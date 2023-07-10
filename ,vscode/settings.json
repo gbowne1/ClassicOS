@@ -1,0 +1,107 @@
+{
+	"files.associations": {
+		"*.c": "c",
+		"*.h": "c",
+		"*.cpp": "cpp",
+		"*.hpp": "hpp",
+		"*.asm": "asm",
+		"*.bin": "bin"
+	},
+	"files.fileAssociations": {
+		".c": "c",
+		".h": "c",
+		".cpp": "cpp",
+		".hpp": "cpp",
+		".asm": "asm",
+		".bin": "bin"
+	},
+	"emmet.includeLanguages": {
+		"c": "c",
+		"cpp": "cpp",
+		"assembly": "asm"
+	},
+	"C_Cpp_Runner.cCompilerPath": "/usr/bin",
+	"C_Cpp_Runner.cppCompilerPath": "/usr/bin",
+	"C_Cpp_Runner.debuggerPath": "/usr/bin",
+	"C_Cpp_Runner.cStandard": "c17",
+	"C_Cpp_Runner.cppStandard": "c++20",
+	"C_Cpp_Runner.msvcBatchPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat",
+	"C_Cpp_Runner.useMsvc": false,
+	"C_Cpp_Runner.warnings": [
+		"-Wall",
+		"-Wextra",
+		"-Wpedantic"
+	],
+	"C_Cpp_Runner.enableWarnings": true,
+	"C_Cpp_Runner.warningsAsError": false,
+	"C_Cpp_Runner.compilerArgs": [],
+	"C_Cpp_Runner.linkerArgs": [
+		"-dynamic-linker {/lib64/ld-linux-x86-64.so.2}"
+	],
+	"C_Cpp_Runner.includePaths": [],
+	"C_Cpp_Runner.includeSearch": [
+		"*",
+		"**/*"
+	],
+	"C_Cpp_Runner.excludeSearch": [
+		"**/build",
+		"**/build/**",
+		"**/.*",
+		"**/.*/**",
+		"**/.vscode",
+		"**/.vscode/**"
+	],
+	"C_Cpp_Runner.useAddressSanitizer": false,
+	"C_Cpp_Runner.showCompilationTime": false,
+	"c-cpp-flylint.enable": true,
+	"c-cpp-flylint.debug": true,
+	"c-cpp-flylint.flexelint.enable": false,
+	"c-cpp-flylint.cppcheck.enable": true,
+	"c-cpp-flylint.clang.enable": false,
+	"C_Cpp_Config.cCompilerPath": "gcc",
+	"C_Cpp_Config.cppCompilerPath": "g++",
+	"C_Cpp_Config.debuggerPath": "gdb",
+	"C_Cpp_Config.makePath": "make",
+	"C_Cpp.clang_format_sortIncludes": true,
+	"C_Cpp.vcFormat.indent.preserveComments": true,
+	"C_Cpp.vcFormat.indent.namespaceContents": false,
+	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true,
+	"C_Cpp.vcFormat.space.pointerReferenceAlignment": "right",
+	"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
+	"C_Cpp.default.cppStandard": "c++20",
+	"C_Cpp.default.cStandard": "c17",
+	"C_Cpp.formatting": "clangFormat",
+	"[c]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "ms-vscode.cpptools"
+	},
+	"[cpp]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "ms-vscode.cpptools"
+	},
+	"C_Cpp.codeAnalysis.clangTidy.enabled": true,
+	"C_Cpp.configurationWarnings": "disabled",
+	"cmake.configureOnOpen": false,
+	"cmake.autoSelectActiveFolder": false,
+	"cmake.configureOnEdit": false,
+	"c-cpp-flylint.flexelint.configFile": "",
+	"c-cpp-flylint.flexelint.executable": "",
+	"c-cpp-flylint.language": "c",
+	"C_Cpp.autocompleteAddParentheses": true,
+	"C_Cpp.errorSquiggles": "Enabled",
+	"C_Cpp_Runner.makePath": "",
+	"cmake.sourceDirectory": "${workspaceFolder}",
+	"C_Cpp.default.compilerPath": "/usr/bin",
+	"C_Cpp.loggingLevel": "",
+	"C_Cpp.default.enableConfigurationSquiggles": "",
+	"C_Cpp.default.includePath": "/usr/bin",
+	"workbench.editorAssociations": {
+		"*.bin": "bin",
+		"*.c": "c",
+		"*.h": "c",
+		"*.cpp": "cpp",
+		"*.hpp": "hpp",
+		"*.asm": "asm"
+	},
+	"C_Cpp.default.intelliSenseMode": "linux-clang-x86"
+}

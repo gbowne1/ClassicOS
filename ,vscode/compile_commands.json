@@ -1,0 +1,12 @@
+[
+	{
+	  "directory": "/path/to/project",
+	  "command": "gcc -c -o file1.o file1.c",
+	  "file": "/path/to/project/file1.c"
+	},
+	{
+	  "directory": "/path/to/project",
+	  "command": "g++ -c -o file2.o file2.cpp",
+	  "file": "/path/to/project/file2.cpp"
+	}
+  ]
