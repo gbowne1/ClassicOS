@@ -6,17 +6,6 @@ add_library(lib STATIC
   src/lib/mylib.h
 )
 
-target_include_directories(ClassicOS PRIVATE
-  include
-  src/boot
-  src/kernel
-  src/drivers
-)
-
-add_subdirectory(src/boot)
-add_subdirectory(src/kernel)
-add_subdirectory(src/drivers)
-
 add_executable(ClassicOS
   src/boot/boot.asm
   src/kernel/kernel.c
@@ -28,8 +17,6 @@ target_link_libraries(ClassicOS PRIVATE
   lib
   pthread
 )
-
-target_compile_features(ClassicOS PRIVATE c_std_17 cxx_std_20)
 
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_LINKER ld)

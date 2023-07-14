@@ -1,0 +1,85 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile C program",
+			"type": "shell",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-std=c17",
+				"-Wall",
+				"-Wextra",
+				"-pedantic",
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Compile C++ program",
+			"type": "shell",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-std=c++20",
+				"-Wall",
+				"-Wextra",
+				"-pedantic",
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Assemble NASM program",
+			"type": "shell",
+			"command": "/usr/bin/nasm",
+			"args": [
+				"-f",
+				"elf64",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}.o"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Link object file",
+			"type": "shell",
+			"command": "/usr/bin/ld",
+			"args": [
+				"${fileDirname}/${fileBasenameNoExtension}.o",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Run program",
+			"type": "shell",
+			"command": "qemu-x86_64",
+			"args": [
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		}
+	]
+}

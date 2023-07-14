@@ -1,0 +1,25 @@
+{
+	"configurations": [
+		{
+			"name": "Linux",
+			"includePath": [
+				"${workspaceFolder}/**",
+				"/usr/include/**"
+			],
+			"defines": [],
+			"compilerPath": "/usr/bin/gcc",
+			"cStandard": "c17",
+			"cppStandard": "c++20",
+			"intelliSenseMode": "gcc-x64",
+			"browse": {
+				"path": [
+					"${workspaceFolder}/**",
+					"/usr/include/**"
+				],
+				"limitSymbolsToIncludedHeaders": true,
+				"databaseFilename": ""
+			}
+		}
+	],
+	"version": 4
+}

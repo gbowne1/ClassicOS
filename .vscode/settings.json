@@ -88,11 +88,11 @@
 	"c-cpp-flylint.flexelint.executable": "",
 	"c-cpp-flylint.language": "c",
 	"C_Cpp.autocompleteAddParentheses": true,
-	"C_Cpp.errorSquiggles": "Enabled",
+	"C_Cpp.errorSquiggles": "enabled",
 	"C_Cpp_Runner.makePath": "",
 	"cmake.sourceDirectory": "${workspaceFolder}",
 	"C_Cpp.default.compilerPath": "/usr/bin",
-	"C_Cpp.loggingLevel": "",
+	"C_Cpp.loggingLevel": "Error",
 	"C_Cpp.default.enableConfigurationSquiggles": "",
 	"C_Cpp.default.includePath": "/usr/bin",
 	"workbench.editorAssociations": {
