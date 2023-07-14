@@ -1,0 +1,3 @@
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/rebuild_cache.dir
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/edit_cache.dir

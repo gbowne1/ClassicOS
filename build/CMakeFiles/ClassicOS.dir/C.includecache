@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/keyboard/keyboard.c
+stdint.h
+-
+stdbool.h
+-
+stddef.h
+-
+
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/screen/screen.c
+screen.h
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/screen/screen.h
+dos.h
+-
+
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/screen/screen.h
+
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/kernel/kernel.c
+kernel.h
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/kernel/kernel.h
+
+/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/kernel/kernel.h
+

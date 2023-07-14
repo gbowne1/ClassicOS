@@ -1,0 +1,1 @@
+gcc -g -g  -g -T /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/linker.ld CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o CMakeFiles/ClassicOS.dir/src/drivers/keyboard/keyboard.c.o CMakeFiles/ClassicOS.dir/src/drivers/screen/screen.c.o  -o ClassicOS -llib -lpthread 

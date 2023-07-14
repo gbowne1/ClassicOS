@@ -1,0 +1,4 @@
+-std=c17
+-Wall
+-O2
+-I/path/to/include

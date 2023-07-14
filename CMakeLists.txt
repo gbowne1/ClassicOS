@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.13.4)
 project(ClassicOS)
 
-add_library(lib STATIC
-  src/lib/mylib.cpp
-  src/lib/mylib.h
-)
-
 add_executable(ClassicOS
   src/boot/boot.asm
   src/kernel/kernel.c
