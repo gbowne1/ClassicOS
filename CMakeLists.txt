@@ -1,17 +1,48 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(my_project C)
+project(ClassicOS)
 
-add_subdirectory(foo)
-add_subdirectory(bar)
+add_library(lib STATIC
+  src/lib/mylib.cpp
+  src/lib/mylib.h
+)
 
-add_library(foo foo.c)
-target_include_directories(foo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ClassicOS PRIVATE
+  include
+  src/boot
+  src/kernel
+  src/drivers
+)
 
-add_subdirectory(tests)
+add_subdirectory(src/boot)
+add_subdirectory(src/kernel)
+add_subdirectory(src/drivers)
 
-add_executable(foo_test foo_tests.c)
-target_link_libraries(foo_test foo)
+add_executable(ClassicOS
+  src/boot/boot.asm
+  src/kernel/kernel.c
+  src/drivers/keyboard/keyboard.c
+  src/drivers/screen/screen.c
+)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
+target_link_libraries(ClassicOS PRIVATE
+  lib
+  pthread
+)
 
+target_compile_features(ClassicOS PRIVATE c_std_17 cxx_std_20)
+
+set(CMAKE_C_COMPILER gcc)
+set(CMAKE_LINKER ld)
+set(CMAKE_EXE_LINKER_FLAGS "-g")
+set(CMAKE_CXX_FLAGS "-g")
+set(CMAKE_C_FLAGS "-g")
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_ASM_COMPILER nasm)
+set(CMAKE_SYSTEM_PROCESSOR i386)
+set(CMAKE_ASM_NASM_COMPILER nasm)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")

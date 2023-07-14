@@ -1,8 +1,21 @@
- ENTRY(boot)
-     SECTIONS {
-       . = 0x7c00;
-       .text : {
-         *(.text)
-       }
-       /* Add other sections as needed */
-     }
+ ENTRY(main)
+
+SECTIONS {
+  . = 0x7c00;
+
+  .text : {
+    *(.text)
+  }
+
+  .rodata : {
+    *(.rodata)
+  }
+
+  .data : {
+    *(.data)
+  }
+
+  .bss : {
+    *(.bss)
+  }
+}
