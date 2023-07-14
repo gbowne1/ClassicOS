@@ -6,6 +6,7 @@ An x86 Operating System for 386, 486, Pentium class (P-75, 100, Pentium II, P3, 
 
 These are the versions I use, but please use the latest possible versions.
 
+
 NASM version 2.14
 QEMU x86_64
 GNU ld (GNU Binutils for Debian) 2.31.1 or newer

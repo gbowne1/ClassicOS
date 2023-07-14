@@ -93,15 +93,19 @@
 	"cmake.sourceDirectory": "${workspaceFolder}",
 	"C_Cpp.default.compilerPath": "/usr/bin",
 	"C_Cpp.loggingLevel": "Error",
-	"C_Cpp.default.enableConfigurationSquiggles": "",
-	"C_Cpp.default.includePath": "/usr/bin",
+	"C_Cpp.default.enableConfigurationSquiggles": true,
+	"C_Cpp.default.includePath": [
+		"${workspaceFolder}/**", // Include all files in the workspace folder
+		"/usr/include", // Standard system include path
+		"/usr/local/include", // Additional system include path
+		"/path/to/custom/includes" // Custom include path
+	],
 	"workbench.editorAssociations": {
-		"*.bin": "bin",
-		"*.c": "c",
-		"*.h": "c",
-		"*.cpp": "cpp",
-		"*.hpp": "hpp",
-		"*.asm": "asm"
+		"*.bin": "default",
+		"*.h": "default",
+		"*.c": "default",
+		"*.json": "default",
+		"*.asm": "default"
 	},
 	"C_Cpp.default.intelliSenseMode": "linux-clang-x86",
 	"cmake.cmakePath": "/usr/bin/cmake"
