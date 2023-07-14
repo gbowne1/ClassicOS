@@ -1,0 +1,17 @@
+{
+	"BuildOptions": {
+		"Platform": "x86",
+		"Configuration": "Debug",
+		"OptimizationLevel": "None",
+		"AdditionalCompilerOptions": "-m32",
+		"AdditionalLinkerOptions": "-m32"
+	},
+	"DebuggingOptions": {
+		"DebuggerType": "NativeOnly",
+		"EnableUnmanagedDebugging": true
+	},
+	"DeploymentOptions": {
+		"TargetArchitecture": "x86",
+		"TargetOperatingSystem": "Windows"
+	}
+}

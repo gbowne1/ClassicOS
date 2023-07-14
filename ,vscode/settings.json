@@ -103,5 +103,6 @@
 		"*.hpp": "hpp",
 		"*.asm": "asm"
 	},
-	"C_Cpp.default.intelliSenseMode": "linux-clang-x86"
+	"C_Cpp.default.intelliSenseMode": "linux-clang-x86",
+	"cmake.cmakePath": "/usr/bin/cmake"
 }
