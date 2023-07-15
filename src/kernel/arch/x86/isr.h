@@ -16,7 +16,7 @@ struct isr_regs
 };
 
 // Register an ISR
-void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs));
+void isr_register(uint8_t num, void (*handler)(void));
 
 // ISR handler
 void isr_handler(struct isr_regs *regs);

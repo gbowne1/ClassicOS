@@ -1,10 +1,21 @@
 #include "gdt.h"
+#include "isr.h"
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
+
 // GDT table
-struct gdt_entry gdt[3];
+struct gdt_entry *gdt;
 
 // GDT pointer
-struct gdt_ptr gp;
+struct gdt_ptr {
+    uint16_t limit;
+    void* base;
+} gp;
 
 // Initialize a GDT entry
 void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
@@ -24,10 +35,11 @@ void gdt_init()
 {
     // Set up GDT pointer
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base  = (uint32_t)&gdt;
+    gdt      = (struct gdt_entry*)malloc(sizeof(struct gdt_entry) * 3);
+    gp.base  = gdt;
 
     // Clear GDT
-    memset(&gdt, 0, sizeof(gdt));
+    memset(gdt, 0, sizeof(struct gdt_entry) * 3);
 
     // Set up code segment
     gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -36,7 +48,7 @@ void gdt_init()
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
 
     // Load GDT
-    _asm volatile("lgdt %0" : : "m"(gp));
+    asm volatile("lgdt %0" : : "m"(gp));
 }
 
 // Exception handlers

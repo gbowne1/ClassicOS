@@ -1,6 +1,12 @@
 #include "idt.h"
 #include <string.h>
 
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 // IDT table
 struct idt_entry idt[256];
 
