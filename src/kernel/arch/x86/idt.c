@@ -1,9 +1,16 @@
 #include "idt.h"
+#include <string.h>
 
 // IDT table
 struct idt_entry idt[256];
 
 // IDT pointer
+struct idt_ptr
+{
+    uint16_t          limit; // Size of IDT in bytes - 1
+    struct idt_entry *base;  // Address of IDT
+} __attribute__((packed));
+
 struct idt_ptr idtp;
 
 // Exception handlers
@@ -33,7 +40,7 @@ void idt_init()
 {
     // Set up IDT pointer
     idtp.limit = sizeof(idt) - 1;
-    idtp.base  = (uint32_t)&idt;
+    idtp.base  = idt;
 
     // Clear IDT
     memset(&idt, 0, sizeof(idt));
@@ -51,5 +58,5 @@ void idt_init()
     idt_set_gate(0x30, (uint32_t)device_handler, 0x08, 0x8E);
 
     // Load IDT
-    asm volatile("lidt %0" : : "m"(idtp));
+    _asm volatile("lidt %0" : : "m"(idtp));
 }

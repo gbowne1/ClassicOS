@@ -1,5 +1,5 @@
 #include "gdt.h"
-
+#include <string.h>
 // GDT table
 struct gdt_entry gdt[3];
 
@@ -36,7 +36,7 @@ void gdt_init()
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
 
     // Load GDT
-    asm volatile("lgdt %0" : : "m"(gp));
+    _asm volatile("lgdt %0" : : "m"(gp));
 }
 
 // Exception handlers
