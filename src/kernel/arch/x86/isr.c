@@ -1,4 +1,6 @@
 #include "isr.h"
+#include "idt.h"
+#include <stdio.h>
 
 // ISR table
 void (*isr_table[256])(struct isr_regs *regs);
@@ -12,19 +14,26 @@ void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
 // ISR handler
 void isr_handler(struct isr_regs *regs)
 {
-    void (*handler)(struct isr_regs *regs);
-
-    handler = isr_table[regs->int_no];
-    if (handler)
+    if (regs->int_no == 0)
     {
-        handler(regs);
+        divide_error();
+    }
+    else
+    {
+        void (*handler)(struct isr_regs *regs);
+
+        handler = isr_table[regs->int_no];
+        if (handler)
+        {
+            handler(regs);
+        }
     }
 }
 
 // Exception handlers
 void divide_error()
 {
-    // Handle divide error exception
+    printf("Divide by zero error!\n");
 }
 
 void page_fault()

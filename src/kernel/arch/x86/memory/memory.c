@@ -46,7 +46,12 @@ void kfree(void *ptr)
     if ((uint8_t *)ptr >= heap_start && ptr < (void *)heap_end)
     {
         /* Zero out the memory */
-        memset(ptr, 0, (uint8_t *)heap_pos - (uint8_t *)ptr);
+        volatile uint8_t *volatile_ptr = (volatile uint8_t *)ptr;
+        size_t            size         = (uint8_t *)heap_pos - (uint8_t *)ptr;
+        while (size--)
+        {
+            *volatile_ptr++ = 0;
+        }
 
         /* Free the memory by moving the heap position */
         heap_pos = (uint8_t *)ptr;

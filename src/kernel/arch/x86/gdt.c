@@ -1,21 +1,15 @@
 #include "gdt.h"
 #include "isr.h"
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <inttypes.h>
 
 // GDT table
 struct gdt_entry *gdt;
-
-// GDT pointer
-struct gdt_ptr {
-    uint16_t limit;
-    void* base;
-} gp;
 
 // Initialize a GDT entry
 void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
@@ -30,13 +24,12 @@ void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
     gdt[num].access = access;
 }
 
-// Initialize the GDT
 void gdt_init()
 {
     // Set up GDT pointer
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gdt      = (struct gdt_entry*)malloc(sizeof(struct gdt_entry) * 3);
-    gp.base  = gdt;
+    gdt      = (struct gdt_entry *)malloc(sizeof(struct gdt_entry) * 3);
+    gp.base  = (uint32_t)gdt; // Cast gdt to uint32_t
 
     // Clear GDT
     memset(gdt, 0, sizeof(struct gdt_entry) * 3);

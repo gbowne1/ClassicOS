@@ -1,22 +1,15 @@
 #include "idt.h"
-#include <string.h>
-
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // IDT table
 struct idt_entry idt[256];
 
 // IDT pointer
-struct idt_ptr
-{
-    uint16_t          limit; // Size of IDT in bytes - 1
-    struct idt_entry *base;  // Address of IDT
-} __attribute__((packed));
-
 struct idt_ptr idtp;
 
 // Exception handlers
@@ -32,13 +25,14 @@ extern void keyboard_handler();
 extern void device_handler();
 
 // Initialize an IDT entry
-void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
+void idt_set_gate(uint8_t num, void *base, uint16_t sel, uint8_t flags)
 {
-    idt[num].base_lo = base & 0xFFFF;
-    idt[num].base_hi = (base >> 16) & 0xFFFF;
-    idt[num].sel     = sel;
-    idt[num].always0 = 0;
-    idt[num].flags   = flags;
+    uint32_t base_addr = (uint32_t)base;
+    idt[num].base_lo   = base_addr & 0xFFFF;
+    idt[num].base_hi   = (base_addr >> 16) & 0xFFFF;
+    idt[num].sel       = sel;
+    idt[num].always0   = 0;
+    idt[num].flags     = flags;
 }
 
 // Initialize the IDT
@@ -46,23 +40,23 @@ void idt_init()
 {
     // Set up IDT pointer
     idtp.limit = sizeof(idt) - 1;
-    idtp.base  = idt;
+    idtp.base  = &idt[0];
 
     // Clear IDT
     memset(&idt, 0, sizeof(idt));
 
     // Set up exception handlers
-    idt_set_gate(0, (uint32_t)divide_error_handler, 0x08, 0x8E);
-    idt_set_gate(14, (uint32_t)page_fault_handler, 0x08, 0x8E);
-    idt_set_gate(13, (uint32_t)general_protection_fault_handler, 0x08, 0x8E);
-    idt_set_gate(8, (uint32_t)double_fault_handler, 0x08, 0x8E);
+    idt_set_gate(0, divide_error_handler, 0x08, 0x8E);
+    idt_set_gate(14, page_fault_handler, 0x08, 0x8E);
+    idt_set_gate(13, general_protection_fault_handler, 0x08, 0x8E);
+    idt_set_gate(8, double_fault_handler, 0x08, 0x8E);
 
     // Set up interrupt handlers
-    idt_set_gate(0x80, (uint32_t)system_call_handler, 0x08, 0xEE);
-    idt_set_gate(0x20, (uint32_t)timer_handler, 0x08, 0x8E);
-    idt_set_gate(0x21, (uint32_t)keyboard_handler, 0x08, 0x8E);
-    idt_set_gate(0x30, (uint32_t)device_handler, 0x08, 0x8E);
+    idt_set_gate(0x80, system_call_handler, 0x08, 0xEE);
+    idt_set_gate(0x20, timer_handler, 0x08, 0x8E);
+    idt_set_gate(0x21, keyboard_handler, 0x08, 0x8E);
+    idt_set_gate(0x30, device_handler, 0x08, 0x8E);
 
     // Load IDT
-    _asm volatile("lidt %0" : : "m"(idtp));
+    __asm__ volatile("lidt %0" : : "m"(idtp));
 }
