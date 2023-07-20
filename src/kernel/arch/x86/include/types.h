@@ -14,11 +14,11 @@ typedef struct
 
 typedef struct
 {
-    uint16_t base_lo;  // Lower 16 bits of handler function address
-    uint16_t selector; // Kernel segment selector
-    uint8_t  always0;  // Always 0
-    uint8_t  flags;    // Flags
-    uint16_t base_hi;  // Upper 16 bits of handler function address
-} idt_entry_t;
+    uint16_t base_low;
+    uint16_t selector;
+    uint8_t  zero;
+    uint8_t  flags;
+    uint16_t base_high;
+} __attribute__((packed)) idt_entry_t;
 
 #endif /* TYPES_H */

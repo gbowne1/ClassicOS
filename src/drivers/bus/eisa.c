@@ -22,7 +22,36 @@ void eisa_init()
 // Detect and configure EISA devices
 void eisa_detect_devices()
 {
-    // Add any necessary device detection and configuration code here
+    uint32_t bus, slot, func;
+    uint16_t vendor_id, device_id, class_code;
+
+    for (bus = 0; bus < 256; bus++)
+    {
+        for (slot = 0; slot < 32; slot++)
+        {
+            for (func = 0; func < 8; func++)
+            {
+                uint32_t address = (bus << 16) | (slot << 11) | (func << 8);
+                uint32_t id      = eisa_read_config_dword(address, 0);
+                vendor_id        = id & 0xFFFF;
+                device_id        = (id >> 16) & 0xFFFF;
+                class_code       = eisa_read_config_word(address, 10);
+                if (vendor_id != 0xFFFF)
+                {
+                    // Device detected, do something with it
+                    if (vendor_id == MY_DEVICE_VENDOR_ID &&
+                        device_id == MY_DEVICE_DEVICE_ID &&
+                        class_code == MY_DEVICE_CLASS_CODE)
+                    {
+                        // This is my device, configure it
+                        uint32_t config1 = eisa_read_config_dword(address, 4);
+                        uint32_t config2 = eisa_read_config_dword(address, 8);
+                        // Do something with the configuration data
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Read from an EISA device

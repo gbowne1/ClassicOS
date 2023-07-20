@@ -4,12 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../display.h"
-#include "../interrupts.h"
+#include "../display/display.h"
 #include "../io/io.h"
-#include "../keyboard.h"
+#include "../keyboard/keyboard.h"
+#include "../screen/screen.h"
 #include "../string.h"
-#include "./screen/screen.h"
 
 #include "./tty.h"
 
