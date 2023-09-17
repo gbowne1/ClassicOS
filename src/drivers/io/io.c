@@ -1,7 +1,7 @@
 #include "io.h"
 
 /*
-    Common Ports 
+    Common Ports
     COM1: 0x3F8
     COM2: 0x2F8
     COM3: 0x3E8
@@ -24,6 +24,12 @@ char io_read_com()
     // TODO: Read from the COM port
     // Use the appropriate memory or I/O address to read from the port
     // Return the read data
+
+    char data = 0; // Initialize the variable to store the read data
+
+    // Read from the COM port and assign the read value to the 'data' variable
+
+    return data; // Return the read data
 }
 
 // Function to write to the COM port
@@ -40,6 +46,12 @@ char io_read_lpt()
     // TODO: Read from the LPT port
     // Use the appropriate memory or I/O address to read from the port
     // Return the read data
+
+    char data = 0; // Initialize the variable to store the read data
+
+    // Read from the LPT port and assign the read value to the 'data' variable
+
+    return data; // Return the read data
 }
 
 // Function to write to the LPT port

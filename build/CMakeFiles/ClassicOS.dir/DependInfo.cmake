@@ -4,11 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/keyboard/keyboard.c" "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/keyboard/keyboard.c.o"
-  "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/drivers/screen/screen.c" "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/screen/screen.c.o"
-  "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/src/kernel/kernel.c" "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/audio/audio.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/audio/audio.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/display/display.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/display/display.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/io/io.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/io/io.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/keyboard/keyboard.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/keyboard/keyboard.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/screen/screen.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/screen/screen.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/drivers/tty/tty.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/drivers/tty/tty.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/kernel/kernel.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o"
+  "/home/gbowne1/Documents/ClassicOS/src/kernel/print.c" "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir/src/kernel/print.c.o"
   )
-set(CMAKE_C_COMPILER_ID "Clang")
+set(CMAKE_C_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS
+CMAKE_SOURCE_DIR = /home/gbowne1/Documents/ClassicOS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build
+CMAKE_BINARY_DIR = /home/gbowne1/Documents/ClassicOS/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gbowne1/Documents/ClassicOS/build/CMakeFiles /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gbowne1/Documents/ClassicOS/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,87 @@ ClassicOS: cmake_check_build_system
 ClassicOS/fast:
 	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/build
 .PHONY : ClassicOS/fast
+
+src/drivers/audio/audio.o: src/drivers/audio/audio.c.o
+
+.PHONY : src/drivers/audio/audio.o
+
+# target to build an object file
+src/drivers/audio/audio.c.o:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/audio/audio.c.o
+.PHONY : src/drivers/audio/audio.c.o
+
+src/drivers/audio/audio.i: src/drivers/audio/audio.c.i
+
+.PHONY : src/drivers/audio/audio.i
+
+# target to preprocess a source file
+src/drivers/audio/audio.c.i:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/audio/audio.c.i
+.PHONY : src/drivers/audio/audio.c.i
+
+src/drivers/audio/audio.s: src/drivers/audio/audio.c.s
+
+.PHONY : src/drivers/audio/audio.s
+
+# target to generate assembly for a file
+src/drivers/audio/audio.c.s:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/audio/audio.c.s
+.PHONY : src/drivers/audio/audio.c.s
+
+src/drivers/display/display.o: src/drivers/display/display.c.o
+
+.PHONY : src/drivers/display/display.o
+
+# target to build an object file
+src/drivers/display/display.c.o:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/display/display.c.o
+.PHONY : src/drivers/display/display.c.o
+
+src/drivers/display/display.i: src/drivers/display/display.c.i
+
+.PHONY : src/drivers/display/display.i
+
+# target to preprocess a source file
+src/drivers/display/display.c.i:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/display/display.c.i
+.PHONY : src/drivers/display/display.c.i
+
+src/drivers/display/display.s: src/drivers/display/display.c.s
+
+.PHONY : src/drivers/display/display.s
+
+# target to generate assembly for a file
+src/drivers/display/display.c.s:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/display/display.c.s
+.PHONY : src/drivers/display/display.c.s
+
+src/drivers/io/io.o: src/drivers/io/io.c.o
+
+.PHONY : src/drivers/io/io.o
+
+# target to build an object file
+src/drivers/io/io.c.o:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/io/io.c.o
+.PHONY : src/drivers/io/io.c.o
+
+src/drivers/io/io.i: src/drivers/io/io.c.i
+
+.PHONY : src/drivers/io/io.i
+
+# target to preprocess a source file
+src/drivers/io/io.c.i:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/io/io.c.i
+.PHONY : src/drivers/io/io.c.i
+
+src/drivers/io/io.s: src/drivers/io/io.c.s
+
+.PHONY : src/drivers/io/io.s
+
+# target to generate assembly for a file
+src/drivers/io/io.c.s:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/io/io.c.s
+.PHONY : src/drivers/io/io.c.s
 
 src/drivers/keyboard/keyboard.o: src/drivers/keyboard/keyboard.c.o
 
@@ -177,6 +258,33 @@ src/drivers/screen/screen.c.s:
 	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/screen/screen.c.s
 .PHONY : src/drivers/screen/screen.c.s
 
+src/drivers/tty/tty.o: src/drivers/tty/tty.c.o
+
+.PHONY : src/drivers/tty/tty.o
+
+# target to build an object file
+src/drivers/tty/tty.c.o:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/tty/tty.c.o
+.PHONY : src/drivers/tty/tty.c.o
+
+src/drivers/tty/tty.i: src/drivers/tty/tty.c.i
+
+.PHONY : src/drivers/tty/tty.i
+
+# target to preprocess a source file
+src/drivers/tty/tty.c.i:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/tty/tty.c.i
+.PHONY : src/drivers/tty/tty.c.i
+
+src/drivers/tty/tty.s: src/drivers/tty/tty.c.s
+
+.PHONY : src/drivers/tty/tty.s
+
+# target to generate assembly for a file
+src/drivers/tty/tty.c.s:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/drivers/tty/tty.c.s
+.PHONY : src/drivers/tty/tty.c.s
+
 src/kernel/kernel.o: src/kernel/kernel.c.o
 
 .PHONY : src/kernel/kernel.o
@@ -204,6 +312,33 @@ src/kernel/kernel.c.s:
 	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.s
 .PHONY : src/kernel/kernel.c.s
 
+src/kernel/print.o: src/kernel/print.c.o
+
+.PHONY : src/kernel/print.o
+
+# target to build an object file
+src/kernel/print.c.o:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/kernel/print.c.o
+.PHONY : src/kernel/print.c.o
+
+src/kernel/print.i: src/kernel/print.c.i
+
+.PHONY : src/kernel/print.i
+
+# target to preprocess a source file
+src/kernel/print.c.i:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/kernel/print.c.i
+.PHONY : src/kernel/print.c.i
+
+src/kernel/print.s: src/kernel/print.c.s
+
+.PHONY : src/kernel/print.s
+
+# target to generate assembly for a file
+src/kernel/print.c.s:
+	$(MAKE) -f CMakeFiles/ClassicOS.dir/build.make CMakeFiles/ClassicOS.dir/src/kernel/print.c.s
+.PHONY : src/kernel/print.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -213,15 +348,30 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... ClassicOS"
 	@echo "... edit_cache"
+	@echo "... src/drivers/audio/audio.o"
+	@echo "... src/drivers/audio/audio.i"
+	@echo "... src/drivers/audio/audio.s"
+	@echo "... src/drivers/display/display.o"
+	@echo "... src/drivers/display/display.i"
+	@echo "... src/drivers/display/display.s"
+	@echo "... src/drivers/io/io.o"
+	@echo "... src/drivers/io/io.i"
+	@echo "... src/drivers/io/io.s"
 	@echo "... src/drivers/keyboard/keyboard.o"
 	@echo "... src/drivers/keyboard/keyboard.i"
 	@echo "... src/drivers/keyboard/keyboard.s"
 	@echo "... src/drivers/screen/screen.o"
 	@echo "... src/drivers/screen/screen.i"
 	@echo "... src/drivers/screen/screen.s"
+	@echo "... src/drivers/tty/tty.o"
+	@echo "... src/drivers/tty/tty.i"
+	@echo "... src/drivers/tty/tty.s"
 	@echo "... src/kernel/kernel.o"
 	@echo "... src/kernel/kernel.i"
 	@echo "... src/kernel/kernel.s"
+	@echo "... src/kernel/print.o"
+	@echo "... src/kernel/print.i"
+	@echo "... src/kernel/print.s"
 .PHONY : help
 
 

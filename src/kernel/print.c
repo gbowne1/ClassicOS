@@ -1,5 +1,7 @@
 #include "kernel.h"
+#include <stdio.h>
 
-void print_string(const char* str) {
-    // Your code to print the string to the screen goes here
+void print_string(const char *str)
+{
+    printf("%s", str);
 }

@@ -1,6 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
+#include <stdint.h>
+
 // Function to initialize the COM and LPT ports
 void io_init();
 
@@ -15,5 +17,10 @@ char io_read_lpt();
 
 // Function to write to the LPT port
 void io_write_lpt(char data);
+
+// Function declarations for keyboard.c
+uint8_t inb(uint16_t port);
+void    outb(uint16_t port, uint8_t data);
+void    install_interrupt_handler(uint8_t interrupt, void (*handler)(void));
 
 #endif /* IO_H */

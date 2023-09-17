@@ -1,4 +1,4 @@
-# Install script for directory: /media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS
+# Install script for directory: /home/gbowne1/Documents/ClassicOS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/media/gbowne1/18656299-5992-400a-a7a4-b6ffc4b0612f/Documents/ClassicOS/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gbowne1/Documents/ClassicOS/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
