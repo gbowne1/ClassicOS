@@ -1,0 +1,12 @@
+Checks: "clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type"
+WarningsAsErrors: true
+HeaderFilterRegex: ""
+AnalyzeTemporaryDtors: false
+FormatStyle: google
+CheckOptions:
+  - key: cert-dcl16-c.NewSuffixes
+    value: "L;LL;LU;LLU"
+  - key: cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
+    value: "0"
+  - key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value: "1"

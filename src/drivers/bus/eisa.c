@@ -3,6 +3,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
+
+#define MY_DEVICE_VENDOR_ID  0x1234
+#define MY_DEVICE_DEVICE_ID  0x5678
+#define MY_DEVICE_CLASS_CODE 0x90AB
 
 // EISA bus controller base address
 #define EISA_BASE_ADDRESS 0x0000
@@ -46,12 +51,52 @@ void eisa_detect_devices()
                         // This is my device, configure it
                         uint32_t config1 = eisa_read_config_dword(address, 4);
                         uint32_t config2 = eisa_read_config_dword(address, 8);
+                        printf("Config1: %u\n", config1);
+                        printf("Config2: %u\n", config2);
                         // Do something with the configuration data
                     }
                 }
             }
         }
     }
+}
+
+// Read a double word (32 bits) from an EISA device's configuration space
+uint32_t eisa_read_config_dword(uint32_t address, uint8_t offset)
+{
+    // Set the EISA bus controller base address
+    eisa_write(EISA_BASE_ADDRESS, address);
+
+    // Set the EISA bus controller command port to read configuration data
+    eisa_write(EISA_COMMAND_PORT, 0x80 | (offset & 0x03));
+
+    // Read the double word from the EISA bus controller data port
+    uint32_t value = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        value |= (eisa_read(EISA_DATA_PORT) << (i * 8));
+    }
+
+    return value;
+}
+
+// Read a word (16 bits) from an EISA device's configuration space
+uint16_t eisa_read_config_word(uint32_t address, uint8_t offset)
+{
+    // Set the EISA bus controller base address
+    eisa_write(EISA_BASE_ADDRESS, address);
+
+    // Set the EISA bus controller command port to read configuration data
+    eisa_write(EISA_COMMAND_PORT, 0x80 | (offset & 0x03));
+
+    // Read the word from the EISA bus controller data port
+    uint16_t value = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        value |= (eisa_read(EISA_DATA_PORT) << (i * 8));
+    }
+
+    return value;
 }
 
 // Read from an EISA device

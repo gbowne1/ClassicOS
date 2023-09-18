@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+extern struct gdt_entry *gdt;
+
 // GDT entry structure
 struct gdt_entry
 {

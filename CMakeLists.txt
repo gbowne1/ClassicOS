@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(ClassicOS)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C)
 
 # Source files
 set(BOOT_SOURCE_FILES
@@ -13,6 +13,16 @@ set(GRUB_SOURCE_FILES
 set(DRIVERS_SOURCE_FILES
     src/drivers/audio/audio.c
     src/drivers/audio/audio.h
+	src/drivers/bus/eisa.c
+	src/drivers/bus/eisa.h
+	src/drivers/bus/isa.c
+	src/drivers/bus/isa.h
+	src/drivers/bus/mca.c
+	src/drivers/bus/mca.h
+	src/drivers/bus/pci.c
+	src/drivers/bus/pci.h
+	src/drivers/bus/vesa.c
+	src/drivers/bus/vesa.h
     src/drivers/display/display.c
     src/drivers/display/display.h
     src/drivers/io/io.c
@@ -25,6 +35,16 @@ set(DRIVERS_SOURCE_FILES
     src/drivers/tty/tty.h
 )
 set(KERNEL_SOURCE_FILES
+	src/kernel/arch/x86/include/memory.h
+	src/kernel/arch/x86/include/types.h
+	src/kernel/arch/x86/include/types.h
+	src/kernel/arch/x86/memory/memory.c
+	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/idt.c
+	src/kernel/arch/x86/idt.h
+	src/kernel/arch/x86/isr.c
+	src/kernel/arch/x86/isr.h
     src/kernel/kernel.c
     src/kernel/kernel.h
     src/kernel/linker.ld
@@ -37,6 +57,11 @@ add_executable(ClassicOS
     ${DRIVERS_SOURCE_FILES}
     ${KERNEL_SOURCE_FILES}
 )
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Enable testing
+enable_testing()
 
 target_link_libraries(ClassicOS PRIVATE)
 

@@ -108,5 +108,6 @@
 		"*.asm": "default"
 	},
 	"C_Cpp.default.intelliSenseMode": "linux-clang-x86",
-	"cmake.cmakePath": "/usr/bin/cmake"
+	"cmake.cmakePath": "/usr/bin/cmake",
+	"FSharp.suggestGitignore": false
 }

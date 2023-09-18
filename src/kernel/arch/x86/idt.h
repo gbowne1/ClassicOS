@@ -3,6 +3,18 @@
 
 #include <stdint.h>
 
+// Structure for storing register values during an ISR
+struct isr_regs
+{
+    uint32_t ds; // Data segment selector
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx,
+        eax; // Pushed by pusha instruction
+    uint32_t int_no,
+        err_code; // Interrupt number and error code (if applicable)
+    uint32_t eip, cs, eflags, useresp,
+        ss; // Pushed by the processor automatically
+};
+
 // IDT entry structure
 struct idt_entry
 {
@@ -22,15 +34,18 @@ struct idt_ptr
 
 // Exception handlers
 void divide_error();
-void page_fault();
-void general_protection_fault();
+void page_fault(struct isr_regs *regs);
+void general_protection_fault(struct isr_regs *regs);
 void double_fault();
 
 // Interrupt handlers
-void system_call();
+void system_call(struct isr_regs *regs);
 void timer();
 void keyboard();
 void device();
+void network();
+void disk();
+void serial_port();
 
 // Initialize the IDT
 void idt_init();

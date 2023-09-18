@@ -6,11 +6,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+enum
+{
+    GDT_ACCESS_PRESENT = 0x80,
+    BASE_MIDDLE_SHIFT  = 16,
+    BYTE_MASK          = 0xFF
+};
+
 // IDT table
 struct idt_entry idt[256];
 
 // IDT pointer
-struct idt_ptr idtp;
+const struct idt_ptr idtp = {sizeof(idt) - 1, idt};
 
 // Exception handlers
 extern void divide_error_handler();
@@ -23,13 +30,16 @@ extern void system_call_handler();
 extern void timer_handler();
 extern void keyboard_handler();
 extern void device_handler();
+extern void network_handler();
+extern void disk_handler();
+extern void serial_port_handler();
 
 // Initialize an IDT entry
 void idt_set_gate(uint8_t num, void *base, uint16_t sel, uint8_t flags)
 {
     uint32_t base_addr = (uint32_t)base;
-    idt[num].base_lo   = base_addr & 0xFFFF;
-    idt[num].base_hi   = (base_addr >> 16) & 0xFFFF;
+    idt[num].base_lo   = base_addr & BYTE_MASK;
+    idt[num].base_hi   = (base_addr >> BASE_MIDDLE_SHIFT) & 0xFFFF;
     idt[num].sel       = sel;
     idt[num].always0   = 0;
     idt[num].flags     = flags;
@@ -38,12 +48,12 @@ void idt_set_gate(uint8_t num, void *base, uint16_t sel, uint8_t flags)
 // Initialize the IDT
 void idt_init()
 {
-    // Set up IDT pointer
-    idtp.limit = sizeof(idt) - 1;
-    idtp.base  = &idt[0];
-
     // Clear IDT
-    memset(&idt, 0, sizeof(idt));
+#ifdef __STDC_LIB_EXT1__
+    memset_s(idt, 0, sizeof(idt));
+#else
+    memset(idt, 0, sizeof(idt));
+#endif
 
     // Set up exception handlers
     idt_set_gate(0, divide_error_handler, 0x08, 0x8E);
@@ -55,7 +65,9 @@ void idt_init()
     idt_set_gate(0x80, system_call_handler, 0x08, 0xEE);
     idt_set_gate(0x20, timer_handler, 0x08, 0x8E);
     idt_set_gate(0x21, keyboard_handler, 0x08, 0x8E);
-    idt_set_gate(0x30, device_handler, 0x08, 0x8E);
+    idt_set_gate(0x22, network_handler, 0x08, 0x8E);
+    idt_set_gate(0x23, disk_handler, 0x08, 0x8E);
+    idt_set_gate(0x24, serial_port_handler, 0x08, 0x8E);
 
     // Load IDT
     __asm__ volatile("lidt %0" : : "m"(idtp));

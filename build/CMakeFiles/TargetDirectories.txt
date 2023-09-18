@@ -1,3 +1,0 @@
-/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/rebuild_cache.dir
-/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/ClassicOS.dir
-/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/edit_cache.dir
