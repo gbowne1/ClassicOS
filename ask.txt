@@ -1,0 +1,162 @@
+I am making an x86 32 bit IA32 Operating System in Visual Studio Code 1.81 for Debian Linux. It's not a linux based OS. The system I am developing on has a Intel i7-3770k and is an x86_64 bit and runs Debian 10 Buster Linux with Linux Kernel version 4.19.0-25-amd64 (supports UNIX 98 PTY)and Bash 5.0.3 and the drive has an ext4 partition and a tempfs partition. I have the extension ms-vscode.cpptools installed on VSCode. I also have both gcc 8.3.0 and clang 7.0.1-8+deb10u2 installed. All of my compilers, debuggers, linkers are in /usr/bin. I have Coreutils 8.30, Binutils 2.31.1, Bison 3.3.2, Diffutils 3.7, Findutils 4.6.0.225, Gawk 4.2.1, Grep 3.3, Gzip 1.9, M4 1.4.18, Make 4.2.1, Patch 2.7.6, Perl 5.28.1, Python 3.7.3, Sed 4.7, Tar 1.30, Texinfo 6.5, Xz 5.2.4.
+
+ClassicOS/
+├── .github/
+├── .vs/
+├── .vscode/
+├── CMakeLists.txt
+├── README.md
+├── build/
+│   ├── boot.bin
+│   └── boot.o
+├── include/
+├── src/
+│   ├── boot/
+│   │   ├── grub/
+│   │   │   ├── grub.cf
+│   │   │	└── menu.lst
+│   │   ├── boot.asm
+│   │   ├── linker.ld
+│   ├── drivers/
+│   │	├── audio/
+│   │   │   ├── audio.c
+│   │   │	└── audio.h
+│   │	├── bus/
+│   │   │	├── eisa.c
+│   │   │	├── eisa.h
+│   │   │	├── isa.c
+│   │   │	├── isa.h
+│   │   │	├── mca.c
+│   │   │	├── mca.h
+│   │   │	├── pci.c
+│   │   │	├── pci.h
+│   │   │	├── vesa.c
+│   │   │	└── vesa.h
+│   │	├── display/
+│   │   │	├── display.c
+│   │   │	└── display.h
+│   │	├── io/
+│   │   │	├── io.c
+│   │   │	└── movement.c
+│   │	├── keyboard/
+│   │   │	├── keyboard.c
+│   │   │	└── keyboard.h
+│   │	├── mouse/
+│   │   │	├── mouse.c
+│   │   │	└── mouse.h
+│   │	├── screen/
+│   │   │	├── screen.c
+│   │   │	└── screen.h
+│   │	├── tty/
+│   │   │	├── tty.c
+│   │   │	└── tty.h
+│   ├── kernel/
+│   │   ├── arch/
+│   │   │	└── x86/
+│	│	│	│	└── include/
+│	│	│	│	│	├── memory.c
+│	│	│	│	│	├── types.h
+│	│	│	│	│	└── types.h
+│	│	│	│	└── memory/
+│	│	│	│	│	└── memory.c
+│	│	│	├── gdt.c
+│	│	│	├── gdt.h
+│	│	│	├── idt.c
+│	│	│	├── idt.h
+│	│	│	├── isr.c
+│	│	│	└── isr.h
+│	│	├── kernel.c
+│	│	├── kernel.h
+│	│	├── kernel.o
+│	│	├── linker.ld
+│	│	├── print.c
+│	│	└── print.o
+│   └── shell/
+│       ├── shell.c
+│       └── shell.h
+└── std/
+
+This is my CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.13.4)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C)
+
+# Source files
+set(BOOT_SOURCE_FILES
+    src/boot/boot.asm
+    src/boot/linker.ld
+)
+set(GRUB_SOURCE_FILES
+    src/boot/grub/grub.cfg
+    src/boot/grub/menu.lst
+)
+set(DRIVERS_SOURCE_FILES
+    src/drivers/audio/audio.c
+    src/drivers/audio/audio.h
+	src/drivers/bus/eisa.c
+	src/drivers/bus/eisa.h
+	src/drivers/bus/isa.c
+	src/drivers/bus/isa.h
+	src/drivers/bus/mca.c
+	src/drivers/bus/mca.h
+	src/drivers/bus/pci.c
+	src/drivers/bus/pci.h
+	src/drivers/bus/vesa.c
+	src/drivers/bus/vesa.h
+    src/drivers/display/display.c
+    src/drivers/display/display.h
+    src/drivers/io/io.c
+    src/drivers/io/io.h
+    src/drivers/keyboard/keyboard.c
+    src/drivers/keyboard/keyboard.h
+    src/drivers/screen/screen.c
+    src/drivers/screen/screen.h
+    src/drivers/tty/tty.c
+    src/drivers/tty/tty.h
+)
+set(KERNEL_SOURCE_FILES
+	src/kernel/arch/x86/include/memory.h
+	src/kernel/arch/x86/include/types.h
+	src/kernel/arch/x86/include/types.h
+	src/kernel/arch/x86/memory/memory.c
+	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/idt.c
+	src/kernel/arch/x86/idt.h
+	src/kernel/arch/x86/isr.c
+	src/kernel/arch/x86/isr.h
+    src/kernel/kernel.c
+    src/kernel/kernel.h
+    src/kernel/linker.ld
+    src/kernel/print.c
+)
+
+add_executable(ClassicOS
+    ${BOOT_SOURCE_FILES}
+    ${GRUB_SOURCE_FILES}
+    ${DRIVERS_SOURCE_FILES}
+    ${KERNEL_SOURCE_FILES}
+)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Enable testing
+enable_testing()
+
+target_link_libraries(ClassicOS PRIVATE)
+
+set(CMAKE_C_COMPILER gcc)
+set(CMAKE_LINKER ld)
+set(CMAKE_EXE_LINKER_FLAGS "-g")
+set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_C_FLAGS "-g -Wall")
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_ASM_COMPILER nasm)
+set(CMAKE_SYSTEM_PROCESSOR i386)
+set(CMAKE_ASM_NASM_COMPILER nasm)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")

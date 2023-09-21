@@ -5,15 +5,26 @@
 #include <stdint.h>
 
 // Keyboard input buffer
-#define KEYBOARD_BUFFER_SIZE 32
+#define KEYBOARD_BUFFER_SIZE          32
+#define KEYBOARD_DATA_PORT            0x60
+#define KEYBOARD_INTERRUPT_VECTOR     0x09
+#define KEYBOARD_COMMAND_PORT         0x64
+#define KEYBOARD_DATA_PORT            0x60
+#define KEYBOARD_ENABLE_COMMAND       0xAE
+#define KEYBOARD_ENABLE_SCANCODE      0xF4
+#define KEYBOARD_ACKNOWLEDGE_SCANCODE 0xFA
+
 static uint8_t keyboard_buffer[KEYBOARD_BUFFER_SIZE];
 static size_t  keyboard_buffer_head = 0;
 static size_t  keyboard_buffer_tail = 0;
 
+void set_interrupt_vector(uint8_t vector, void (*handler)());
+void enable_interrupt(uint8_t vector);
+
 // Keyboard interrupt handler
 void keyboard_interrupt_handler()
 {
-    uint8_t scancode = inb(0x60);
+    uint8_t scancode = inb(KEYBOARD_DATA_PORT);
 
     // Add scancode to buffer
     keyboard_buffer[keyboard_buffer_head] = scancode;
@@ -24,15 +35,15 @@ void keyboard_interrupt_handler()
 void keyboard_init()
 {
     // Install keyboard interrupt handler
-    set_interrupt_vector(0x09, keyboard_interrupt_handler);
-    enable_interrupt(0x09);
+    set_interrupt_vector(KEYBOARD_INTERRUPT_VECTOR, keyboard_interrupt_handler);
+    enable_interrupt(KEYBOARD_INTERRUPT_VECTOR);
 
     // Enable keyboard
-    outb(0x64, 0xAE);
-    while (inb(0x64) & 0x02)
+    outb(KEYBOARD_COMMAND_PORT, KEYBOARD_ENABLE_COMMAND);
+    while (inb(KEYBOARD_COMMAND_PORT) & 0x02)
         ;
-    outb(0x60, 0xF4);
-    while (inb(0x60) != 0xFA)
+    outb(KEYBOARD_DATA_PORT, KEYBOARD_ENABLE_SCANCODE);
+    while (inb(KEYBOARD_DATA_PORT) != KEYBOARD_ACKNOWLEDGE_SCANCODE)
         ;
 }
 

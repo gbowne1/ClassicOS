@@ -37,7 +37,7 @@ extern void serial_port_handler();
 // Initialize an IDT entry
 void idt_set_gate(uint8_t num, void *base, uint16_t sel, uint8_t flags)
 {
-    uint32_t base_addr = (uint32_t)base;
+    uintptr_t base_addr = (uintptr_t)base;
     idt[num].base_lo   = base_addr & BYTE_MASK;
     idt[num].base_hi   = (base_addr >> BASE_MIDDLE_SHIFT) & 0xFFFF;
     idt[num].sel       = sel;
