@@ -11,12 +11,6 @@ enum
     SERIAL_PORT_INTERRUPT = 0x24
 };
 
-struct isr_regs
-{
-    // Define the structure of the isr_regs here
-    // ...
-};
-
 // ISR table
 void (*isr_table[256])(struct isr_regs *regs);
 
