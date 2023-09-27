@@ -71,7 +71,7 @@ void (*isr_table[256])(void) = {0};
 void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs));
 
 // ISR handler
-void isr_handler(struct isr_regs *regs)
+void isr_handler(struct idt_regs *regs);
 {
     void (*handler)(void);
 

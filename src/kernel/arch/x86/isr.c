@@ -1,5 +1,6 @@
 #include "isr.h"
 #include "idt.h"
+#include <stdint.h>
 #include <stdio.h>
 
 enum
@@ -21,27 +22,48 @@ void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
 }
 
 // ISR handler
-// ISR handler
-void isr_handler(struct isr_regs *regs)
+void isr_handler(struct idt_regs *regs)
 {
     switch (regs->int_no)
     {
-    case 0:
+    case 0x00:
         divide_error();
         break;
-    case 13:
+    case 0x06:
+        invalid_opcode();
+        break;
+    case 0x0D:
         general_protection_fault(regs);
         break;
-    case 14:
+    case 0x0E:
         page_fault(regs);
         break;
+    case 0x08:
+        double_fault();
+        break;
+    case 0x80:
+        system_call(regs);
+        break;
+    case 0x20:
+        timer();
+        break;
+    case 0x21:
+        keyboard();
+        break;
+    case 0x2F:
+        device();
+        break;
+    case 0x28:
+        network();
+        break;
+    case 0x2E:
+        disk();
+        break;
+    case 0x24:
+        serial_port();
+        break;
     default:
-        void (*handler)(struct isr_regs *regs);
-        handler = isr_table[regs->int_no];
-        if (handler)
-        {
-            handler(regs);
-        }
+        printf("Unhandled interrupt: %d\n", regs->int_no);
         break;
     }
 }
@@ -53,7 +75,7 @@ void divide_error()
     // Additional actions can be taken as needed
 }
 
-void page_fault(struct isr_regs *regs)
+void page_fault(struct idt_regs *regs)
 {
     uint32_t faulting_address;
 
@@ -67,7 +89,7 @@ void page_fault(struct isr_regs *regs)
     // Additional actions can be taken as needed
 }
 
-void general_protection_fault(struct isr_regs *regs)
+void general_protection_fault(struct idt_regs *regs)
 {
     printf("General protection fault occurred!\n");
     // Additional actions can be taken as needed
@@ -79,7 +101,7 @@ void double_fault()
 }
 
 // Interrupt handlers
-void system_call(struct isr_regs *regs)
+void system_call(struct idt_regs *regs)
 {
     // Get the system call number from the eax register
     uint32_t syscall_number = regs->eax;
