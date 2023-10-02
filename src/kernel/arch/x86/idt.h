@@ -4,10 +4,6 @@
 #include <stdint.h>
 
 // Define the isr_regs structure
-struct idt_regs
-{
-    // Add the necessary members for your ISR context
-};
 
 // IDT entry structure
 struct idt_entry
@@ -28,12 +24,9 @@ struct idt_ptr
 
 // Exception handlers
 void divide_error();
-void page_fault(struct idt_regs *);
-void general_protection_fault(struct idt_regs *);
 void double_fault();
 
 // Interrupt handlers
-void system_call(struct idt_regs *);
 void timer();
 void keyboard();
 void device();
