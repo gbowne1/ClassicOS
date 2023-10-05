@@ -1,0 +1,14 @@
+issue_template_config:
+  # Default labels for all issues
+  labels:
+    - bug
+    - enhancement
+    - help wanted
+  # Default assignees for all issues
+  assignees:
+    - username1
+    - username2
+  # Default projects for all issues
+  projects:
+    - owner/repo/project1
+    - owner/repo/project2
