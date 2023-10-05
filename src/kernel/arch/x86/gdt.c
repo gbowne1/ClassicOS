@@ -68,15 +68,15 @@ void gdt_init()
     // Load GDT
     struct gdt_ptr gdtp;
     gdtp.limit = gp.limit;
-    gdtp.base  = (uint32_t)gdt;
+    gdtp.base  = (uintptr_t)gdt;
     __asm__ volatile("lgdt %0" : : "m"(gdtp));
     __asm__ volatile("mov $0x10, %ax\n\t"
                      "mov %ax, %ds\n\t"
                      "mov %ax, %es\n\t"
                      "mov %ax, %fs\n\t"
                      "mov %ax, %gs\n\t"
-                     "ljmp $0x08, $next\n\t"
-                     "next:");
+                     "ljmp $0x08, $next_label\n\t"
+                     "next_label:");
 }
 
 // Exception handlers
