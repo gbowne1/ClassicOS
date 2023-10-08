@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-// Define the isr_regs structure
-
 // IDT entry structure
 struct idt_entry
 {

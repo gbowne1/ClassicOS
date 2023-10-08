@@ -3,6 +3,15 @@
 
 #include <stdint.h>
 
+struct isr_regs
+{
+    uint32_t gs, fs, es, ds;      // Segment selectors
+    uint32_t edi, esi, ebp, esp;  // Pushed by pusha instruction
+    uint32_t ebx, edx, ecx, eax;  // Pushed by the interrupt handler
+    uint32_t int_no, err_code;    // Interrupt number and error code (if applicable)
+    uint32_t eip, cs, eflags, esp_at_signal; // Pushed by the processor automatically
+};
+
 // Structure for storing register values during an ISR
 struct idt_regs
 {
