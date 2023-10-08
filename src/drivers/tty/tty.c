@@ -8,7 +8,6 @@
 #include "../io/io.h"
 #include "../keyboard/keyboard.h"
 #include "../screen/screen.h"
-#include "../string.h"
 
 #include "./tty.h"
 
