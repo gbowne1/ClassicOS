@@ -18,17 +18,10 @@ void dummy_isr(struct isr_regs *regs)
 }
 
 // ISR table
-void (*isr_table[256])(struct isr_regs *regs) = {
-    // initialize the dummy isr_table
-    [TIMER_INTERRUPT]       = dummy_isr, // Timer interrupt
-    [KEYBOARD_INTERRUPT]    = dummy_isr, // Keyboard interrupt
-    [NETWORK_INTERRUPT]     = dummy_isr, // Network interrupt
-    [DISK_INTERRUPT]        = dummy_isr, // Disk interrupt
-    [SERIAL_PORT_INTERRUPT] = dummy_isr  // Serial port interrupt
-};
+extern void (*isr_table[256])(struct isr_regs *regs);
 
 // Register an ISR
-void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
+extern void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
 {
     isr_table[num] = handler;
 }

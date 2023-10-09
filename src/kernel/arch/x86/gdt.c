@@ -81,7 +81,7 @@ void gdt_init()
 
 // Exception handlers
 extern void divide_error();
-extern void page_fault();
+extern void page_fault(struct idt_regs *regs);
 extern void general_protection_fault();
 extern void double_fault();
 
@@ -91,25 +91,10 @@ extern void timer();
 extern void keyboard();
 extern void device();
 
-// ISR table
-void (*isr_table[ISR_TABLE_SIZE])(void) = {0};
-
 // Register an ISR
-void isr_register(uint8_t num, void (*handler)(void))
+void isr_register(uint8_t num, void (*handler)(struct idt_regs *))
 {
     isr_table[num] = handler;
-}
-
-// ISR handler
-void isr_handler(struct idt_regs *regs)
-{
-    void (*handler)(void) = isr_table[regs->int_no];
-
-    handler = isr_table[regs->int_no];
-    if (handler)
-    {
-        handler();
-    }
 }
 
 // Initialize the ISR

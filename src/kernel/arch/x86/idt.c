@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "isr.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -21,7 +22,7 @@ const struct idt_ptr idtp = {sizeof(idt) - 1, idt};
 
 // Exception handlers
 extern void divide_error_handler();
-extern void page_fault_handler();
+extern void page_fault(struct idt_regs *regs);
 extern void general_protection_fault_handler();
 extern void double_fault_handler();
 
@@ -57,7 +58,7 @@ void idt_init()
 
     // Set up exception handlers
     idt_set_gate(0, divide_error_handler, 0x08, 0x8E);
-    idt_set_gate(14, page_fault_handler, 0x08, 0x8E);
+    idt_set_gate(14, page_fault, 0x08, 0x8E);
     idt_set_gate(13, general_protection_fault_handler, 0x08, 0x8E);
     idt_set_gate(8, double_fault_handler, 0x08, 0x8E);
 
