@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+extern void (*isr_table[256])(struct isr_regs *regs);
+
 struct isr_regs
 {
     uint32_t gs, fs, es, ds;     // Segment selectors

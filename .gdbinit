@@ -4,6 +4,16 @@ set architecture i386
 # Set the disassembly flavor
 set disassembly-flavor intel
 
+set disassemble-next-line
+
+set pagination enable
+
+set print address
+
+set logging enable
+
+set logging file gdb.log
+
 # Set the prompt
 set prompt (gdb)
 
@@ -16,10 +26,10 @@ set history size 1000
 set solib-search-path .
 
 # Set the default directory
-cd /path/to/project
+d /home/user/Documents/ClassicOS
 
 # Set the default target
-file kernel
+file ClassicOS/build/kernel
 
 # Set the symbol file
 symbol-file kernel

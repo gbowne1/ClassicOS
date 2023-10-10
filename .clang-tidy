@@ -1,12 +1,48 @@
-Checks: "clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type"
+Checks: "clang-diagnostic-*,clang-analyzer-*,modernize-*,-modernize-use-trailing-return-type"
 WarningsAsErrors: true
 HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
-FormatStyle: google
+FormatStyle: llvm
 CheckOptions:
-  - key: cert-dcl16-c.NewSuffixes
-    value: "L;LL;LU;LLU"
-  - key: cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
-    value: "0"
-  - key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
-    value: "1"
+  - key: modernize-use-trailing-return-type.Enabled
+    value: false
+  - key: readability-identifier-naming.NamespaceCase
+    value: CamelCase
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: CamelCase
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: camelBack
+  - key: readability-identifier-naming.LocalConstantCase
+    value: camelBack
+  - key: readability-identifier-naming.LocalVariableCase
+    value: camelBack
+  - key: readability-identifier-naming.MemberConstantCase
+    value: camelBack
+  - key: readability-identifier-naming.MemberVariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.TemplateParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.TypedefCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypeAliasCase
+    value: CamelCase
+  - key: readability-identifier-naming.TypeTemplateParameterCase
+    value: CamelCase
+  - key: readability-identifier-naming.VariableTemplateCase
+    value: camelBack

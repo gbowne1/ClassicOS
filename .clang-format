@@ -1,5 +1,6 @@
 ---
-Language: Cpp
+Language: C
+Standard: C11 (or C17)
 BasedOnStyle: LLVM
 IndentWidth: 4
 UseTab: Never

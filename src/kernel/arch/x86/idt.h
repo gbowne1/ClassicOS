@@ -2,7 +2,7 @@
 #define IDT_H
 
 #include <stdint.h>
-
+#include "isr.h"
 // IDT entry structure
 struct idt_entry
 {
@@ -21,7 +21,7 @@ struct idt_ptr
 } __attribute__((packed));
 
 // Exception handlers
-void divide_error();
+void divide_error(struct idt_regs *regs);
 void double_fault();
 
 // Interrupt handlers

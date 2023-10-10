@@ -80,7 +80,7 @@ void gdt_init()
 }
 
 // Exception handlers
-extern void divide_error();
+extern void divide_error(struct idt_regs *regs);
 extern void page_fault(struct idt_regs *regs);
 extern void general_protection_fault();
 extern void double_fault();
@@ -92,20 +92,20 @@ extern void keyboard();
 extern void device();
 
 // Register an ISR
-void isr_register(uint8_t num, void (*handler)(struct idt_regs *))
+void isr_register(uint8_t num, void (*handler)(struct isr_regs *))
 {
     isr_table[num] = handler;
+}
+
+void divide_error(struct idt_regs *regs)
+{
+    printf("Divide by zero error!\n");
+    // Additional actions can be taken as needed
 }
 
 // Initialize the ISR
 void isr_init()
 {
-    // Initialize ISR table
-    for (int i = 0; i < ISR_TABLE_SIZE; i++)
-    {
-        isr_table[i] = NULL;
-    }
-
     // Register exception handlers
     isr_register(0, divide_error);
     isr_register(PAGE_FAULT, page_fault);

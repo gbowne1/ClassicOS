@@ -18,7 +18,7 @@ void dummy_isr(struct isr_regs *regs)
 }
 
 // ISR table
-extern void (*isr_table[256])(struct isr_regs *regs);
+void (*isr_table[256])(struct isr_regs *regs) = {0};
 
 // Register an ISR
 extern void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
@@ -32,7 +32,7 @@ void isr_handler(struct idt_regs *regs)
     switch (regs->int_no)
     {
     case 0x00:
-        divide_error();
+        divide_error(regs);
         break;
     case 0x06:
         invalid_opcode();
@@ -74,7 +74,7 @@ void isr_handler(struct idt_regs *regs)
 }
 
 // Exception handlers
-void divide_error()
+void divide_error(struct idt_regs *regs)
 {
     printf("Divide by zero error!\n");
     // Additional actions can be taken as needed
