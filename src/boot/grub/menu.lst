@@ -1,0 +1,8 @@
+# This doesn't work
+# If you wanna use the old GRUB, please fix this thing
+
+title Linux
+    configfile /config/linux.lst
+
+title Tools
+    configfile /config/tools.lst
