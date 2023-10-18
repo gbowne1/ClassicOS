@@ -1,0 +1,19 @@
+CompileFlags:
+  Add: ["-std=c17"]
+  Remove: ["-Werror"]
+Index:
+  Background: true
+  OnDidChange: true
+Diagnostics:
+  OnOpen: true
+  OnSave: true
+Completion:
+  EnableSnippets: true
+  IncludeBlacklist:
+    - "**/vendor/**"
+    - "**/third_party/**"
+    - "**/generated/**"
+Format:
+Workspace:
+CodeLens:
+Rename:

@@ -1,0 +1,14 @@
+# top-most EditorConfig file
+root = true
+
+# C source files
+[*.{c,h}]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C++ source files
+[*.{cpp,hpp}]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true

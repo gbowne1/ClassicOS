@@ -4,45 +4,46 @@ HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
 FormatStyle: llvm
 CheckOptions:
-  - key: modernize-use-trailing-return-type.Enabled
+
+- key: modernize-use-trailing-return-type.Enabled
     value: false
-  - key: readability-identifier-naming.NamespaceCase
+- key: readability-identifier-naming.NamespaceCase
     value: CamelCase
-  - key: readability-identifier-naming.ClassCase
+- key: readability-identifier-naming.ClassCase
     value: CamelCase
-  - key: readability-identifier-naming.StructCase
+- key: readability-identifier-naming.StructCase
     value: CamelCase
-  - key: readability-identifier-naming.FunctionCase
+- key: readability-identifier-naming.FunctionCase
     value: CamelCase
-  - key: readability-identifier-naming.VariableCase
+- key: readability-identifier-naming.VariableCase
     value: camelBack
-  - key: readability-identifier-naming.ConstantCase
+- key: readability-identifier-naming.ConstantCase
     value: UPPER_CASE
-  - key: readability-identifier-naming.EnumCase
+- key: readability-identifier-naming.EnumCase
     value: CamelCase
-  - key: readability-identifier-naming.EnumConstantCase
+- key: readability-identifier-naming.EnumConstantCase
     value: UPPER_CASE
-  - key: readability-identifier-naming.GlobalConstantCase
+- key: readability-identifier-naming.GlobalConstantCase
     value: UPPER_CASE
-  - key: readability-identifier-naming.GlobalVariableCase
+- key: readability-identifier-naming.GlobalVariableCase
     value: camelBack
-  - key: readability-identifier-naming.LocalConstantCase
+- key: readability-identifier-naming.LocalConstantCase
     value: camelBack
-  - key: readability-identifier-naming.LocalVariableCase
+- key: readability-identifier-naming.LocalVariableCase
     value: camelBack
-  - key: readability-identifier-naming.MemberConstantCase
+- key: readability-identifier-naming.MemberConstantCase
     value: camelBack
-  - key: readability-identifier-naming.MemberVariableCase
+- key: readability-identifier-naming.MemberVariableCase
     value: camelBack
-  - key: readability-identifier-naming.ParameterCase
+- key: readability-identifier-naming.ParameterCase
     value: camelBack
-  - key: readability-identifier-naming.TemplateParameterCase
+- key: readability-identifier-naming.TemplateParameterCase
     value: camelBack
-  - key: readability-identifier-naming.TypedefCase
+- key: readability-identifier-naming.TypedefCase
     value: CamelCase
-  - key: readability-identifier-naming.TypeAliasCase
+- key: readability-identifier-naming.TypeAliasCase
     value: CamelCase
-  - key: readability-identifier-naming.TypeTemplateParameterCase
+- key: readability-identifier-naming.TypeTemplateParameterCase
     value: CamelCase
-  - key: readability-identifier-naming.VariableTemplateCase
+- key: readability-identifier-naming.VariableTemplateCase
     value: camelBack

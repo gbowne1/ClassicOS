@@ -1,0 +1,23 @@
+# Define architecture and target
+target create -arch i386-unknown-unknown-unknown
+settings set target.x86-disassembly-flavor intel
+
+# Set the default source language to C
+settings set target.language c
+
+# Set the default C standard to C11
+settings set target.c-lang-std c11
+
+# Set the default C++ standard to C++17
+settings set target.cxx-lang-std c++17
+
+# Set the default disassembly flavor to Intel syntax
+settings set target.x86-disassembly-flavor intel
+
+# Set the default disassembly format to AT&T syntax
+settings set target.x86-disassembly-format att
+
+# Set the default breakpoint command to print the call stack
+breakpoint command add -s python 1
+import lldb
+print(lldb.frame.thread.GetStackFrames())
