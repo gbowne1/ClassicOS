@@ -4,20 +4,22 @@ Thank you for considering contributing to our open-source project! We appreciate
 
 ## Table of Contents
 
-1. [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Fork the Repository](#fork-the-repository)
-    - [Clone the Repository](#clone-the-repository)
-2. [Making Contributions](#making-contributions)
-    - [Branches](#branches)
-    - [Coding Standards](#coding-standards)
-    - [Commit Messages](#commit-messages)
-    - [Testing](#testing)
-3. [Submitting Changes](#submitting-changes)
-    - [Pull Requests](#pull-requests)
-    - [Issues](#issues)
-4. [Community and Communication](#community-and-communication)
-5. [Code of Conduct](#code-of-conduct)
+- [Contributing Guidelines](#contributing-guidelines)
+	- [Table of Contents](#table-of-contents)
+	- [Getting Started](#getting-started)
+		- [Prerequisites](#prerequisites)
+		- [Fork the Repository](#fork-the-repository)
+		- [Clone the Repository](#clone-the-repository)
+	- [Making Contributions](#making-contributions)
+		- [Branches](#branches)
+		- [Coding Standards](#coding-standards)
+		- [Commit Messages](#commit-messages)
+		- [Testing](#testing)
+	- [Submitting Changes](#submitting-changes)
+		- [Pull Requests](#pull-requests)
+		- [Issues](#issues)
+	- [Community and Communication](#community-and-communication)
+	- [Code of Conduct](#code-of-conduct)
 
 ## Getting Started
 
@@ -39,7 +41,7 @@ Fork our repository by clicking the "Fork" button on the top right of the reposi
 After forking the repository, clone it to your local machine using the following command, replacing `[your-username]` with your GitHub username:
 
 ```bash
-git clone https://github.com/[your-username]/[repository-name].git
+git clone https://github.com/gbowne1/[repository-name].git
 ```
 
 ## Making Contributions
@@ -56,13 +58,21 @@ git checkout -b feature/your-feature-name
 
 Please follow the coding standards and style guide of the project. If there are no established standards, maintain consistency with the existing codebase.
 
+A few notes about this project's coding standards.
+
+We use the C11 and/or C17 standard in this project.
+
+Use whatever editor or IDE you prefer.  We have toolchain recommendations including versions in the main README.md file.
+
 ### Commit Messages
 
 Write clear, concise, and meaningful commit messages. A good commit message should:
 
-- Begin with a verb in the imperative mood (e.g., "Add," "Fix," "Update").
+- Begin with a verb in the imperative mood (e.g., "Add", "Fix" "Update", etc. ).
 - Be concise and focused on a single change.
+- Keep your changes limited to the issue.
 - Reference related issues or pull requests, if applicable.
+- Do not be afraid to post any issues you encounter
 
 Example: "Fix #123: Add validation for user email input"
 
@@ -78,6 +88,7 @@ When your contribution is ready, open a pull request (PR) from your branch to th
 
 - Give the PR a descriptive title.
 - Provide a clear and detailed description of your changes.
+- Do NOT screenshot code, rather copy and paste into code blocks in Markdown.
 - Reference related issues, if any.
 - Be prepared to respond to feedback and make necessary adjustments.
 
@@ -87,7 +98,7 @@ If you find a bug, have a suggestion, or want to work on an issue, please check 
 
 ## Community and Communication
 
-Join our community on [GitHub Discussions](link-to-discussions) or [our Discord/Slack channel](link-to-community-chat) to connect with other contributors and maintainers. This is the place to seek help, discuss ideas, and stay updated on project developments.
+Join our community on [GitHub Discussions](https://github.com/gbowne1/ClassicOS/discussions) or [our Discord](https://discord.gg/QusyDYeh) or [our Slack server/channel](https://join.slack.com/t/connectcoders/shared_invite/zt-23ajnvegn-0nUuIlxhSDU8tQrPBL~riQ)to connect with other contributors and maintainers. This is the place to seek help, discuss ideas, and stay updated on project developments.
 
 ## Code of Conduct
 
