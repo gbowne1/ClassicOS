@@ -11,8 +11,7 @@ void pci_init();
 // Detect and configure PCI devices
 void pci_detect_devices();
 
-// Read from a PCI device
-uint8_t pci_read(uint16_t port);
+uint8_t pci_read(uint8_t bus, uint8_t device, uint8_t function, uint8_t offset);
 
 // Write to a PCI device
 void pci_write(uint16_t port, uint8_t value);

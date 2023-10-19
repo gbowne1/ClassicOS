@@ -1,3 +1,5 @@
+[BITS 16]
+
 ; Set up the segment registers
 xor ax, ax
 mov ds, ax
@@ -89,7 +91,7 @@ main:
    ; Wait for a key press to exit the loop
    mov ah, 0x00
    int 0x16
-   
+
    ; Call the detect_disk function
    call detect_disk
 

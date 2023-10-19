@@ -1,15 +1,21 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(ClassicOS VERSION 0.0.1 LANGUAGES C)
+project(ClassicOS
+		VERSION 0.0.1
+		DESCRIPTION "An x86 Operating System for your pleasure and enjoyment"
+        HOMEPAGE_URL "https://github.com/gbowne1/ClassicOS"
+		LANGUAGES C ASM_NASM)
 
 # Source files
 set(BOOT_SOURCE_FILES
     src/boot/boot.asm
     src/boot/linker.ld
 )
+
 set(GRUB_SOURCE_FILES
     src/boot/grub/grub.cfg
     src/boot/grub/menu.lst
 )
+
 set(DRIVERS_SOURCE_FILES
     src/drivers/audio/audio.c
     src/drivers/audio/audio.h
@@ -53,7 +59,7 @@ set(KERNEL_SOURCE_FILES
 
 add_executable(ClassicOS
     ${BOOT_SOURCE_FILES}
-    ${GRUB_SOURCE_FILES}
+	${GRUB_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
     ${KERNEL_SOURCE_FILES}
 )
@@ -78,6 +84,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_ASM_COMPILER nasm)
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --32")
+set(CMAKE_ASM_NASM_OBJECT_FORMAT bin)
 set(CMAKE_SYSTEM_PROCESSOR i386)
 set(CMAKE_SYSTEM_NAME None)
 set(CMAKE_ASM_NASM_COMPILER nasm)
