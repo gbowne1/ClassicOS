@@ -4,7 +4,7 @@ CXX = g++
 AS = nasm
 LD = ld
 CFLAGS = -g -Wall
-CXXFLAGS = -g -Wall
+CXXFLAGS = -g -Wall -Werror -Wpedantic -Wextra
 LDFLAGS = -T linker.ld
 
 # Source files

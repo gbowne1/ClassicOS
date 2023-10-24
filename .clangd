@@ -1,6 +1,6 @@
 CompileFlags:
   Add: ["-std=c17"]
-  Remove: ["-Werror"]
+  Remove: ["-Wall -Wpedantic -Wextra -Werror"]
 Index:
   Background: true
   OnDidChange: true

@@ -1,4 +1,7 @@
 -std=c17
 -Wall
+-Wextra
+-Wpedantic
+-Werror
 -O2
 -I/path/to/include

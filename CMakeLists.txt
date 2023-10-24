@@ -3,7 +3,7 @@ project(ClassicOS
 		VERSION 0.0.1
 		DESCRIPTION "An x86 Operating System for your pleasure and enjoyment"
         HOMEPAGE_URL "https://github.com/gbowne1/ClassicOS"
-		LANGUAGES C ASM_NASM)
+		LANGUAGES C)
 
 # Source files
 set(BOOT_SOURCE_FILES
@@ -66,28 +66,39 @@ add_executable(ClassicOS
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(WIN32)
+  # Define build steps for Windows
+elseif(LINUX)
+  # Define build steps for other platforms
+elseif(UNIX)
+
+endif()
+
 # Enable testing
 enable_testing()
 
 target_link_libraries(ClassicOS PRIVATE)
 
-set(CMAKE_C_COMPILER gcc)
-set(CMAKE_LINKER ld)
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_LINKER /usr/bin/ld)
 set(CMAKE_EXE_LINKER_FLAGS "-g -s")
+# set(CMAKE_LINK_FLAGS) usage is deprecated, use CMAKE_EXE_LINKER_FLAGS).
 set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
-set(CMAKE_CXX_FLAGS "-g -Wall")
-set(CMAKE_C_FLAGS "-g -Wall -m32")
-set(CMAKE_C_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS "-g Wall ")
+set(CMAKE_C_FLAGS "-g -Wall")
+set(CMAKE_C_FLAGS_DEBUG "-g -Wall")
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_GDB_COMMAND gdb)
+set(CMAKE_GDB_COMMAND "/usr/bin/gdb")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_ASM_COMPILER nasm)
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --32")
+set(CMAKE_ASM_COMPILER /usr/bin/nasm)
+set(CMAKE_ASM_NASM_FLAGS "-f elf32 -g -F dwarf")
+set(CMAKE_ASM_FLAGS "-m32 -g")
 set(CMAKE_ASM_NASM_OBJECT_FORMAT bin)
+set(CMAKE_HOST_SYSTEM_PROCESSOR x86_64)
 set(CMAKE_SYSTEM_PROCESSOR i386)
 set(CMAKE_SYSTEM_NAME None)
-set(CMAKE_ASM_NASM_COMPILER nasm)
+set(CMAKE_ASM_NASM_COMPILER user/bin/nasm)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
