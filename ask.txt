@@ -8,15 +8,19 @@ ClassicOS/
 ├── README.md
 ├── build/
 │   ├── boot.bin
-│   └── boot.o
+│   ├── boot.o
 ├── include/
 ├── src/
 │   ├── boot/
 │   │   ├── grub/
-│   │   │   ├── grub.cf
+│   │   │	├── grub.cfg
 │   │   │	└── menu.lst
 │   │   ├── boot.asm
+│   │	├── boot.o
 │   │   ├── linker.ld
+│   ├── cpu/
+│   │   ├── cpu.c
+│   │	├── cpu.h
 │   ├── drivers/
 │   │	├── audio/
 │   │   │   ├── audio.c
@@ -34,46 +38,77 @@ ClassicOS/
 │   │   │	└── vesa.h
 │   │	├── display/
 │   │   │	├── display.c
-│   │   │	└── display.h
+│   │   │	├── display.h
+│   │   │	├── vga.c
+│   │   │	└── vga.h
 │   │	├── io/
 │   │   │	├── io.c
-│   │   │	└── movement.c
+│   │   │	├── io.c
+│   │   │	├── serial.c
+│   │   │	└── serial.h
 │   │	├── keyboard/
 │   │   │	├── keyboard.c
 │   │   │	└── keyboard.h
 │   │	├── mouse/
 │   │   │	├── mouse.c
 │   │   │	└── mouse.h
+│   │	├── network/
+│   │   │	├── ne2000.c
+│   │   │	└── ne2000.h
 │   │	├── screen/
+│   │   │	├── console.c
+│   │   │	├── console.c
 │   │   │	├── screen.c
 │   │   │	└── screen.h
 │   │	├── tty/
 │   │   │	├── tty.c
 │   │   │	└── tty.h
+│	├── filesystem/
+│	│	├── fat16/
+│   │   │	├── fat16.h
+│   │   │	└── fat16.h
+│	│	├── fat32/
+│   │   │	├── fat32.c
+│   │   │	└── fat32.h
+│   ├── gui/
+│   │	├── gui.c
+│   │	├── gui.h
 │   ├── kernel/
 │   │   ├── arch/
 │   │   │	└── x86/
 │	│	│	│	└── include/
-│	│	│	│	│	├── memory.c
+│	│	│	│	│	├── memory.h
 │	│	│	│	│	├── types.h
 │	│	│	│	│	└── types.h
 │	│	│	│	└── memory/
-│	│	│	│	│	└── memory.c
+│	│	│	│	│	├── memory.c
+│	│	│	│	│	└── memory.o
 │	│	│	├── gdt.c
 │	│	│	├── gdt.h
+│	│	│	├── gdt.o
 │	│	│	├── idt.c
 │	│	│	├── idt.h
+│	│	│	├── gdt.o
 │	│	│	├── isr.c
 │	│	│	└── isr.h
+│	│	└── malloc/
+│   │   │	├── kmalloc.c
+│	│	│	└── kmalloc.h
+│	│	├── acpi.c
+│	│	├── acpi.h
 │	│	├── kernel.c
 │	│	├── kernel.h
 │	│	├── kernel.o
 │	│	├── linker.ld
 │	│	├── print.c
-│	│	└── print.o
+│	│	├── print.c
+│	│	├── timer.c
+│	│	└── timer.h
 │   └── shell/
 │       ├── shell.c
 │       └── shell.h
+│   ├── elf.C
+│	└── elf.h
 └── std/
 
 This is my CMakeLists.txt
@@ -166,4 +201,3 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
-
