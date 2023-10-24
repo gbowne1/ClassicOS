@@ -1,9 +1,20 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(ClassicOS
-		VERSION 0.0.1
-		DESCRIPTION "An x86 Operating System for your pleasure and enjoyment"
-        HOMEPAGE_URL "https://github.com/gbowne1/ClassicOS"
-		LANGUAGES C)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C ASM_NASM)
+
+set(IS_OS_WINDOWS FALSE)
+set(IS_OS_LINUX FALSE)
+set(IS_OS_MAC FALSE)
+
+if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+	set(IS_OS_WINDOWS TRUE)
+	message("Building for the Windows operating system.")
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+	set(IS_OS_LINUX TRUE)
+	message("Building for the Linux operating system.")
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+	set(IS_OS_MAC TRUE)
+	message("Building for the Mac operating system.")
+endif ()
 
 # Source files
 set(BOOT_SOURCE_FILES
@@ -11,10 +22,12 @@ set(BOOT_SOURCE_FILES
     src/boot/linker.ld
 )
 
+#[[
 set(GRUB_SOURCE_FILES
     src/boot/grub/grub.cfg
     src/boot/grub/menu.lst
 )
+]]
 
 set(DRIVERS_SOURCE_FILES
     src/drivers/audio/audio.c
@@ -25,6 +38,7 @@ set(DRIVERS_SOURCE_FILES
 	src/drivers/bus/isa.h
 	src/drivers/bus/mca.c
 	src/drivers/bus/mca.h
+	src/drivers/bus/pci.asm
 	src/drivers/bus/pci.c
 	src/drivers/bus/pci.h
 	src/drivers/bus/vesa.c
@@ -58,49 +72,38 @@ set(KERNEL_SOURCE_FILES
 )
 
 add_executable(ClassicOS
-    ${BOOT_SOURCE_FILES}
-	${GRUB_SOURCE_FILES}
+    ${GRUB_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
     ${KERNEL_SOURCE_FILES}
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(WIN32)
-  # Define build steps for Windows
-elseif(LINUX)
-  # Define build steps for other platforms
-elseif(UNIX)
-
-endif()
-
 # Enable testing
 enable_testing()
 
 target_link_libraries(ClassicOS PRIVATE)
 
-set(CMAKE_C_COMPILER /usr/bin/gcc)
-set(CMAKE_LINKER /usr/bin/ld)
-set(CMAKE_EXE_LINKER_FLAGS "-g -s")
-# set(CMAKE_LINK_FLAGS) usage is deprecated, use CMAKE_EXE_LINKER_FLAGS).
-set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
-set(CMAKE_CXX_FLAGS "-g Wall ")
-set(CMAKE_C_FLAGS "-g -Wall")
-set(CMAKE_C_FLAGS_DEBUG "-g -Wall")
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_GDB_COMMAND "/usr/bin/gdb")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_ASM_COMPILER /usr/bin/nasm)
-set(CMAKE_ASM_NASM_FLAGS "-f elf32 -g -F dwarf")
-set(CMAKE_ASM_FLAGS "-m32 -g")
-set(CMAKE_ASM_NASM_OBJECT_FORMAT bin)
-set(CMAKE_HOST_SYSTEM_PROCESSOR x86_64)
+
 set(CMAKE_SYSTEM_PROCESSOR i386)
 set(CMAKE_SYSTEM_NAME None)
-set(CMAKE_ASM_NASM_COMPILER user/bin/nasm)
 set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
+
+if (IS_OS_LINUX)
+	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f elf")
+	set(CMAKE_C_COMPILER gcc)
+	set(CMAKE_LINKER ld)
+	set(CMAKE_EXE_LINKER_FLAGS "-g -s")
+	set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
+	set(CMAKE_CXX_FLAGS "-g -Wall")
+	set(CMAKE_C_FLAGS "-g -Wall -m32")
+	set(CMAKE_C_FLAGS_DEBUG "-g")
+	set(CMAKE_GDB_COMMAND gdb)
+	set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+	set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
+elseif (IS_OS_WINDOWS)
+	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f win32")
+endif ()
