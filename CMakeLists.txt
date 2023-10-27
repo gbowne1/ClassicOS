@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(ClassicOS VERSION 0.0.1 LANGUAGES C ASM_NASM)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C CXX ASM_NASM)
 
 set(IS_OS_WINDOWS FALSE)
 set(IS_OS_LINUX FALSE)
@@ -38,7 +38,7 @@ set(DRIVERS_SOURCE_FILES
 	src/drivers/bus/isa.h
 	src/drivers/bus/mca.c
 	src/drivers/bus/mca.h
-	src/drivers/bus/pci.asm
+	#src/drivers/bus/pci.asm
 	src/drivers/bus/pci.c
 	src/drivers/bus/pci.h
 	src/drivers/bus/vesa.c
@@ -69,6 +69,33 @@ set(KERNEL_SOURCE_FILES
     src/kernel/kernel.h
     src/kernel/linker.ld
     src/kernel/print.c
+)
+
+set(UTIL_SOURCE_FILES
+	src/EHS.h
+	src/sys/cpu.h src/sys/cpu.cpp src/sys/CPU_GCC_AMD64.asm
+	src/Util.h src/Util.cpp
+	src/Version.h src/Version.cpp
+	src/Serializer.h
+	src/Array.h
+	src/Vector.h
+	src/SArray.h
+	src/Str.h
+	src/PRNG.h
+	src/HRNG.h src/HRNG_GCC.s
+	src/Math.h src/Math.cpp src/Math_GCC_AMD64.s
+	src/Rect.h
+	src/Range.h src/Range.cpp
+	src/Color4.h src/Color4.cpp
+	src/Color3.h src/Color3.cpp
+	src/Quat.h
+	src/Vec4.h
+	src/Vec3.h
+	src/Vec2.h
+	src/Mat4.h
+	src/Mat3.h
+	src/Mat2.h
+
 )
 
 add_executable(ClassicOS
