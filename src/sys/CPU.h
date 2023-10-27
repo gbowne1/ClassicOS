@@ -28,11 +28,6 @@ struct TSC
 
 class CPU
 {
-private:
-	#ifdef OS_LINUX
-		static UInt_64 TSC_Freq;
-	#endif
-
 public:
 	static Architecture GetArchitecture();
 
@@ -41,8 +36,6 @@ public:
 	static Endianness GetEndianness();
 
 	static void RDTSCP(TSC* tsc);
-
-	static UInt_64 GetTSC_Freq();
 
 	static UInt_64 GetTSC();
 
@@ -207,9 +200,4 @@ public:
 	static void GetBrand(Char_8* input);
 
 	//static Str_8 ToStr();
-
-private:
-	static UInt_64 RetrieveTSC_Freq();
-
-	static UInt_64 CalculateTSC_Freq();
 };

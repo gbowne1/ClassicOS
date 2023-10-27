@@ -7,13 +7,13 @@ set(IS_OS_MAC FALSE)
 
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
 	set(IS_OS_WINDOWS TRUE)
-	message("Building for the Windows operating system.")
+	message("Building on the Windows operating system.")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
 	set(IS_OS_LINUX TRUE)
-	message("Building for the Linux operating system.")
+	message("Building on the Linux operating system.")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
 	set(IS_OS_MAC TRUE)
-	message("Building for the Mac operating system.")
+	message("Building on the Mac operating system.")
 endif ()
 
 # Source files
@@ -73,7 +73,7 @@ set(KERNEL_SOURCE_FILES
 
 set(UTIL_SOURCE_FILES
 	src/EHS.h
-	src/sys/cpu.h src/sys/cpu.cpp src/sys/CPU_GCC_AMD64.asm
+	src/sys/CPU.h src/sys/CPU.cpp src/sys/CPU_GCC_AMD64.asm
 	src/Util.h src/Util.cpp
 	src/Version.h src/Version.cpp
 	src/Serializer.h
@@ -95,13 +95,13 @@ set(UTIL_SOURCE_FILES
 	src/Mat4.h
 	src/Mat3.h
 	src/Mat2.h
-
 )
 
 add_executable(ClassicOS
     ${GRUB_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
     ${KERNEL_SOURCE_FILES}
+	${UTIL_SOURCE_FILES}
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -115,6 +115,7 @@ target_link_libraries(ClassicOS PRIVATE)
 set(CMAKE_SYSTEM_PROCESSOR i386)
 set(CMAKE_SYSTEM_NAME None)
 set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
