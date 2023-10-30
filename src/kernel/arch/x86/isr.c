@@ -2,6 +2,16 @@
 #include "idt.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "./interrupt_utils.h"
+
+void invalid_opcode(void);
+void general_protection_fault(struct idt_regs *regs);
+void page_fault(struct idt_regs *regs);
+void system_call(struct idt_regs *regs);
 
 enum
 {
@@ -16,9 +26,6 @@ void dummy_isr(struct isr_regs *regs)
 {
     printf("Timer interrupt occurred!\n");
 }
-
-// ISR table
-void (*isr_table[256])(struct isr_regs *regs) = {0};
 
 // Register an ISR
 extern void isr_register(uint8_t num, void (*handler)(struct isr_regs *regs))
@@ -141,7 +148,8 @@ void system_call(struct idt_regs *regs)
 
 void timer()
 {
-    // Handle timer interrupt
+	static int count = 0;
+	printf ("timer expired %d times\n", ++count);
 }
 
 void keyboard()
