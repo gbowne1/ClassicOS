@@ -1,6 +1,7 @@
 global inb
 global outb
 
+section .text
 inb:
     MOV DX, WORD [ESP + 16]
     IN AL, DX

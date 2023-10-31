@@ -4,20 +4,20 @@
 
 void DivideByZero()
 {
-	printf("Divide By Zero Exception");
+	//printf("Divide By Zero Exception");
 }
 
 void DoubleFault()
 {
-	printf("Double Fault Exception");
+	//printf("Double Fault Exception");
 }
 
 void PageFault()
 {
-	printf("Page Fault Exception");
+	//printf("Page Fault Exception");
 }
 
 void GeneralProtectionFault()
 {
-	printf("General Protection Fault Exception");
+	//printf("General Protection Fault Exception");
 }

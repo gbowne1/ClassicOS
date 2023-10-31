@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.13.4)
+
+set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/src)
+set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/build)
+
+include(x86-baremetal-toolchain.cmake)
+
 project(ClassicOS VERSION 0.0.1 LANGUAGES C CXX ASM_NASM)
 
 set(IS_OS_WINDOWS FALSE)
@@ -61,7 +67,8 @@ set(KERNEL_SOURCE_FILES
 	src/kernel/arch/x86/include/types.h
 	src/kernel/arch/x86/memory/memory.c
 	src/kernel/arch/x86/gdt.c
-	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/gdt.asm
+	src/kernel/arch/x86/gdt.h
 	src/kernel/arch/x86/idt.c
 	src/kernel/arch/x86/idt.asm
 	src/kernel/arch/x86/idt.h
@@ -73,6 +80,8 @@ set(KERNEL_SOURCE_FILES
     src/kernel/kernel.h
     src/kernel/linker.ld
     src/kernel/print.c
+		src/kernel/stack.c
+		src/kernel/stack.h
 )
 
 set(UTIL_SOURCE_FILES
@@ -103,38 +112,17 @@ set(UTIL_SOURCE_FILES
 
 add_executable(ClassicOS
     ${GRUB_SOURCE_FILES}
+	${KERNEL_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
-    ${KERNEL_SOURCE_FILES}
 )
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Enable testing
-enable_testing()
-
-target_link_libraries(ClassicOS PRIVATE)
-
-
-set(CMAKE_SYSTEM_PROCESSOR i386)
-set(CMAKE_SYSTEM_NAME None)
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-
 if (IS_OS_LINUX)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f elf")
-	set(CMAKE_C_COMPILER gcc)
-	set(CMAKE_LINKER ld)
 	set(CMAKE_EXE_LINKER_FLAGS "-g -s")
 	set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
-	set(CMAKE_CXX_FLAGS "-g -Wall")
-	set(CMAKE_C_FLAGS "-g -Wall -m32")
-	set(CMAKE_C_FLAGS_DEBUG "-g")
-	set(CMAKE_GDB_COMMAND gdb)
-	set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-	set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
+
+	#set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
 elseif (IS_OS_WINDOWS)
 	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f win32")
 endif ()

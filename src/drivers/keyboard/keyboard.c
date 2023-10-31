@@ -34,8 +34,8 @@ void KeyboardInterruptHandler()
 void keyboard_init()
 {
     // Install keyboard interrupt handler
-    set_interrupt_vector(KEYBOARD_INTERRUPT_VECTOR, KeyboardInterruptHandler);
-    enable_interrupt(KEYBOARD_INTERRUPT_VECTOR);
+    //set_interrupt_vector(KEYBOARD_INTERRUPT_VECTOR, KeyboardInterruptHandler);
+    //enable_interrupt(KEYBOARD_INTERRUPT_VECTOR);
 
     // Enable keyboard
     outb(KEYBOARD_COMMAND_PORT, KEYBOARD_ENABLE_COMMAND);

@@ -3,5 +3,5 @@
 
 void print_string(const char *str)
 {
-    printf("%s", str);
+    //printf("%s", str);
 }

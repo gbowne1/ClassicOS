@@ -38,6 +38,8 @@ enum GDT_BASE_LIMIT
     GDT_LIMIT_MASK        = 0xFFFF
 };
 
+extern void LoadGDT(struct gdt_ptr* gdt);
+
 // Initialize a GDT entry
 void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
                   uint8_t gran, struct gdt_entry *const gdt)
@@ -57,8 +59,8 @@ void gdt_init()
     // Set up GDT pointer
     struct gdt_ptr gp;
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gdt      = (struct gdt_entry *)malloc(sizeof(struct gdt_entry) * 3);
-    memset(gdt, 0, sizeof(struct gdt_entry) * 3);
+    //gdt      = (struct gdt_entry *)malloc(sizeof(struct gdt_entry) * 3);
+    //memset(gdt, 0, sizeof(struct gdt_entry) * 3);
 
     // Initialize GDT entries
     gdt_set_gate(0, 0, 0, 0, 0, gdt);                // Null segment
@@ -69,7 +71,10 @@ void gdt_init()
     struct gdt_ptr gdtp;
     gdtp.limit = gp.limit;
     gdtp.base  = (uintptr_t)gdt;
-    __asm__ volatile("lgdt %0" : : "m"(gdtp));
+
+	LoadGDT(&gdtp);
+
+	/*
     __asm__ volatile("mov $0x10, %ax\n\t"
                      "mov %ax, %ds\n\t"
                      "mov %ax, %es\n\t"
@@ -77,6 +82,7 @@ void gdt_init()
                      "mov %ax, %gs\n\t"
                      "ljmp $0x08, $next_label\n\t"
                      "next_label:");
+	 */
 }
 
 // Exception handlers

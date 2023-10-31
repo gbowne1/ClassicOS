@@ -51,8 +51,8 @@ void eisa_detect_devices()
                         // This is my device, configure it
                         uint32_t config1 = eisa_read_config_dword(address, 4);
                         uint32_t config2 = eisa_read_config_dword(address, 8);
-                        printf("Config1: %u\n", config1);
-                        printf("Config2: %u\n", config2);
+						//printf("Config1: %u\n", config1);
+                        //printf("Config2: %u\n", config2);
                         // Do something with the configuration data
                     }
                 }
