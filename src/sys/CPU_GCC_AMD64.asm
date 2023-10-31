@@ -1,22 +1,22 @@
-global _ZN3lwe3CPU6RDTSCPEPNS_3TSCE
-global _ZN3lwe3CPU15GetManufacturerEPc
-global _ZN3lwe3CPU11GetInfoBitsEv
-global _ZN3lwe3CPU16GetFeatureBits_1Ev
-global _ZN3lwe3CPU16GetFeatureBits_2Ev
-global _ZN3lwe3CPU19GetExtFeatureBits_1Ev
-global _ZN3lwe3CPU19GetExtFeatureBits_2Ev
-global _ZN3lwe3CPU19GetExtFeatureBits_3Ev
-global _ZN3lwe3CPU8GetBrandEPc
+global _ZN3CPU6RDTSCPEPNS_3TSCE
+global _ZN3CPU15GetManufacturerEPc
+global _ZN3CPU11GetInfoBitsEv
+global _ZN3CPU16GetFeatureBits_1Ev
+global _ZN3CPU16GetFeatureBits_2Ev
+global _ZN3CPU19GetExtFeatureBits_1Ev
+global _ZN3CPU19GetExtFeatureBits_2Ev
+global _ZN3CPU19GetExtFeatureBits_3Ev
+global _ZN3CPU8GetBrandEPc
 
 section .text
-    _ZN3lwe3CPU6RDTSCPEPNS_3TSCE:
+    _ZN3CPU6RDTSCPEPNS_3TSCE:
         RDTSCP
         MOV DWORD [RDI], ECX
         MOV DWORD [RDI + 4], EDX
         MOV DWORD [RDI + 8], EAX
         RET
 
-    _ZN3lwe3CPU15GetManufacturerEPc:
+    _ZN3CPU15GetManufacturerEPc:
         PUSH RBX
 
         XOR EAX, EAX
@@ -30,7 +30,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU11GetInfoBitsEv:
+    _ZN3CPU11GetInfoBitsEv:
         PUSH RBX
 
         MOV EAX, 1
@@ -40,7 +40,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU16GetFeatureBits_1Ev:
+    _ZN3CPU16GetFeatureBits_1Ev:
         PUSH RBX
 
         MOV EAX, 1
@@ -52,7 +52,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU16GetFeatureBits_2Ev:
+    _ZN3CPU16GetFeatureBits_2Ev:
         PUSH RBX
 
         MOV EAX, 1
@@ -64,7 +64,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU19GetExtFeatureBits_1Ev:
+    _ZN3CPU19GetExtFeatureBits_1Ev:
         PUSH RBX
 
         MOV EAX, 7
@@ -77,7 +77,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU19GetExtFeatureBits_2Ev:
+    _ZN3CPU19GetExtFeatureBits_2Ev:
         PUSH RBX
 
         MOV EAX, 7
@@ -90,7 +90,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU19GetExtFeatureBits_3Ev:
+    _ZN3CPU19GetExtFeatureBits_3Ev:
         PUSH RBX
 
         MOV EAX, 7
@@ -103,7 +103,7 @@ section .text
 
         RET
 
-    _ZN3lwe3CPU8GetBrandEPc:
+    _ZN3CPU8GetBrandEPc:
         PUSH RBX
 
         MOV EAX, 80000002h

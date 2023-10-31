@@ -4,7 +4,7 @@
 #include "../Str.h"
 #include "../Array.h"
 
-enum class Architecture : UInt_8
+enum Architecture : UInt_8
 {
 	X64,
 	X86,
@@ -13,7 +13,7 @@ enum class Architecture : UInt_8
 	UNKNOWN
 };
 
-enum class Endianness : UInt_8
+enum Endianness : UInt_8
 {
 	LE,
 	BE
@@ -21,9 +21,9 @@ enum class Endianness : UInt_8
 
 struct TSC
 {
-	UInt_32 coreId = 0;
-	UInt_32 highCount = 0;
-	UInt_32 lowCount = 0;
+	UInt_32 coreId;
+	UInt_32 highCount;
+	UInt_32 lowCount;
 };
 
 class CPU

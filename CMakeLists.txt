@@ -46,6 +46,7 @@ set(DRIVERS_SOURCE_FILES
     src/drivers/display/display.c
     src/drivers/display/display.h
     src/drivers/io/io.c
+	src/drivers/io/io.asm
     src/drivers/io/io.h
     src/drivers/keyboard/keyboard.c
     src/drivers/keyboard/keyboard.h
@@ -62,9 +63,12 @@ set(KERNEL_SOURCE_FILES
 	src/kernel/arch/x86/gdt.c
 	src/kernel/arch/x86/gdt.c
 	src/kernel/arch/x86/idt.c
+	src/kernel/arch/x86/idt.asm
 	src/kernel/arch/x86/idt.h
-	src/kernel/arch/x86/isr.c
-	src/kernel/arch/x86/isr.h
+	src/kernel/arch/x86/isr/isr.c
+	src/kernel/arch/x86/isr/isr.h
+	src/kernel/arch/x86/isr/exceptions.c
+	src/kernel/arch/x86/isr/exceptions.h
     src/kernel/kernel.c
     src/kernel/kernel.h
     src/kernel/linker.ld
@@ -101,7 +105,6 @@ add_executable(ClassicOS
     ${GRUB_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
     ${KERNEL_SOURCE_FILES}
-	${UTIL_SOURCE_FILES}
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -21,21 +21,20 @@ static size_t  keyboard_buffer_tail = 0;
 void set_interrupt_vector(uint8_t vector, void (*handler)());
 void enable_interrupt(uint8_t vector);
 
-// Keyboard interrupt handler
-void keyboard_interrupt_handler()
+void KeyboardInterruptHandler()
 {
-    uint8_t scancode = inb(KEYBOARD_DATA_PORT);
+	uint8_t scancode = inb(KEYBOARD_DATA_PORT);
 
-    // Add scancode to buffer
-    keyboard_buffer[keyboard_buffer_head] = scancode;
-    keyboard_buffer_head = (keyboard_buffer_head + 1) % KEYBOARD_BUFFER_SIZE;
+	// Add scancode to buffer
+	keyboard_buffer[keyboard_buffer_head] = scancode;
+	keyboard_buffer_head = (keyboard_buffer_head + 1) % KEYBOARD_BUFFER_SIZE;
 }
 
 // Initialize keyboard
 void keyboard_init()
 {
     // Install keyboard interrupt handler
-    set_interrupt_vector(KEYBOARD_INTERRUPT_VECTOR, keyboard_interrupt_handler);
+    set_interrupt_vector(KEYBOARD_INTERRUPT_VECTOR, KeyboardInterruptHandler);
     enable_interrupt(KEYBOARD_INTERRUPT_VECTOR);
 
     // Enable keyboard

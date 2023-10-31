@@ -404,29 +404,3 @@ bool CPU::HasADX()
 {
 	return GetExtFeatureBits_1() & 0b00000000000010000000000000000000;
 }
-
-/*
-Str_8 CPU::ToStr()
-{
-	return "Manufacturer: " + GetManufacturer() + "\r\n" +
-			"Brand: " + GetBrand() + "\r\n" +
-			"Stepping Id: " + Str_8::FromNum(GetSteppingId()) + "\r\n" +
-			"GpuModel Id: " + Str_8::FromNum(GetModelId()) + "\r\n" +
-			"Family Id: " + Str_8::FromNum(GetFamilyId()) + "\r\n" +
-			"Processor Type Id: " + Str_8::FromNum(GetProcessorTypeId()) + "\r\n" +
-			"Extended GpuModel Id: " + Str_8::FromNum(GetExtModelId()) + "\r\n" +
-			"Extended Family Id: " + Str_8::FromNum(GetExtFamilyId()) + "\r\n" +
-			"Has FPU: " + Str_8::FromNum((UInt_8)HasFPU()) + "\r\n" +
-			"Has SSE: " + Str_8::FromNum((UInt_8)HasSSE()) + "\r\n" +
-			"Has SSE 2: " + Str_8::FromNum((UInt_8)HasSSE2()) + "\r\n" +
-			"Has SSE 3: " + Str_8::FromNum((UInt_8)HasSSE3()) + "\r\n" +
-			"Has SSSE 3: " + Str_8::FromNum((UInt_8)HasSSSE3()) + "\r\n" +
-			"Has SSE 4.1: " + Str_8::FromNum((UInt_8)HasSSE4_1()) + "\r\n" +
-			"Has SSE 4.2: " + Str_8::FromNum((UInt_8)HasSSE4_2()) + "\r\n" +
-			"Has AVX: " + Str_8::FromNum((UInt_8)HasAVX()) + "\r\n" +
-			"Has RDRND: " + Str_8::FromNum((UInt_8)HasRDRND()) + "\r\n" +
-			"Has AVX 2: " + Str_8::FromNum((UInt_8)HasAVX2()) + "\r\n" +
-			"Has ADX: " + Str_8::FromNum((UInt_8)HasADX()) + "\r\n" +
-			"Has RDSEED: " + Str_8::FromNum((UInt_8)HasRDSEED());
-}
-*/

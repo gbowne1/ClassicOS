@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+void KeyboardInterruptHandler();
+
 void    keyboard_init();
 bool    keyboard_buffer_empty();
 uint8_t keyboard_read_scancode();

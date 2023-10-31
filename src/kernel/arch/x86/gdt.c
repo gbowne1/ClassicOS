@@ -1,6 +1,6 @@
 #include "gdt.h"
 #include "idt.h"
-#include "isr.h"
+#include "isr/isr.h"
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -90,31 +90,3 @@ extern void system_call();
 extern void timer();
 extern void keyboard();
 extern void device();
-
-// Register an ISR
-void isr_register(uint8_t num, void (*handler)(struct isr_regs *))
-{
-    isr_table[num] = handler;
-}
-
-void divide_error(struct idt_regs *regs)
-{
-    printf("Divide by zero error!\n");
-    // Additional actions can be taken as needed
-}
-
-// Initialize the ISR
-void isr_init()
-{
-    // Register exception handlers
-    isr_register(0, divide_error);
-    isr_register(PAGE_FAULT, page_fault);
-    isr_register(13, general_protection_fault);
-    isr_register(DOUBLE_FAULT, double_fault);
-
-    // Register interrupt handlers
-    isr_register(SYSTEM_CALL, system_call);
-    isr_register(TIMER, timer);
-    isr_register(0x21, keyboard);
-    isr_register(0x30, device);
-}

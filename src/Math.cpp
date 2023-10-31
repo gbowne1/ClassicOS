@@ -55,7 +55,7 @@ double Math::Sqrt(const double from)
 
 float Math::Sqrt(const float from)
 {
-	#if defined(ARCH_X64)
+	#if defined(ARCH_X64) || defined(ARCH_X86)
 		if (CPU::HasAVX())
 			return Sqrt_AVX(from);
 		else if (CPU::HasSSE())

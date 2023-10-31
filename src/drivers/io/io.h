@@ -19,8 +19,10 @@ char io_read_lpt();
 void io_write_lpt(char data);
 
 // Function declarations for keyboard.c
-uint8_t inb(uint16_t port);
-void    outb(uint16_t port, uint8_t data);
+extern uint8_t inb(uint16_t port);
+
+extern void outb(uint16_t port, uint8_t data);
+
 void    install_interrupt_handler(uint8_t interrupt, void (*handler)(void));
 
 #endif /* IO_H */

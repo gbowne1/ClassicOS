@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sys/cpu.h"
+#include "sys/CPU.h"
 
 #define LOW_WORD(x) *((int*)&x) + 1
 

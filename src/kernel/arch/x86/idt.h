@@ -1,8 +1,8 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include <stdint.h>
-#include "isr.h"
+#include "include/types.h"
+
 // IDT entry structure
 struct idt_entry
 {
@@ -13,26 +13,9 @@ struct idt_entry
     uint16_t base_hi; // Upper 16 bits of handler function address
 } __attribute__((packed));
 
-// IDT pointer structure
-struct idt_ptr
-{
-    uint16_t          limit; // Size of IDT in bytes - 1
-    struct idt_entry *base;  // Address of IDT
-} __attribute__((packed));
-
-// Exception handlers
-void divide_error(struct idt_regs *regs);
-void double_fault();
-
-// Interrupt handlers
-void timer();
-void keyboard();
-void device();
-void network();
-void disk();
-void serial_port();
+extern struct idt_entry idt[256];
 
 // Initialize the IDT
-void idt_init();
+void InitializeIDT();
 
 #endif /* IDT_H */
