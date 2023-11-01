@@ -5,6 +5,7 @@ set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/build)
 
 include(x86-baremetal-toolchain.cmake)
 
+project(ClassicOSBL VERSION 0.0.1 LANGUAGES ASM_NASM)
 project(ClassicOS VERSION 0.0.1 LANGUAGES C CXX ASM_NASM)
 
 set(IS_OS_WINDOWS FALSE)
@@ -28,12 +29,10 @@ set(BOOT_SOURCE_FILES
     src/boot/linker.ld
 )
 
-#[[
 set(GRUB_SOURCE_FILES
     src/boot/grub/grub.cfg
     src/boot/grub/menu.lst
 )
-]]
 
 set(DRIVERS_SOURCE_FILES
     src/drivers/audio/audio.c
@@ -111,18 +110,13 @@ set(UTIL_SOURCE_FILES
 )
 
 add_executable(ClassicOS
-    ${GRUB_SOURCE_FILES}
 	${KERNEL_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
 )
 
-if (IS_OS_LINUX)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f elf")
-	set(CMAKE_EXE_LINKER_FLAGS "-g -s")
-	set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
+add_executable(ClassicOSBL
+	${BOOT_SOURCE_FILES}
+	${GRUB_SOURCE_FILES}
+)
 
-	#set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
-elseif (IS_OS_WINDOWS)
-	set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -f win32")
-endif ()
+message("${CMAKE_EXE_LINKER_FLAGS}")

@@ -1,112 +1,87 @@
 [BITS 16]
+[ORG 0x7c00]
 
-; Set up the segment registers
-xor ax, ax
-mov ds, ax
-mov es, ax
+start:
+    XOR AX, AX
+    MOV DS, AX
+    MOV SS, AX
+    MOV SP, 0x7c00
 
-; Set up stack and jump to main
-mov ss, ax
-mov sp, 0x7c00
-jmp main
+    MOV SI, loading
+    CALL printnl
 
-; Print 'Booting ClassicOS!' to the screen
-print:
-   mov si, message
-   mov ah, 0x0e
-.loop:
-   lodsb
-   test al, al
-   jz .done
-   int 0x10
-   jmp .loop
-.done:
-   ret
+    CALL reset_drives
+    CALL read_drive
 
-; Set the video mode to a 40 column text mode
-set_video_mode:
-   mov ax, 0x0003    ; Set up a 80x25 text mode
-   int 0x10
+    MOV SI, loadedSS
+    CALL printnl
 
-   ; Set the number of columns to 40
-   mov ax, 0x1112
-   mov bx, 0x0007
-   int 0x10
+    JMP 0x1000:0x0000
 
-   ret
+    RET
 
-; Detect floppy disk drive
-detect_disk:
-   mov ah, 0x08
-   int 0x13
-   cmp ah, 0
-   jne .error
-   ret
+printnl:
+    LODSB
+    OR AL, AL
+    JZ .stop
 
-.error:
-   ; Handle disk detection error
-   ; Display error message or take appropriate action
-   ret
+    MOV AH, 0x0E
+    MOV BH, 0x00
+    MOV BL, 0x07
+    INT 0x10
 
-; Read sectors from floppy disk
-read_sectors:
-   mov ah, 0x02
-   mov al, 1  ; Number of sectors to read
-   mov ch, 0  ; Cylinder/Track number
-   mov cl, 2  ; Sector number (starting from 1)
-   mov dh, 0  ; Head number
-   mov dl, 0  ; Drive number (0 for floppy disk)
+    JMP printnl
 
-   mov bx, buffer  ; Destination buffer
-   mov es, bx
-   xor bx, bx
+    .stop:
+        MOV AH, 0x03  ; AH = 0x03 (Get Cursor Position and Shape)
+        XOR BH, BH    ; BH = 0x00 (Video Page Number)
+        INT 0x10      ; Call video interrupt
 
-   int 0x13
+        INC DH
 
-   jc .error  ; Check carry flag for error
-   ret
+        MOV AH, 0x02  ; Set cursor position
+        XOR BH, BH    ; Page number
+        XOR DL, DL    ; Column (start from 0)
+        INT 0x10      ; Call video interrupt
+        RET
 
-.error:
-   ; Handle read error
-   ; Display error message or take appropriate action
-   ret
+reset_drives:
+    XOR AH, AH         ; 0 = Reset floppy disk
+    INT 0x13
+    JC .reset_error          ; If carry flag was set, try again
+    RET
 
-; Bootloader entry point
-main:
-   ; Call the set_video_mode function
-   call set_video_mode
+    .reset_error:
+        MOV SI, resetError
+        CALL printnl
+        RET
 
-   ; Clear the screen
-   mov ah, 0x06
-   mov al, 0
-   xor bx, bx
-   xor cx, cx
-   mov dh, 24
-   mov dl, 39
-   int 0x10
+read_drive:
+    MOV AH, 0x02
+    MOV AL, 1  ; Number of sectors to read
+    XOR CH, CH  ; Cylinder/Track number
+    MOV CL, 2  ; Sector number (starting from 1)
+    XOR DH, DH  ; Head number
+    XOR DL, DL  ; Drive number (0x0 for floppy disk / 0x80 for hard disk)
 
-   ; Call the print function
-   call print
+    MOV BX, 0x1000
+    MOV ES, BX
+    XOR BX, BX
 
-   ; Wait for a key press to exit the loop
-   mov ah, 0x00
-   int 0x16
+    INT 0x13
 
-   ; Call the detect_disk function
-   call detect_disk
+    JC .read_error
+    RET
 
-   ; Call the read_sectors function
-   call read_sectors
+    .read_error:
+        MOV SI, readError
+        CALL printnl
+        RET
 
-   ; Infinite loop
-.loop:
-   jmp .loop
-
-; Message to print
-message db 'Booting ClassicOS!', 0
-
-; Buffer to store read sectors
-buffer times 512 db 0
+loading db "Loading Second Stage", 0
+resetError db "Failed to reset drives.", 0
+readError db "Failed to read drive", 0
+loadedSS db "Loaded second stage...", 0
 
 times 510-($-$$) db 0
 dw 0xaa55
