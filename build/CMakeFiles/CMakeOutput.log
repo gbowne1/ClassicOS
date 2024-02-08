@@ -1,0 +1,702 @@
+The system is: Linux - 4.19.0-16-amd64 - x86_64
+Checking whether the ASM_NASM compiler is NASM using "-v" matched "(NASM version)":
+NASM version 2.14
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/gcc 
+Build flags: -m32;-ffreestanding;-nostdlib
+Id flags:  
+
+The output was:
+0
+/usr/bin/ld: warning: cannot find entry symbol _start; defaulting to 0000000000001000
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/3.13.4/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/g++ 
+Build flags: -m32;-ffreestanding;-nostdlib
+Id flags:  
+
+The output was:
+0
+/usr/bin/ld: warning: cannot find entry symbol _start; defaulting to 0000000000001000
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/3.13.4/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3f008/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3f008.dir/build.make CMakeFiles/cmTC_3f008.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3f008.dir/testCCompiler.c.o
+/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=gnu11 -o CMakeFiles/cmTC_3f008.dir/testCCompiler.c.o   -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_3f008
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3f008.dir/link.txt --verbose=1
+/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_3f008.dir/testCCompiler.c.o  -o cmTC_3f008 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e0e28/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e0e28.dir/build.make CMakeFiles/cmTC_e0e28.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o
+/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=gnu11 -o CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_e0e28
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e0e28.dir/link.txt --verbose=1
+/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack -v CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o  -o cmTC_e0e28 
+Using built-in specs.
+COLLECT_GCC=/usr/bin/gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Debian 8.3.0-6' --with-bugurl=file:///usr/share/doc/gcc-8/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-8 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 8.3.0 (Debian 8.3.0-6) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/32/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32/:/lib/i386-linux-gnu/:/lib/../lib32/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib32/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../:/lib/i386-linux-gnu/:/lib/:/usr/lib/i386-linux-gnu/:/usr/lib/
+COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_e0e28' '-mtune=generic' '-march=i686'
+ /usr/lib/gcc/x86_64-linux-gnu/8/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper -plugin-opt=-fresolution=/tmp/cc8gDg1y.res --build-id --eh-frame-hdr -m elf_i386 --hash-style=gnu -dynamic-linker /lib/ld-linux.so.2 -pie -o cmTC_e0e28 -e kernel_main -z noexecstack -L/usr/lib/gcc/x86_64-linux-gnu/8/32 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32 -L/lib/i386-linux-gnu -L/lib/../lib32 -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/8 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../.. -L/lib/i386-linux-gnu -L/usr/lib/i386-linux-gnu CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o -T /home/gbowne1/Documents/ClassicOS/linker.ld
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_e0e28' '-mtune=generic' '-march=i686'
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_e0e28/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_e0e28.dir/build.make CMakeFiles/cmTC_e0e28.dir/build]
+  ignore line: [make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=gnu11 -o CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_e0e28]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e0e28.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack -v CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o  -o cmTC_e0e28 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Debian 8.3.0-6' --with-bugurl=file:///usr/share/doc/gcc-8/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-8 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 8.3.0 (Debian 8.3.0-6) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/32/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32/:/lib/i386-linux-gnu/:/lib/../lib32/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib32/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../:/lib/i386-linux-gnu/:/lib/:/usr/lib/i386-linux-gnu/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_e0e28' '-mtune=generic' '-march=i686']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/8/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper -plugin-opt=-fresolution=/tmp/cc8gDg1y.res --build-id --eh-frame-hdr -m elf_i386 --hash-style=gnu -dynamic-linker /lib/ld-linux.so.2 -pie -o cmTC_e0e28 -e kernel_main -z noexecstack -L/usr/lib/gcc/x86_64-linux-gnu/8/32 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32 -L/lib/i386-linux-gnu -L/lib/../lib32 -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/8 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../.. -L/lib/i386-linux-gnu -L/usr/lib/i386-linux-gnu CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o -T /home/gbowne1/Documents/ClassicOS/linker.ld]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/8/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc8gDg1y.res] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_i386] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.2] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_e0e28] ==> ignore
+    arg [-e] ==> ignore
+    arg [kernel_main] ==> ignore
+    arg [-znoexecstack] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/32] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/32]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32]
+    arg [-L/lib/i386-linux-gnu] ==> dir [/lib/i386-linux-gnu]
+    arg [-L/lib/../lib32] ==> dir [/lib/../lib32]
+    arg [-L/usr/lib/i386-linux-gnu] ==> dir [/usr/lib/i386-linux-gnu]
+    arg [-L/usr/lib/../lib32] ==> dir [/usr/lib/../lib32]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../..]
+    arg [-L/lib/i386-linux-gnu] ==> dir [/lib/i386-linux-gnu]
+    arg [-L/usr/lib/i386-linux-gnu] ==> dir [/usr/lib/i386-linux-gnu]
+    arg [CMakeFiles/cmTC_e0e28.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-T] ==> ignore
+    arg [/home/gbowne1/Documents/ClassicOS/linker.ld] ==> ignore
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/32] ==> [/usr/lib/gcc/x86_64-linux-gnu/8/32]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32] ==> [/usr/lib32]
+  collapse library dir [/lib/i386-linux-gnu] ==> [/lib/i386-linux-gnu]
+  collapse library dir [/lib/../lib32] ==> [/lib32]
+  collapse library dir [/usr/lib/i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/../lib32] ==> [/usr/lib32]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8] ==> [/usr/lib/gcc/x86_64-linux-gnu/8]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../..] ==> [/usr/lib]
+  collapse library dir [/lib/i386-linux-gnu] ==> [/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  implicit libs: []
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/8/32;/usr/lib/i386-linux-gnu;/usr/lib32;/lib/i386-linux-gnu;/lib32;/usr/lib/gcc/x86_64-linux-gnu/8;/usr/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ba45b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ba45b.dir/build.make CMakeFiles/cmTC_ba45b.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ba45b.dir/feature_tests.c.o
+/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=c11 -std=gnu11 -o CMakeFiles/cmTC_ba45b.dir/feature_tests.c.o   -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_ba45b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba45b.dir/link.txt --verbose=1
+/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_ba45b.dir/feature_tests.c.o  -o cmTC_ba45b 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3b6b2/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3b6b2.dir/build.make CMakeFiles/cmTC_3b6b2.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3b6b2.dir/feature_tests.c.o
+/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=c99 -std=gnu11 -o CMakeFiles/cmTC_3b6b2.dir/feature_tests.c.o   -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_3b6b2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3b6b2.dir/link.txt --verbose=1
+/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_3b6b2.dir/feature_tests.c.o  -o cmTC_3b6b2 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c90] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_513a6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_513a6.dir/build.make CMakeFiles/cmTC_513a6.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_513a6.dir/feature_tests.c.o
+/usr/bin/gcc   -m32 -ffreestanding -nostdlib    -std=c90 -std=gnu11 -o CMakeFiles/cmTC_513a6.dir/feature_tests.c.o   -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_513a6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_513a6.dir/link.txt --verbose=1
+/usr/bin/gcc -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_513a6.dir/feature_tests.c.o  -o cmTC_513a6 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6e8ec/fast"
+/usr/bin/make -f CMakeFiles/cmTC_6e8ec.dir/build.make CMakeFiles/cmTC_6e8ec.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_6e8ec.dir/testCXXCompiler.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=gnu++11 -o CMakeFiles/cmTC_6e8ec.dir/testCXXCompiler.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_6e8ec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6e8ec.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_6e8ec.dir/testCXXCompiler.cxx.o  -o cmTC_6e8ec 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f2925/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f2925.dir/build.make CMakeFiles/cmTC_f2925.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=gnu++11 -o CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_f2925
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f2925.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack -v CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_f2925 
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Debian 8.3.0-6' --with-bugurl=file:///usr/share/doc/gcc-8/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-8 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 8.3.0 (Debian 8.3.0-6) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/32/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32/:/lib/i386-linux-gnu/:/lib/../lib32/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib32/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../:/lib/i386-linux-gnu/:/lib/:/usr/lib/i386-linux-gnu/:/usr/lib/
+COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_f2925' '-shared-libgcc' '-mtune=generic' '-march=i686'
+ /usr/lib/gcc/x86_64-linux-gnu/8/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyGHeAT.res --build-id --eh-frame-hdr -m elf_i386 --hash-style=gnu -dynamic-linker /lib/ld-linux.so.2 -pie -o cmTC_f2925 -e kernel_main -z noexecstack -L/usr/lib/gcc/x86_64-linux-gnu/8/32 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32 -L/lib/i386-linux-gnu -L/lib/../lib32 -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/8 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../.. -L/lib/i386-linux-gnu -L/usr/lib/i386-linux-gnu CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o -T /home/gbowne1/Documents/ClassicOS/linker.ld
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_f2925' '-shared-libgcc' '-mtune=generic' '-march=i686'
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_f2925/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_f2925.dir/build.make CMakeFiles/cmTC_f2925.dir/build]
+  ignore line: [make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=gnu++11 -o CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_f2925]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f2925.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack -v CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_f2925 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/g++]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Debian 8.3.0-6' --with-bugurl=file:///usr/share/doc/gcc-8/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-8 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 8.3.0 (Debian 8.3.0-6) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/8/32/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32/:/lib/i386-linux-gnu/:/lib/../lib32/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib32/:/usr/lib/gcc/x86_64-linux-gnu/8/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/8/../../../:/lib/i386-linux-gnu/:/lib/:/usr/lib/i386-linux-gnu/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-ffreestanding' '-nostdlib' '-e' 'kernel_main' '-T' '/home/gbowne1/Documents/ClassicOS/linker.ld' '-m32' '-z' 'noexecstack' '-v' '-o' 'cmTC_f2925' '-shared-libgcc' '-mtune=generic' '-march=i686']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/8/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyGHeAT.res --build-id --eh-frame-hdr -m elf_i386 --hash-style=gnu -dynamic-linker /lib/ld-linux.so.2 -pie -o cmTC_f2925 -e kernel_main -z noexecstack -L/usr/lib/gcc/x86_64-linux-gnu/8/32 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32 -L/lib/i386-linux-gnu -L/lib/../lib32 -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib32 -L/usr/lib/gcc/x86_64-linux-gnu/8 -L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/8/../../.. -L/lib/i386-linux-gnu -L/usr/lib/i386-linux-gnu CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o -T /home/gbowne1/Documents/ClassicOS/linker.ld]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/8/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/8/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/8/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccyGHeAT.res] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_i386] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.2] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_f2925] ==> ignore
+    arg [-e] ==> ignore
+    arg [kernel_main] ==> ignore
+    arg [-znoexecstack] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/32] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/32]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32]
+    arg [-L/lib/i386-linux-gnu] ==> dir [/lib/i386-linux-gnu]
+    arg [-L/lib/../lib32] ==> dir [/lib/../lib32]
+    arg [-L/usr/lib/i386-linux-gnu] ==> dir [/usr/lib/i386-linux-gnu]
+    arg [-L/usr/lib/../lib32] ==> dir [/usr/lib/../lib32]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/8/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../..]
+    arg [-L/lib/i386-linux-gnu] ==> dir [/lib/i386-linux-gnu]
+    arg [-L/usr/lib/i386-linux-gnu] ==> dir [/usr/lib/i386-linux-gnu]
+    arg [CMakeFiles/cmTC_f2925.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-T] ==> ignore
+    arg [/home/gbowne1/Documents/ClassicOS/linker.ld] ==> ignore
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/32] ==> [/usr/lib/gcc/x86_64-linux-gnu/8/32]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../../lib32] ==> [/usr/lib32]
+  collapse library dir [/lib/i386-linux-gnu] ==> [/lib/i386-linux-gnu]
+  collapse library dir [/lib/../lib32] ==> [/lib32]
+  collapse library dir [/usr/lib/i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/../lib32] ==> [/usr/lib32]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8] ==> [/usr/lib/gcc/x86_64-linux-gnu/8]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../../i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/8/../../..] ==> [/usr/lib]
+  collapse library dir [/lib/i386-linux-gnu] ==> [/lib/i386-linux-gnu]
+  collapse library dir [/usr/lib/i386-linux-gnu] ==> [/usr/lib/i386-linux-gnu]
+  implicit libs: []
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/8/32;/usr/lib/i386-linux-gnu;/usr/lib32;/lib/i386-linux-gnu;/lib32;/usr/lib/gcc/x86_64-linux-gnu/8;/usr/lib]
+  implicit fwks: []
+
+
+
+
+Detecting CXX [-std=c++2a] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1ddb5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1ddb5.dir/build.make CMakeFiles/cmTC_1ddb5.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1ddb5.dir/feature_tests.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=c++2a -std=gnu++11 -o CMakeFiles/cmTC_1ddb5.dir/feature_tests.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_1ddb5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1ddb5.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_1ddb5.dir/feature_tests.cxx.o  -o cmTC_1ddb5 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++17] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c33b8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c33b8.dir/build.make CMakeFiles/cmTC_c33b8.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c33b8.dir/feature_tests.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=c++17 -std=gnu++11 -o CMakeFiles/cmTC_c33b8.dir/feature_tests.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_c33b8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c33b8.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_c33b8.dir/feature_tests.cxx.o  -o cmTC_c33b8 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++14] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ec388/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ec388.dir/build.make CMakeFiles/cmTC_ec388.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ec388.dir/feature_tests.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=c++14 -std=gnu++11 -o CMakeFiles/cmTC_ec388.dir/feature_tests.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_ec388
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ec388.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_ec388.dir/feature_tests.cxx.o  -o cmTC_ec388 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++11] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_50cb0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_50cb0.dir/build.make CMakeFiles/cmTC_50cb0.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_50cb0.dir/feature_tests.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=c++11 -std=gnu++11 -o CMakeFiles/cmTC_50cb0.dir/feature_tests.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_50cb0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_50cb0.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_50cb0.dir/feature_tests.cxx.o  -o cmTC_50cb0 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+
+
+Detecting CXX [-std=c++98] compiler features compiled with the following output:
+Change Dir: /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_00553/fast"
+/usr/bin/make -f CMakeFiles/cmTC_00553.dir/build.make CMakeFiles/cmTC_00553.dir/build
+make[1]: Entering directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_00553.dir/feature_tests.cxx.o
+/usr/bin/g++    -m32 -ffreestanding -nostdlib    -std=c++98 -std=gnu++11 -o CMakeFiles/cmTC_00553.dir/feature_tests.cxx.o -c /home/gbowne1/Documents/ClassicOS/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_00553
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_00553.dir/link.txt --verbose=1
+/usr/bin/g++  -m32 -ffreestanding -nostdlib   -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack  CMakeFiles/cmTC_00553.dir/feature_tests.cxx.o  -o cmTC_00553 
+/usr/bin/ld: warning: cannot find entry symbol kernel_main; defaulting to 0000000000100000
+make[1]: Leaving directory '/home/gbowne1/Documents/ClassicOS/build/CMakeFiles/CMakeTmp'
+
+
+    Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:0cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:0cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:0cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:0cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_decltype_incomplete_return_types
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:0cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:0cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:0cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:0cxx_relaxed_constexpr
+    Feature record: CXX_FEATURE:0cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:0cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates

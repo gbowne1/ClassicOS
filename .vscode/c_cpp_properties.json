@@ -1,26 +1,34 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/usr/include/**"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c11",
-            "cppStandard": "c++11",
-            "intelliSenseMode": "linux-gcc-x64",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**",
-                    "/usr/include/**"
-                ],
-                "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": ""
-            },
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
-        }
-    ],
-    "version": 4
+	"env": {
+		"myDefaultIncludePath": [
+			"${workspaceFolder}/ClassicOS/include"
+		],
+		"myCompilerPath": "/usr/bin/gcc"
+	},
+	"configurations": [
+		{
+			"name": "Linux",
+			"intelliSenseMode": "linux-gcc-x64",
+			"compilerArgs": [
+				""
+			],
+			"includePath": [
+				"${workspaceFolder}/**"
+			],
+			"defines": [],
+			"compilerPath": "/usr/bin/gcc",
+			"cStandard": "c11",
+			"cppStandard": "c++17",
+			"compileCommands": "build/compile_commands.json",
+			"browse": {
+				"path": [
+					"${workspaceFolder}/src"
+				],
+				"limitSymbolsToIncludedHeaders": true,
+				"databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+			},
+			"configurationProvider": "ms-vscode.cmake-tools"
+		}
+	],
+	"version": 4
 }

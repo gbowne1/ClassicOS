@@ -3,7 +3,7 @@
 
 #include "../include/types.h"
 
-enum ISR_Vector : uint32_t
+enum ISR_Vector
 {
 	EXCEPTION_START					   = 0x00,
 	DIVIDE_BY_ZERO_INTERRUPT		   = 0x00,

@@ -5,8 +5,8 @@ set(CMAKE_ASM_COMPILER nasm)
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER g++)
 
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 
 # Add compiler and linker flags for x86 bare metal
 set(CMAKE_ASM_NASM_FLAGS "-f elf32")

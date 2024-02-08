@@ -1,0 +1,1 @@
+/usr/bin/nasm -f elf32  -e kernel_main -T/home/gbowne1/Documents/ClassicOS/linker.ld -m32 -z noexecstack CMakeFiles/ClassicOSBL.dir/src/boot/boot.asm.o  -o ClassicOSBL 

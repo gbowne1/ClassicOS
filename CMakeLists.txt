@@ -8,6 +8,9 @@ include(x86-baremetal-toolchain.cmake)
 project(ClassicOSBL VERSION 0.0.1 LANGUAGES ASM_NASM)
 project(ClassicOS VERSION 0.0.1 LANGUAGES C CXX ASM_NASM)
 
+enable_language(ASM_NASM)
+set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
+
 set(IS_OS_WINDOWS FALSE)
 set(IS_OS_LINUX FALSE)
 set(IS_OS_MAC FALSE)
@@ -108,6 +111,8 @@ set(UTIL_SOURCE_FILES
 	src/Mat3.h
 	src/Mat2.h
 )
+
+set_source_files_properties(src/boot/boot.asm PROPERTIES LANGUAGE ASM_NASM)
 
 add_executable(ClassicOS
 	${KERNEL_SOURCE_FILES}
