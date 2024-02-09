@@ -1,14 +1,24 @@
+section .text
 global inb
 global outb
 
-section .text
+; Read a byte from the specified port
+; Input: DX = port number
+; Output: AL = data read from the port
 inb:
-    MOV DX, WORD [ESP + 16]
-    IN AL, DX
+    PUSH DX    ; Preserve DX
+    IN AL, DX  ; Read from port
+    POP DX     ; Restore DX
     RET
 
+; Write a byte to the specified port
+; Input: DX = port number, AL = data to write
 outb:
-    MOV DX, WORD [ESP + 16]
-    MOV AL, BYTE [ESP + 24]
-    OUT DX, AL
+    PUSH DX    ; Preserve DX
+    PUSH AX    ; Preserve AX
+    MOV DX, [ESP + 4] ; Get port number from stack
+    MOV AL, [ESP + 6] ; Get data from stack
+    OUT DX, AL  ; Write to port
+    POP AX     ; Restore AX
+    POP DX     ; Restore DX
     RET
