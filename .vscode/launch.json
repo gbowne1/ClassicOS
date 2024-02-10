@@ -8,7 +8,7 @@
 			"name": "gcc-8 - Build and debug active file Level 1",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${fileDirname}/${fileBasenameNoExtension}",
+			"program": "/home/gbowne1/Documents/ClassicOS/build/ClassicOS",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",

@@ -1,17 +1,15 @@
 #include "cpu.h"
 
 // Function to read a 32-bit value from a CPU register
-uint32_t read_register(uint8_t reg)
-{
+uint32_t read_register(uint8_t reg) {
     uint32_t value;
-    __asm__ volatile("mov %0, %%" + reg : "=r"(value));
+    __asm__ volatile("mov %0, %%" : "+r"(value) : "c"(reg));
     return value;
 }
 
 // Function to write a 32-bit value to a CPU register
-void write_register(uint8_t reg, uint32_t value)
-{
-    __asm__ volatile("mov %0, %%" + reg : : "r"(value));
+void write_register(uint8_t reg, uint32_t value) {
+    __asm__ volatile("mov %0, %%" : : "c"(reg), "r"(value));
 }
 
 // Function to read the value of the CR0 register
