@@ -15,7 +15,7 @@ start:
 
     switch_to_protected_mode:
 		CLI             ; Disable interrupts
-		LGDT [gdt_descriptor] ; Load the global descriptor table
+		lgdt [gdt_descriptor] ; Load the global descriptor table
 		MOV EAX, CR0
 		OR EAX, 0x1     ; Set the PE (Protection Enable) bit
 		MOV CR0, EAX
@@ -23,7 +23,10 @@ start:
 		JMP CODE_SEG:init_pm ; CODE_SEG is the segment selector for code segment in GDT
 	init_pm:
 		; Update segment registers here
-		; ...
+		; Set code segment register (CS) to point to code segment descriptor (selector 1)
+		mov ax, 0x0001
+		mov ds, ax ; Set data segment register (DS) to point to data segment descriptor (selector 2)
+		mov es, ax ; Set other segment registers (ES, SS, etc.) as needed
 		RET
 
 
@@ -62,7 +65,28 @@ start:
     ; Code to set up flat memory model for protected mode
     ; This involves setting up the segment registers with selectors
     ; that point to descriptors in the GDT that define a flat memory model
-    ; ...
+
+	; Define GDT structure
+	gdt_struct:
+	; Null descriptor (ignored)
+	dq 0x0000000000000000h
+	dq 0x0000000000000000h
+
+	; Code segment descriptor (flat memory model)
+	; Base address 0, limit 0xffffffff (full 4GB)
+	; Present, Readable, Accessed, Code segment, 4KB granularity
+	; Flags: 0x9A (Bits explained below)
+	dq 0x0000000000000000h
+	dq 0x00CFFFFFFFh
+	db 0x9A
+	db 0xCF
+
+	; Data segment descriptor (flat memory model)
+	; Similar structure to code segment descriptor with Data segment flag set
+	dq 0x0000000000000000h
+	dq 0x00CFFFFFFFh
+	db 0x92
+	db 0xCF
 
     ; Jump to the kernel entry point
     JMP 0x1000:0x0000 ; Assuming the kernel is loaded at 0x1000:0x0000
