@@ -19,7 +19,7 @@
 #define ISR_TABLE_SIZE 256
 
 // GDT table
-struct gdt_entry *gdt;
+struct gdt_entry gdt_entries[3] __attribute__((aligned(0x1000)));
 
 // GDT constants
 enum GDT_ACCESS
@@ -63,9 +63,9 @@ void gdt_init()
     //memset(gdt, 0, sizeof(struct gdt_entry) * 3);
 
     // Initialize GDT entries
-    gdt_set_gate(0, 0, 0, 0, 0, gdt);                // Null segment
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF, gdt); // Code segment
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF, gdt); // Data segment
+    gdt_set_gate(0, 0, 0, 0, 0, &gdt_entries[0]); // Null segment
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF, &gdt_entries[1]); // Code segment
+    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF, &gdt_entries[2]); // Data segment
 
     // Load GDT
     struct gdt_ptr gdtp;

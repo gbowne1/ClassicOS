@@ -108,6 +108,6 @@
 		"*.json": "default",
 		"*.asm": "default"
 	},
-	"C_Cpp.default.intelliSenseMode": "linux-clang-x86",
+	"C_Cpp.default.intelliSenseMode": "linux-gcc-x86",
 	"cmake.cmakePath": "/usr/bin/cmake"
 }
