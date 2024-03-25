@@ -4,6 +4,7 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+		
 		{
 			"name": "gcc-8 - Build and debug active file Level 1",
 			"type": "cppdbg",
@@ -27,6 +28,16 @@
 			"logging": {
 				"engineLogging": true
 			}
+		},
+		{
+			"name": "Debug with QEMU",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/boot.bin",
+			"miDebuggerPath": "/usr/bin/qemu-system-i386",
+			"miDebuggerArgs": "-kernel",
+			"cwd": "${workspaceFolder}",
+			"preLaunchTask": "build"
 		}
 	]
 }

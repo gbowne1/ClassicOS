@@ -16,10 +16,10 @@ identify_drive:
     cmp     cl, 0x80    ; Check for hard disk interrupt vector (example)
     je      is_harddrive
     ; Handle invalid drive type (error handling)
-    ...
+    ; ...
 
 is_floppy:
-     Perform floppy disk access (assuming AH=0x02 for read sectors)
+    ; Perform floppy disk access (assuming AH=0x02 for read sectors)
     mov     ah, 0x02    ; Read sectors
     mov     al, 1       ; Number of sectors to read (1)
 
@@ -68,8 +68,8 @@ memory_error:
     ; ... (error handling or continue with limited memory)
 
 ; Second stage loading (simplified example)
-Here's an improved version of the load_second_stage section with the placeholder jump replaced by actual loading logic:
-Code snippet
+; Here's an improved version of the load_second_stage section with the placeholder jump replaced by actual loading logic:
+; Code snippet
 
 load_second_stage:
   ; Calculate address of second stage bootloader (assuming offset from boot sector)

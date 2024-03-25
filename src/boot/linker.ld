@@ -28,7 +28,4 @@ SECTIONS {
     bootloader_padding : {
         *(.bootloader_padding)
     }
-
-    /* Set the bootloader size to 512 bytes */
-    = 512;
 }
