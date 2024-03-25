@@ -1,131 +1,166 @@
-[BITS 16]
-[ORG 0x7c00]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Stage 1 bootloader for ClassicOS ;
+; -------------------------------- ;
+; Determines if it was loaded from ;
+;  a floppy disk or an hard disk   ;
+;  drive, and then loads stage 2   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+; Assembler directives ;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+; tells the assembler that the program will be loaded at 0x7C00
+; this is done by the BIOS
+org 0x7C00
+
+; we are targeting (x86) 16-bit real mode
+bits 16
+
+;;;;;;;;;;;;;;;;;
+; Jump to start ;
+;;;;;;;;;;;;;;;;;
+jmp start
+
+;;;;;;;;
+; Data ;
+;;;;;;;;
+; fdd geometry & options
+fddsamt  db 8        ; how many sectors to load
+fddretr  db 5        ; max retries for fdd operations
+fddcretr db 0        ; current retries left
+
+; misc strings
+welcome1 db "Welcome to the ClassicOS Stage 1 bootloader.", 13, 10, 0
+disktype db "Drive type: ", 0
+diskfdd  db "FDD", 13, 10, 0
+diskhdd  db "HDD", 13, 10, 0
+loaded   db "Data loaded!", 13, 10, 0
+
+; errors
+fdderes  db "FDD reset failed.", 13, 10, 0
+fddeload db "FDD read failed.", 13, 10, 0
+
+; storage
+disknum  db 0
+
+;;;;;;;;;;;
+; Program ;
+;;;;;;;;;;;
 
 start:
-    ; Processor initialization (only stack segment register needed)
-    mov    ss, 0x1000 ; Set stack segment register
-	mov    sp, 0x7C00  ; Set stack pointer (SP)
-    mov    ds, ss      ; Set data segment register (DS)
+   xor ax, ax             ; set up segment registers to segment 0 since
+   mov ds, ax             ; our addresses are already relative to 0x7C00
+   mov es, ax
 
-; Identify boot device using BIOS calls
-identify_drive:
-    mov     ah, 0x0E    ; Get Interrupt Vector for INT 13h (Disk Services)
-    int     0x80
-    cmp     cl, 0x41    ; Check for floppy drive interrupt vector (example)
-    je      is_floppy
-    cmp     cl, 0x80    ; Check for hard disk interrupt vector (example)
-    je      is_harddrive
-    ; Handle invalid drive type (error handling)
-    ; ...
+   mov [disknum], dl      ; save disk number to memory
 
-is_floppy:
-    ; Perform floppy disk access (assuming AH=0x02 for read sectors)
-    mov     ah, 0x02    ; Read sectors
-    mov     al, 1       ; Number of sectors to read (1)
+   mov ah, 0x01           ; set cursor shape
+   mov cx, 0x0100         ; hide cursor by setting ch = 1 and cl = 0x00
+   int 0x10               ; video interrupt
 
-    ; Set CH, CL, DH, DL for floppy based on your system configuration
-    ; (Replace these values with appropriate settings for your floppy drive)
-    mov     ch, 0       ; Cylinder (example, adjust based on your floppy)
-    mov     cl, 1       ; Sector number (example, adjust based on boot sector location)
-    mov     dh, 0       ; Head number (example, typically 0 for single-sided floppies)
-    mov     dl, 0x00    ; Drive number (0x00 for floppy drive A)
+   mov ah, 0x08           ; read page number into bh
+   int 0x10
 
-    ; Set ES:BX to the memory address where you want to store the read data
-    mov     es, 0x1000  ; Example segment (adjust as needed)
-    mov     bx, 0x0      ; Memory offset within the segment (example)
+   mov si, welcome1       ; print welcome
+   call printstr
 
-    int     0x13
-    jc      error_floppy
+   mov si, disktype       ; print first part of disk type
+   call printstr
 
-    ; Implement error handling (omitted here for brevity)
-    ; Process the read data from the floppy sector (load second stage bootloader, etc.)
+   mov dl, [disknum]      ; restore disk number - should not be
+                          ; strictly necessary but you never know
+   and dl, 0x80           ; sets zf if disk is floppy
+   jz fddload
 
-is_harddrive:
+hddload:
+   mov si, diskhdd        ; print disk type
+   call printstr
 
-	; Sample code (not guaranteed to work universally)
-	mov ah, 0x02 ; Set function for read sectors
-	mov al, 0x01 ; Read one sector
-	; Set CH, CL, DH for desired sector location (e.g., first sector)
-	mov dl, 0x80 ; Drive number (assuming drive A is boot device)
-	mov es, segment_address ; Set ES for buffer to store read data
-	mov bx, buffer_offset ; Set BX for offset within the buffer
+   jmp halt               ; not implemented!
 
-	int 13h ; Raise BIOS interrupt for disk read
+fddload:
+   mov si, diskfdd        ; print disk type
+   call printstr
 
-	; Check Carry flag for error handling
-	jc harddrive_not_found ; Jump if Carry flag is set (potential error)
+fddload_onto_reset:
+   mov ah, [fddretr]     ; load max retries in memory
+   mov [fddcretr], ah
+fddload_reset:
+   mov si, fdderes        ; load error message pointer
+   dec byte [fddcretr]    ; decrement the retries counter
+   jz fddload_err         ; if it is 0, we stop trying
 
-	; Hard drive likely present (further processing can occur)
+   mov ah, 0x00           ; otherwise, reset function (int 0x13)
+   int 0x13
+   jc fddload_reset       ; if jc (error), we try again
 
-	; ... (rest of your bootloader code)
+fddload_onto_load:
+   mov ah, [fddretr]      ; reset retries counter
+   mov [fddcretr], ah
+   mov ax, 0x1000         ; need to stay within real mode limits
+   mov es, ax
+fddload_load:              ; loads 512*fddsamt bytes from sector 2 on.
+   mov si, fddeload
+   dec byte [fddcretr]
+   jz fddload_err
 
-	harddrive_not_found:
-	; Handle error condition (missing drive or other issue)
+   mov dh, 0              ; head 0
+   mov ch, 0              ; cyl/track 0
+   mov cl, 2              ; start sector
+   mov bx, 0              ; memory location
+   mov al, [fddsamt]      ; how many sectors to read
+   mov ah, 0x02           ; read function (int 0x13)
+   int 0x13
+   jc fddload_load        ; if jc (error), we try again
+   cmp al, [fddsamt]      ; also if al is not 1, we have a problem
+   jnz fddload_load
 
-	; ... (error handling logic)
+fddload_done:
+   mov si, loaded         ; we have successfully loaded the data
+   call printstr
+   jmp halt               ; this will be jmp 0x1000:0x0000
 
-memory_error:
-    ; ... (error handling or continue with limited memory)
+fddload_err:
+   call printstr          ; print
+   jmp halt               ; and die
 
-; Second stage loading (simplified example)
-; Here's an improved version of the load_second_stage section with the placeholder jump replaced by actual loading logic:
-; Code snippet
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; printstr routine, prints the string pointed by si using int 0x10 ;
+; sets the direction flag to 0                                     ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+printstr:
+   cld                    ; clear df flag - lodsb increments si
+printstr_loop:
+   lodsb                  ; load next character into al, increment si
+   or al, al              ; sets zf if al is 0x00
+   jz printstr_end
+   mov ah, 0x0E           ; teletype output (int 0x10)
+   int 0x10               ; print character
+   jmp printstr_loop
+printstr_end:
+   ret                    ; return to caller address
 
-load_second_stage:
-  ; Calculate address of second stage bootloader (assuming offset from boot sector)
-  mov dx, 0x0000 ; Clear DX register for better calculation
-  add dx, sector_count ; Add number of sectors to skip (adjust as needed)
-  shl dx, 5 ; Multiply by sector size (512 bytes)
-  add dx, 0x7C00 ; Add boot sector address offset
 
-  ; Read second stage bootloader from calculated address
-  mov ah, 0x02 ; Function for reading sectors
-  mov al, 1     ; Number of sectors to read (1 for second stage)
-  mov es, dx    ; Set ES segment register to calculated address
-  mov bx, 0x0000 ; Set BX offset within the segment (example)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; halt routine - infinite loop ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+halt:
+   cli
+   jmp halt
 
-  int 13h      ; Raise BIOS interrupt for disk read
+;;;;;;;;;;;
+; Padding ;
+;;;;;;;;;;;
+; $ is the address of the current line, $$ is the base address for
+; this program.
+; the expression is expanded to 510 - ($ - 0x7C00), or
+; 510 + 0x7C00 - $, which is, in other words, the number of bytes
+; before the address 510 + 0x7C00 (= 0x7DFD), where the 0xAA55
+; signature shall be put.
+times 510 - ($ - $$) db 0x00
 
-  ; Check Carry flag for error handling
-  jc memory_error ; Jump if Carry flag is set (potential error)
-
-  ; Second stage likely loaded successfully, jump to it
-  jmp second_stage_address ; Direct jump to the defined address
-
-error_floppy:
-  ; Display a basic error message (optional)
-  mov ah, 0x0E  ; BIOS video call for displaying text (educational purposes)
-  mov bh, 0x00  ; Set background color (black)
-  mov bl, 0x07  ; Set text color (white)
-  mov dx, error_floppy_message ; Address of error message string
-  int 0x10     ; BIOS video interrupt
-
-  ; Halt the boot process (replace with a retry or more advanced error handling)
-  hlt          ; Halt instruction
-
-error_floppy_message db 'Floppy disk read error!', 0x0
-
-memory_error:
-    ; Check for available memory (replace with actual method)
-	; ... (e.g., call BIOS service for memory size or use a constant value)
-	cmp available_memory, memory_threshold ; Compare with minimum required memory
-	jb limited_memory_boot ; Jump if below threshold
-
-  	; ... (standard error handling for other scenarios)
-
-limited_memory_boot:
-  ; Perform minimal setup for limited memory boot
-  ; ... (disable non-essential features, adjust kernel parameters)
-
-  ; Load and jump to second stage bootloader (potentially with adjustments)
-  ; ... (modify loading logic if necessary)
-
-; Define variables used for calculation (adjust as needed)
-sector_count db 1  ; Number of sectors to skip before second stage (change if needed)
-second_stage_address equ 0x8000  ; Replace with actual address of your second stage bootloader
-available_memory equ 0x100000 ; Replace with actual memory size detection (1MB in this example)
-memory_threshold equ 0x0A0000 ; Example minimum memory required (adjust based on needs)
-
-; Padding and magic number (standard practice)
-times 510-($-$$) db 0
-dw 0xaa55
+;;;;;;;;;;;;;;;;;;
+; BIOS signature ;
+;;;;;;;;;;;;;;;;;;
+dw 0xAA55
