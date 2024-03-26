@@ -16,7 +16,7 @@ inb:
 outb:
     PUSH DX    ; Preserve DX
     PUSH AX    ; Preserve AX
-    MOV DX, [ESP + 4] ; Get port number from stack
+    MOV DX, [ESP + 6] ; Get port number from stack
     MOV AL, [ESP + 6] ; Get data from stack
     OUT DX, AL  ; Write to port
     POP AX     ; Restore AX

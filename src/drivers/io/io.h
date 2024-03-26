@@ -23,6 +23,6 @@ extern uint8_t inb(uint16_t port);
 
 extern void outb(uint16_t port, uint8_t data);
 
-void    install_interrupt_handler(uint8_t interrupt, void (*handler)(void));
+void install_interrupt_handler(uint8_t interrupt, void (*handler)(void));
 
 #endif /* IO_H */

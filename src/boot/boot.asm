@@ -26,7 +26,7 @@ jmp start
 ; Data ;
 ;;;;;;;;
 ; fdd geometry & options
-fddsamt  db 8        ; how many sectors to load
+fddsamt  db 1        ; how many sectors to load
 fddretr  db 5        ; max retries for fdd operations
 fddcretr db 0        ; current retries left
 
@@ -76,52 +76,51 @@ start:
 hddload:
    mov si, diskhdd        ; print disk type
    call printstr
-
-   jmp halt               ; not implemented!
+   jmp load_onto_reset
 
 fddload:
    mov si, diskfdd        ; print disk type
    call printstr
 
-fddload_onto_reset:
+load_onto_reset:
    mov ah, [fddretr]     ; load max retries in memory
    mov [fddcretr], ah
-fddload_reset:
+load_reset:
    mov si, fdderes        ; load error message pointer
    dec byte [fddcretr]    ; decrement the retries counter
-   jz fddload_err         ; if it is 0, we stop trying
+   jz load_err         ; if it is 0, we stop trying
 
    mov ah, 0x00           ; otherwise, reset function (int 0x13)
    int 0x13
-   jc fddload_reset       ; if jc (error), we try again
+   jc load_reset       ; if jc (error), we try again
 
-fddload_onto_load:
+load_onto_load:
    mov ah, [fddretr]      ; reset retries counter
    mov [fddcretr], ah
-   mov ax, 0x1000         ; need to stay within real mode limits
+   mov ax, 0x8000         ; need to stay within real mode limits
    mov es, ax
-fddload_load:              ; loads 512*fddsamt bytes from sector 2 on.
+load_load:              ; loads 512*fddsamt bytes from sector 2 on.
    mov si, fddeload
    dec byte [fddcretr]
-   jz fddload_err
+   jz load_err
 
    mov dh, 0              ; head 0
    mov ch, 0              ; cyl/track 0
    mov cl, 2              ; start sector
-   mov bx, 0              ; memory location
+   mov bx, 0x8000              ; memory location
    mov al, [fddsamt]      ; how many sectors to read
    mov ah, 0x02           ; read function (int 0x13)
    int 0x13
-   jc fddload_load        ; if jc (error), we try again
+   jc load_load        ; if jc (error), we try again
    cmp al, [fddsamt]      ; also if al is not 1, we have a problem
-   jnz fddload_load
+   jnz load_load
 
-fddload_done:
+load_done:
    mov si, loaded         ; we have successfully loaded the data
    call printstr
-   jmp halt               ; this will be jmp 0x1000:0x0000
+   jmp 0x8000:0x0000               ; this will be jmp 0x1000:0x0000
 
-fddload_err:
+load_err:
    call printstr          ; print
    jmp halt               ; and die
 
