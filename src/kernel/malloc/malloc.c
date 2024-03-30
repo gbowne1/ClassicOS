@@ -10,6 +10,20 @@ void init_heap(void *start, void *end)
 	// Initialize the heap here
 }
 
+void *find_free_block(size_t size) {
+  // Implementation is similar to find_free_kernel_block
+  struct memory_block *current = free_blocks;
+  while (current != NULL) {
+    if (current->size >= size) {
+      return current;
+    }
+    current = current->next;
+  }
+
+  // No suitable block found
+  return NULL;
+}
+
 void *malloc(size_t size)
 {
 	if (heap_start == NULL || heap_end == NULL)

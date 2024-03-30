@@ -2,6 +2,7 @@
 #define ISR_H
 
 #include "../include/types.h"
+#include <stdio.h>
 
 enum ISR_Vector
 {
@@ -33,6 +34,7 @@ struct isr_regs
         esp_at_signal; // Pushed by the processor automatically
 };
 
+void isr_handler(struct isr_regs regs);
 // Structure for storing register values during an ISR
 struct idt_regs
 {

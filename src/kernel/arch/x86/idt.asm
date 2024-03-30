@@ -1,7 +1,12 @@
-global LoadIDT
+global LoadIDT  ; Declare function as global
 
-section .text
+_offset idt db 0
+
+section .text  ; Code section
+
+%include "idt.h"
+
 LoadIDT:
-mov eax, [offset idt] ; Get the IDT address
-    LIDT [eax + 8*0x33]   ; Load only the timer interrupt entry (offset 8*0x33)
-    RET
+    mov eax, [esp + 4] ; Get IDT address (ensure offset idt is defined)
+    LIDT [eax]  ; Load timer interrupt entry (check for correct brackets)
+    RET                 ; Return from function

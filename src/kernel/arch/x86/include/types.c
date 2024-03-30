@@ -1,4 +1,5 @@
 #include "./types.h"
+#include <stdint.h>
 
 void gdt_set_entry(gdt_entry_t *entry, uint32_t base, uint32_t limit,
                    uint16_t flags)

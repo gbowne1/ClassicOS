@@ -1,4 +1,5 @@
 #include "isr.h"
+#include <stdio.h>
 
 void isr_handler(struct isr_regs regs) {
     switch(regs.int_no) {
