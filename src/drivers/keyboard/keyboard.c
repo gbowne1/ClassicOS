@@ -22,14 +22,20 @@ static size_t keyboard_buffer_tail = 0;
 void set_interrupt_vector(uint8_t vector, void (*handler)());
 void enable_interrupt(uint8_t vector);
 
+bool keyboard_buffer_full()
+{
+    return (keyboard_buffer_head + 1) % KEYBOARD_BUFFER_SIZE == keyboard_buffer_tail;
+}
 void KeyboardInterruptHandler()
 {
-	uint8_t scancode = inb(KEYBOARD_DATA_PORT);
+	if (!keyboard_buffer_full())
+	{uint8_t scancode = inb(KEYBOARD_DATA_PORT);
 	uint8_t keycode = translate_scancode_to_keycode(scancode);
 
 	// Add scancode to buffer
 	keyboard_buffer[keyboard_buffer_head] = scancode;
 	keyboard_buffer_head = (keyboard_buffer_head + 1) % KEYBOARD_BUFFER_SIZE;
+	}
 }
 
 // Function to translate the combined extended scancode (first byte + second byte)
@@ -134,7 +140,30 @@ uint8_t translate_scancode_to_keycode(uint8_t scancode)
 		[0x51] = KEYCODE_PAGE_DOWN,
 		[0x52] = KEYCODE_INSERT,
 		[0x53] = KEYCODE_DELETE,
-
+		[0x54] = KEYCODE_HOME,
+		[0x55] = KEYCODE_UP,
+		[0x56] = KEYCODE_PAGE_UP,
+		[0x57] = KEYCODE_LEFT_CTRL_BREAK,  // Handle Break key (adjust if needed)
+		[0x58] = KEYCODE_RIGHT_SHIFT,
+		[0x59] = KEYCODE_NUM_LOCK,
+		[0x5A] = KEYCODE_SCROLL_LOCK,
+		[0x5B] = KEYCODE_F7,
+		[0x5C] = KEYCODE_F8,
+		[0x5D] = KEYCODE_F9,
+		[0x5E] = KEYCODE_F10,
+		[0x5F] = KEYCODE_PAUSE,  // Handle Pause key (adjust if needed)
+		[0x60] = KEYCODE_INSERT,
+		[0x61] = KEYCODE_DELETE,
+		[0x62] = KEYCODE_RIGHT,
+		[0x63] = KEYCODE_END,
+		[0x64] = KEYCODE_DOWN,
+		[0x65] = KEYCODE_PAGE_DOWN,
+		[0x66] = KEYCODE_F11,
+		[0x67] = KEYCODE_F12,
+		[0x68] = KEYCODE_UNKNOWN,  // (unused)
+		[0x69] = KEYCODE_LED_NUM_LOCK,  // Num Lock LED status
+		[0x6A] = KEYCODE_LED_CAPS_LOCK, // Caps Lock LED status
+		[0x6B] = KEYCODE_LED_SCROLL_LOCK
 		// ... (complete the rest based on the scancode table)
 		[0xE0] = 0, // Handle extended scancodes (e.g., Print Screen) separately
 	};

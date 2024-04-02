@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 // Function to initialize the COM and LPT ports
-void io_init();
+void io_init(uint16_t port);
 
 // Function to read from the COM port
 char io_read_com();

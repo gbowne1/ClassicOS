@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+uint8_t inb(uint16_t port);
+void outb(uint16_t port, uint8_t value);
+
 // NE2000 registers
 #define NE2000_COMMAND 0x00
 #define NE2000_PSTART 0x01

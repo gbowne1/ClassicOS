@@ -15,8 +15,15 @@
     LPT3: 0x3BC
 */
 
+typedef enum {
+    IO_SUCCESS = 0,
+    IO_ERROR_PORT_NOT_READY,
+    IO_ERROR_PORT_UNAVAILABLE,
+    // Add more error codes as needed
+} IOErrorCode;
+
 // Function to initialize the ports before reading or writing
-void io_init()
+void io_init(uint16_t port)
 {
     // Initialize COM1 port (0x3F8) - You can add more port initializations here if needed
 

@@ -4,14 +4,9 @@ kernel_sector equ 1   ; Sector containing the kernel (adjust for your kernel's l
 kernel_segments equ 4  ; Number of sectors to load (adjust for your kernel size)
 kernel_load_address equ 0x1000 ; Memory address to load the kernel
 
-; ... (Function prototypes and int_13h implementation copied from previous response)
-; Function prototypes for readability
-; (These functions are not strictly necessary in NASM, but improve code organization)
-; Prototype for BIOS disk read interrupt (INT 13h)
 void int_13h(unsigned int ah, unsigned int al, unsigned int dx, unsigned int ch, unsigned int cl, unsigned int bx);
 
-; Function prototype for error handling or printing a message
-void error_handler(const char *message);
+void error_handler(const char *message)
 ; Main kernel loading code
 mov bx, kernel_load_address  ; Set load address
 

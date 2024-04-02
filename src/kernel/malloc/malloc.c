@@ -33,7 +33,6 @@ void *malloc(size_t size)
 	}
 
 	// Align the size to the word size for efficiency
-	size += sizeof(size_t) - 1;
 	size &= ~(sizeof(size_t) - 1);
 
 	// Search for a free block of sufficient size

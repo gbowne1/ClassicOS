@@ -1,3 +1,4 @@
+#include "ne2000.h"
 #include <stdint.h>
 
 // NE2000 registers
@@ -12,15 +13,15 @@
 // ... more commands ...
 
 // Write a value to a NE2000 register
-void ne2000_write_reg(uint16_t base_addr, uint8_t reg, uint8_t value) {
-	volatile uint8_t *ne2000_reg = (volatile uint8_t *)(base_addr + reg);
-    *ne2000_reg = value;
+void ne2000_write_reg(uint16_t base_addr, uint8_t reg, uint8_t value)
+{
+	outb(base_addr + reg, value);
 }
 
 // Read a value from a NE2000 register
-uint8_t ne2000_read_reg(uint16_t base_addr, uint8_t reg) {
-	volatile uint8_t *ne2000_reg = (volatile uint8_t *)(base_addr + reg);
-	return *ne2000_reg;
+uint8_t ne2000_read_reg(uint16_t base_addr, uint8_t reg)
+{
+	return inb(base_addr + reg);
 }
 
 // Initialize the NE2000 card

@@ -8,6 +8,7 @@ void KeyboardInterruptHandler();
 
 void keyboard_init();
 bool keyboard_buffer_empty();
+bool keyboard_buffer_full();
 uint8_t keyboard_read_scancode();
 void set_interrupt_vector(uint8_t vector, void (*handler)());
 void enable_interrupt(uint8_t vector);
