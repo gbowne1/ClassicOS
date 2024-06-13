@@ -2,6 +2,9 @@
 #define FAT16_H
 
 #include <stdint.h>
+
+#include "../../ata.h"
+
 // Define constants for sector size, cluster size, etc. (replace with actual values)
 #define SECTOR_SIZE 512
 #define BYTES_PER_CLUSTER 4096 // Example: 8 sectors per cluster

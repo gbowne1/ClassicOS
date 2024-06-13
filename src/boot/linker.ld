@@ -1,31 +1,25 @@
 ENTRY(start)
-SECTIONS {
-    . = 0x7c00;
-
-    .text : {
+SECTIONS
+{
+.text :
+    {
         *(.text)
     }
 
-    .data : {
+.data :
+    {
         *(.data)
     }
 
-    .bss : {
+.bss :
+    {
         *(.bss)
     }
 
-    /* Define the bootloader signature at the end of the bootloader */
-    bootloader_signature : {
-        *(.bootloader_signature)
-    }
-
-    /* Define the bootloader magic number at the end of the bootloader */
-    bootloader_magic : {
-        *(.bootloader_magic)
-    }
-
-    /* Define the bootloader padding to fill up the remaining space */
-    bootloader_padding : {
-        *(.bootloader_padding)
+.kernel :
+    {
+        /* Kernel code */
+    . = 0x9000; /* Start of kernel code section */
+        *(.kernel)
     }
 }

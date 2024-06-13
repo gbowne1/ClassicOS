@@ -1,165 +1,249 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Stage 1 bootloader for ClassicOS ;
-; -------------------------------- ;
-; Determines if it was loaded from ;
-;  a floppy disk or an hard disk   ;
-;  drive, and then loads stage 2   ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-; Assembler directives ;
-;;;;;;;;;;;;;;;;;;;;;;;;
-
-; tells the assembler that the program will be loaded at 0x7C00
-; this is done by the BIOS
-org 0x7C00
-
-; we are targeting (x86) 16-bit real mode
-bits 16
-
-;;;;;;;;;;;;;;;;;
-; Jump to start ;
-;;;;;;;;;;;;;;;;;
-jmp start
-
-;;;;;;;;
-; Data ;
-;;;;;;;;
-; fdd geometry & options
-fddsamt  db 1        ; how many sectors to load
-fddretr  db 5        ; max retries for fdd operations
-fddcretr db 0        ; current retries left
-
-; misc strings
-welcome1 db "Welcome to the ClassicOS Stage 1 bootloader.", 13, 10, 0
-disktype db "Drive type: ", 0
-diskfdd  db "FDD", 13, 10, 0
-diskhdd  db "HDD", 13, 10, 0
-loaded   db "Data loaded!", 13, 10, 0
-
-; errors
-fdderes  db "FDD reset failed.", 13, 10, 0
-fddeload db "FDD read failed.", 13, 10, 0
-
-; storage
-disknum  db 0
-
-;;;;;;;;;;;
-; Program ;
-;;;;;;;;;;;
+[bits 16]
+[org 0x7c00]
 
 start:
-   xor ax, ax             ; set up segment registers to segment 0 since
-   mov ds, ax             ; our addresses are already relative to 0x7C00
-   mov es, ax
+    ;Set up segments correctly
+    xor ax, ax
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
 
-   mov [disknum], dl      ; save disk number to memory
+    ;Set up stack
+    mov ss, ax
+    mov bp, 0x7c00
+    mov sp, bp
 
-   mov ah, 0x01           ; set cursor shape
-   mov cx, 0x0100         ; hide cursor by setting ch = 1 and cl = 0x00
-   int 0x10               ; video interrupt
+    ;Save boot device number
+    mov [bootdev], dl
 
-   mov ah, 0x08           ; read page number into bh
-   int 0x10
+;Enable A20 Gate
+EnableA20Gate:
+	call TestA20
+	cmp ax, 1
+	je A20Enabled
 
-   mov si, welcome1       ; print welcome
-   call printstr
+tryUsingBIOS:
+	mov ax, 0x2401
+	int 0x15
+	call TestA20
+	cmp ax, 1
+	je A20Enabled
 
-   mov si, disktype       ; print first part of disk type
-   call printstr
+tryUsingKeyboardController:
+	cli
+	call WaitCommand
+	mov al, 0xAD	;Disable the keyboard
+	out 0x64, al
 
-   mov dl, [disknum]      ; restore disk number - should not be
-                          ; strictly necessary but you never know
-   and dl, 0x80           ; sets zf if disk is floppy
-   jz fddload
+	call WaitCommand
+	mov al, 0xD0	;Read from input
+	out 0x64, al
 
-hddload:
-   mov si, diskhdd        ; print disk type
-   call printstr
-   jmp load_onto_reset
+	call WaitData
+	in al, 0x60		;Read input from keyboard
+	push ax			;Save it
 
-fddload:
-   mov si, diskfdd        ; print disk type
-   call printstr
+	call WaitCommand
+	mov al, 0xD1	;Write to output
+	out 0x64, al
 
-load_onto_reset:
-   mov ah, [fddretr]     ; load max retries in memory
-   mov [fddcretr], ah
-load_reset:
-   mov si, fdderes        ; load error message pointer
-   dec byte [fddcretr]    ; decrement the retries counter
-   jz load_err         ; if it is 0, we stop trying
+	call WaitCommand
+	pop ax			;Write to input back with bit #2 set
+	or al, 2
+	out 0x60, al
 
-   mov ah, 0x00           ; otherwise, reset function (int 0x13)
-   int 0x13
-   jc load_reset       ; if jc (error), we try again
+	call WaitCommand
+	mov al, 0xAE	;Enable Keyboard
+	out 0x64, al
 
-load_onto_load:
-   mov ah, [fddretr]      ; reset retries counter
-   mov [fddcretr], ah
-   mov ax, 0x8000         ; need to stay within real mode limits
-   mov es, ax
-load_load:              ; loads 512*fddsamt bytes from sector 2 on.
-   mov si, fddeload
-   dec byte [fddcretr]
-   jz load_err
+	call WaitCommand
+	sti
+	jmp A20KeyboardCheck
 
-   mov dh, 0              ; head 0
-   mov ch, 0              ; cyl/track 0
-   mov cl, 2              ; start sector
-   mov bx, 0x8000              ; memory location
-   mov al, [fddsamt]      ; how many sectors to read
-   mov ah, 0x02           ; read function (int 0x13)
-   int 0x13
-   jc load_load        ; if jc (error), we try again
-   cmp al, [fddsamt]      ; also if al is not 1, we have a problem
-   jnz load_load
+WaitCommand:
+	in al, 0x64
+	test al, 2
+	jnz WaitCommand
+	ret
 
-load_done:
-   mov si, loaded         ; we have successfully loaded the data
-   call printstr
-   jmp 0x8000:0x0000               ; this will be jmp 0x1000:0x0000
+WaitData:
+	in al, 0x64
+	test al, 1
+	jz WaitData
+	ret
 
-load_err:
-   call printstr          ; print
-   jmp halt               ; and die
+A20KeyboardCheck:
+	call TestA20
+	cmp ax, 1
+	je A20Enabled
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; printstr routine, prints the string pointed by si using int 0x10 ;
-; sets the direction flag to 0                                     ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-printstr:
-   cld                    ; clear df flag - lodsb increments si
-printstr_loop:
-   lodsb                  ; load next character into al, increment si
-   or al, al              ; sets zf if al is 0x00
-   jz printstr_end
-   mov ah, 0x0E           ; teletype output (int 0x10)
-   int 0x10               ; print character
-   jmp printstr_loop
-printstr_end:
-   ret                    ; return to caller address
+UseFastA20Method:
+	in al, 0x92
+	or al, 2
+	out 0x92, al
+	call TestA20
+	cmp ax, 1
+	je A20Enabled
 
+;Else bail out, A20 cannot be enabled, maybe :)
+A20Error:
+	mov si, A20_error_msg
+	call print
+	xor ax, ax
+	int 16h
+	xor ax, ax
+	int 19h
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; halt routine - infinite loop ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-halt:
-   cli
-   jmp halt
+jmp $
+;If we ever get here, A20 is enabled!
+A20Enabled:
+LoadSecondStage:
+	push es
+	mov ax, 0x7e0
+	mov es, ax
 
-;;;;;;;;;;;
-; Padding ;
-;;;;;;;;;;;
-; $ is the address of the current line, $$ is the base address for
-; this program.
-; the expression is expanded to 510 - ($ - 0x7C00), or
-; 510 + 0x7C00 - $, which is, in other words, the number of bytes
-; before the address 510 + 0x7C00 (= 0x7DFD), where the 0xAA55
-; signature shall be put.
-times 510 - ($ - $$) db 0x00
+	stc
+	mov dh, 0
+	mov ah, 0x02
+	mov al, 2	;load 2 sectors
+	mov ch, 0
+	mov cl, 2
 
-;;;;;;;;;;;;;;;;;;
-; BIOS signature ;
-;;;;;;;;;;;;;;;;;;
-dw 0xAA55
+	mov dl, [bootdev]
+
+	xor bx, bx ; [es:bx] = 0x07e0:0x0000
+	int 13h
+
+	jnc load_success
+
+disk_error:
+	mov si, disk_read_error_msg
+	call print
+	xor ax, ax
+	int 16h
+	xor ax, ax
+	int 19h
+
+jmp $
+
+load_success:
+	pop es
+	mov dl, [bootdev]
+	jmp 0x07e0:0x0000
+
+jmp $
+
+;Print string routine
+print:
+    pusha
+
+.loop:
+    lodsb
+    cmp al, 0
+    je .done
+    mov ah, 0x0e
+    int 10h
+    jmp .loop
+
+.done:
+    popa
+    ret
+
+;****************************
+;Function to check if A20 Gate is enabled
+;IN = nothing
+;OUT : AX = status; 0 = Disabled, 1 = Enabled
+TestA20:
+	cli
+	push es
+	push di
+	push ds
+	push si
+
+	push bx
+	push dx
+
+	xor dx, dx
+	xor bx, bx
+
+	mov es, bx
+	mov di, 0x0500
+
+	mov bx, 0xffff
+	mov ds, bx
+	mov si, 0x0510
+
+	mov al, byte [es:di]
+	push ax
+
+	mov al, byte [ds:si]
+	push ax
+
+	mov [es:di], byte 0x00
+	mov [ds:si], byte 0xff
+
+	mov bl, byte [es:di]
+	cmp bl, 0xff
+	je A20Exit
+	mov dx, 0x0001		;A20 Enabled
+
+A20Exit:
+	pop ax
+	mov [ds:si], al
+	pop ax
+	mov [es:di], al
+
+	mov ax, dx
+	pop dx
+	pop bx
+	pop si
+	pop ds
+	pop di
+	pop es
+	sti
+	ret
+;;;;;;End of function;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+disk_read_error_msg db 'Error Reading disk. Press any key to reboot. Code : 0x01', 0
+A20_error_msg db 'An Internal error occured. Press any key to reboot. Code: 0x02', 0
+bootdev db 0
+
+times 442 - ($-$$) db 0
+dd 0x07112026	;Boot signature: Unique for each boot disk this OS is installed on  ;6:20 PM
+
+;Written on 7th November, 2020 6:20 pm
+;Partition tables
+; #1
+
+db 0x0
+db 0
+db 0
+db 0
+db 0x00	;Reserved
+db 0
+db 0
+db 0
+dd 0x0
+dd 20480
+
+; #2
+db 0x80
+db 0
+db 0
+db 0
+db 07h	;FAT 32 fs
+db 0
+db 0
+db 0
+dd 20480
+dd 8388608
+
+; #3
+times 16 db 0
+
+; #4
+times 16 db 0
+
+dw 0xaa55

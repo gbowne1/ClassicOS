@@ -3,16 +3,30 @@
 global cpuid
 
 cpuid:
-  ; Input parameter in EAX register
-  mov eax, %edi
+ ; Save registers
+ push ebp
+ mov ebp, esp
+ push ebx
+ push edi
+ push esi
 
-  ; Call CPUID instruction (clobbers EAX, EBX, ECX, EDX)
-  cpuid
+ ; Input parameter in EAX register
+ mov eax, [ebp + 8] ; Assuming the input is passed on the stack
 
-  ; Return values in output registers
-  mov %esi, [esp + 4]   ; eax (output)
-  mov %edx, [esp + 8]   ; ebx (output)
-  mov %ecx, [esp + 12]  ; ecx (output)
-  mov %edi, [esp + 16]  ; edx (output)
+ ; Call CPUID instruction (clobbers EAX, EBX, ECX, EDX)
+ cpuid
 
-  ret
+ ; Move output values to the appropriate registers
+ mov esi, eax ; Output EAX
+ mov edi, ebx ; Output EBX
+ mov ecx, ecx ; Output ECX
+ mov edx, edx ; Output EDX
+
+ ; Restore registers and clean up the stack
+ pop esi
+ pop edi
+ pop ebx
+ mov esp, ebp
+ pop ebp
+
+ ret

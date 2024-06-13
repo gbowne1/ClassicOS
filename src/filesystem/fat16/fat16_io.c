@@ -1,5 +1,7 @@
 #include "fat16_io.h"
 #include <stdint.h>
+#include "src/kernel/arch/x86/disk/ata.h"
+#include "fat16.h"
 // I/O port addresses for IDE controller (replace with actual values if needed)
 #define PRIMARY_DATA_REGISTER 0x1F0
 #define PRIMARY_ERROR_REGISTER 0x1F1

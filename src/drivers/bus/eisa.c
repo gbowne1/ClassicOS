@@ -50,10 +50,29 @@ void eisa_detect_devices()
                     {
                         // This is my device, configure it
                         uint32_t config1 = eisa_read_config_dword(address, 4);
-                        uint32_t config2 = eisa_read_config_dword(address, 8);
+						uint32_t config2 = eisa_read_config_dword(address, 8);
+
 						//printf("Config1: %u\n", config1);
                         //printf("Config2: %u\n", config2);
                         // Do something with the configuration data
+
+						// Check for specific bits in config1
+						if (config1 & 0x00000001) {
+						// Enable feature 1 based on bit 0 of config1
+						eisa_write(0xspecific_port_1, 0xvalue_to_enable_feature_1);
+						}
+
+						if (config1 & 0x00000010) {
+						// Set DMA channel based on bits 4-5 of config1
+						uint8_t dma_channel = (config1 >> 4) & 0x03;
+						eisa_write(0xspecific_port_2, dma_channel);
+						}
+
+						// Check for specific bits in config2
+						if (config2 & 0x00000001) {
+						// Configure interrupt line based on bit 0 of config2
+						eisa_write(0xspecific_port_3, 0xinterrupt_line_number);
+						}
                     }
                 }
             }

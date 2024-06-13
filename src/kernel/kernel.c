@@ -1,4 +1,8 @@
 #include "kernel.h"
+#include "./arch/x86/gdt.h"
+#include "../kernel/malloc/malloc.h"
+#include "../kernel/malloc/kmalloc.h"
+#include "./arch/x86/include/memory.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -45,12 +49,29 @@ void init_devices() {
     // Placeholder for actual implementation
 }
 
+void early_init() {
+  // ... other early initialization tasks
+  init_kernel_heap((void*)KERNEL_HEAP_START, (void*)KERNEL_HEAP_END);
+  // Initialize GDT
+  gdt_init();
+}
+
 void kernel_main() {
     clear_screen();
     print("Welcome to ClassicOS!");
 
     // Initialize memory management
     init_memory_management();
+
+    // Initialize user-space heap (example)
+    void* user_heap_start = /* address of user-space heap start */;
+    void* user_heap_end = /* address of user-space heap end */;
+    init_heap(user_heap_start, user_heap_end);
+
+	// Initialize kernel heap (example)
+    void* kernel_heap_start = /* address of kernel heap start */;
+    void* kernel_heap_end = /* address of kernel heap end */;
+    init_kernel_heap(kernel_heap_start, kernel_heap_end);
 
     // Initialize devices
     init_devices();
@@ -70,4 +91,3 @@ void kernel_main() {
         handle_system_calls();
     }
 }
-
