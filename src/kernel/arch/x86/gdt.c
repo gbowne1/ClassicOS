@@ -10,11 +10,11 @@
 #include <string.h>
 #include <sys/cdefs.h>
 
-#define BYTE_MASK    0xFF
-#define PAGE_FAULT   14
+#define BYTE_MASK 0xFF
+#define PAGE_FAULT 14
 #define DOUBLE_FAULT 8
-#define SYSTEM_CALL  80
-#define TIMER        20
+#define SYSTEM_CALL 80
+#define TIMER 20
 
 #define ISR_TABLE_SIZE 256
 
@@ -24,65 +24,66 @@ struct gdt_entry gdt_entries[3] __attribute__((aligned(0x1000)));
 // GDT constants
 enum GDT_ACCESS
 {
-    GDT_ACCESS_PRESENT = 0x80
+	GDT_ACCESS_PRESENT = 0x80
 };
 
 // GDT base and limit constants
 enum GDT_BASE_LIMIT
 {
-    GDT_BASE_MIDDLE_SHIFT = 16,
-    GDT_BASE_HIGH_SHIFT   = 24,
-    GDT_GRANULARITY_SHIFT = 16,
-    GDT_GRANULARITY_MASK  = 0x0F,
-    GDT_ACCESS_MASK       = 0xF0,
-    GDT_LIMIT_MASK        = 0xFFFF
+	GDT_BASE_MIDDLE_SHIFT = 16,
+	GDT_BASE_HIGH_SHIFT = 24,
+	GDT_GRANULARITY_SHIFT = 16,
+	GDT_GRANULARITY_MASK = 0x0F,
+	GDT_ACCESS_MASK = 0xF0,
+	GDT_LIMIT_MASK = 0xFFFF
 };
-
-extern void LoadGDT(struct gdt_ptr* gdt);
 
 // Initialize a GDT entry
 void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access,
-                  uint8_t gran, struct gdt_entry *const gdt)
+				  uint8_t gran, struct gdt_entry *const gdt)
 {
-    gdt[num].base_low    = (base & GDT_LIMIT_MASK);
-    gdt[num].base_middle = (base >> GDT_BASE_MIDDLE_SHIFT) & BYTE_MASK;
-    gdt[num].base_high   = (base >> GDT_BASE_HIGH_SHIFT) & BYTE_MASK;
-    gdt[num].limit_low   = (limit & GDT_LIMIT_MASK);
-    gdt[num].granularity =
-        (limit >> GDT_GRANULARITY_SHIFT) & GDT_GRANULARITY_MASK;
-    gdt[num].granularity |= gran & GDT_ACCESS_MASK;
-    gdt[num].access = access;
+	gdt[num].base_low = (base & GDT_LIMIT_MASK);
+	gdt[num].base_middle = (base >> GDT_BASE_MIDDLE_SHIFT) & BYTE_MASK;
+	gdt[num].base_high = (base >> GDT_BASE_HIGH_SHIFT) & BYTE_MASK;
+	gdt[num].limit_low = (limit & GDT_LIMIT_MASK);
+	gdt[num].granularity =
+		(limit >> GDT_GRANULARITY_SHIFT) & GDT_GRANULARITY_MASK;
+	gdt[num].granularity |= gran & GDT_ACCESS_MASK;
+	gdt[num].access = access;
 }
 
-void gdt_init()
+extern bool gdt_init(void)
 {
-    // Set up GDT pointer
-    struct gdt_ptr gp;
-    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    //gdt      = (struct gdt_entry *)malloc(sizeof(struct gdt_entry) * 3);
-    //memset(gdt, 0, sizeof(struct gdt_entry) * 3);
+	// Set up GDT pointer
+	struct gdt_ptr gp;
+	gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
 
-    // Initialize GDT entries
-    gdt_set_gate(0, 0, 0, 0, 0, &gdt_entries[0]); // Null segment
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF, &gdt_entries[1]); // Code segment
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF, &gdt_entries[2]); // Data segment
+	// Initialize GDT entries
+	gdt_set_gate(0, 0, 0, 0, 0, &gdt_entries[0]);				 // Null segment
+	gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF, &gdt_entries[1]); // Code segment
+	gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF, &gdt_entries[2]); // Data segment
 
-    // Load GDT
-    struct gdt_ptr gdtp;
-    gdtp.limit = gp.limit;
-    gdtp.base  = (uintptr_t)gdt;
+	// Load GDT
+	struct gdt_ptr gdtp;
+	gdtp.limit = gp.limit;
+	gdtp.base = (uint32_t)&gdt_entries[0];
 
 	LoadGDT(&gdtp);
 
-	/*
-    __asm__ volatile("mov $0x10, %ax\n\t"
-                     "mov %ax, %ds\n\t"
-                     "mov %ax, %es\n\t"
-                     "mov %ax, %fs\n\t"
-                     "mov %ax, %gs\n\t"
-                     "ljmp $0x08, $next_label\n\t"
-                     "next_label:");
-	 */
+	// Switch to protected mode
+	__asm__ volatile(
+		"cli\n\t"					  // Disable interrupts
+		"mov %[base], %%eax\n\t"	  // Move the base address of the GDT to eax
+		"mov %[limit], %%ebx\n\t"	  // Move the limit of the GDT to ebx
+		"shl $16, %%ebx\n\t"		  // Shift left 16 bits to get the full 32-bit value
+		"or %%eax, %%ebx\n\t"		  // Combine the base and limit
+		"mov %[address], %%ecx\n\t"	  // Move the address of gdtr to ecx
+		"mov %%ebx, (%[address])\n\t" // Store the combined value at gdtr
+		"lgdt (%[address])\n\t"		  // Load the GDT
+		"sti\n\t"					  // Enable interrupts
+		:
+		: [base] "a"(gdtp.base), [limit] "b"(gdtp.limit), [address] "c"(&gdtp)
+		: "%ebx", "%ecx", "%edx");
 }
 
 // Exception handlers

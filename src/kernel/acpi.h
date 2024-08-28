@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
 // ACPI base address (replace with actual value)
 #define ACPI_BASE 0xE0000000
 

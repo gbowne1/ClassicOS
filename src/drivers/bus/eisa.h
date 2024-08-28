@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 // Initialize the EISA bus
 void eisa_init();

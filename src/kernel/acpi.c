@@ -1,6 +1,8 @@
 #include "acpi.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
 
 // Function prototypes (implementations below)
 acpi_fadt_t *acpi_find_fadt();
@@ -13,7 +15,7 @@ acpi_fadt_t *acpi_find_fadt() {
   // Read the RSDP (Root System Description Pointer) signature and checksum
   // at the ACPI base address.
   acpi_fadt_t *rsdp = (acpi_fadt_t *)ACPI_BASE;
-  if (rsdp->signature != *(uint32_t *)"RSDT" && rsdp->signature != *(uint32_t *)"XSDT") {
+  if (memcmp(&rsdp->signature, "RSDT", 4) != 0 && memcmp(&rsdp->signature, "XSDT", 4) != 0) {
     return NULL; // Not a valid ACPI signature
   }
   if (rsdp->checksum != 0) {

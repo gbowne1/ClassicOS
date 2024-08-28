@@ -1,4 +1,25 @@
-I am making a fully custom x86 32 bit IA32 Operating System in Visual Studio Code 1.81 for Debian Linux. This will not be a linux based OS. It's also not posix, linux, unix, windows, bsd or any other derivitive thereof but does use the same concepts. The system I am developing on has a Intel i7-3770k and is an x86_64 bit and runs Debian 10 Buster Linux with Linux Kernel version 4.19.0-25-amd64 (supports UNIX 98 PTY) and Bash 5.0.3 and the drive has an ext4 partition and a tempfs partition. I have the extension ms-vscode.cpptools installed on VSCode. I also have both gcc 8.3.0 and clang 7.0.1-8+deb10u2 installed. All of my compilers, debuggers, linkers are in /usr/bin. I have Coreutils 8.30, Binutils 2.31.1, Bison 3.3.2, Diffutils 3.7, Findutils 4.6.0.225, Gawk 4.2.1, Grep 3.3, Gzip 1.9, M4 1.4.18, Make 4.2.1, Patch 2.7.6, Perl 5.28.1, Python 3.7.3, Sed 4.7, Tar 1.30, Texinfo 6.5, Xz 5.2.4.  The operating system would run on any system that has a 386 CPU up to a 32 bit only Prescott Pentium 4 released in 2004.  I am using gcc to compile, ld to link, gdb to debug, nasm to do the assembly and qemu to emulate the system.  it has a two stage bootloader.  The os should boot from floppy, hard drive and optical media.
+I am making a fully custom x86 32 bit IA32 Operating System in Visual Studio Code 1.81 for Debian Linux. This will not be a linux based OS. It's also not posix, linux, unix, windows, bsd or any other derivitive thereof but does use the same concepts. The system I am developing on has a Intel i7-3770k and is an x86_64 bit and runs Debian 10 Buster Linux with Linux Kernel version 4.19.0-25-amd64 (supports UNIX 98 PTY) and Bash 5.0.3 and the drive has an ext4 partition and a tempfs partition. I have the extension ms-vscode.cpptools installed on VSCode. I also have both gcc 8.3.0 and clang 7.0.1-8+deb10u2 installed. All of my compilers, debuggers, linkers are in /usr/bin. I have Coreutils 8.30, Binutils 2.31.1, Bison 3.3.2, Diffutils 3.7, Findutils 4.6.0.225, Gawk 4.2.1, Grep 3.3, Gzip 1.9, M4 1.4.18, Make 4.2.1, Patch 2.7.6, Perl 5.28.1, Python 3.7.3, Sed 4.7, Tar 1.30, Texinfo 6.5, Xz 5.2.4.  The operating system would run on any system that has a 386 CPU up to a 32 bit only Prescott Pentium 4 released in 2004 including i386, i486, i586 and i686. I am using gcc to compile, ld to link, gdb to debug, nasm to do the assembly and qemu to emulate the system.  it has a two stage bootloader.  The os should boot from floppy, hard drive and optical media.
+
+Here is the system ,emory map
+BIOS: The Basic Input/Output System often resides in the lower 64KB (first 65536 bytes) of memory.
+MBR (Master Boot Record): The first sector of the boot disk (usually 512 bytes) is typically located at 0x00007C00.
+VGA Memory: The memory used for graphics display might be mapped in this region (e.g., 0xB8000 for text mode).
+Legacy Device Memory: Memory-mapped I/O (MMIO) regions for legacy devices like keyboard, mouse, or floppy controller could be present.
+Lower 1GB of RAM: This is the main usable memory region for the kernel, applications, and data. The kernel might load itself here after being booted by the bootloader.
+
+the kernel.c should be kernel_main() and
+
+Kernel Stack Implementation:
+
+    Memory Allocation: The kernel reserves a dedicated memory region for the kernel stack during boot or early initialization. This region typically resides within the usable portion of memory allocated for the kernel itself (often within the first 1GB on IA32 systems).
+
+    Stack Pointer (ESP): The kernel maintains a stack pointer register (often ESP or RSP on x86 architectures) that points to the top of the kernel stack. Initially, this pointer is set to the end of the allocated stack memory region, indicating an empty stack.
+
+    Stack Growth: When a function is called in kernel space, the required data (arguments, local variables, return address) is pushed onto the stack. This decrements the stack pointer value, effectively "growing" the stack downwards in memory.
+
+    Stack Protection:  The kernel sets up memory protection mechanisms to ensure the stack doesn't grow beyond its allocated region or overwrite other critical kernel data structures.
+
+    Stack Overflow Protection:  The kernel might implement stack overflow protection mechanisms to detect and handle situations where the stack grows too large and threatens to overwrite other memory areas. This can involve setting up guard pages below the allocated stack space to trigger exceptions if accessed.
 
 here is the file structure:
 
@@ -127,17 +148,44 @@ ClassicOS/
 This is my CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.13.4)
-project(ClassicOS VERSION 0.0.1 LANGUAGES C)
+
+set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/src)
+set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/build)
+
+include(x86-baremetal-toolchain.cmake)
+
+project(ClassicOSBL VERSION 0.0.1 LANGUAGES ASM_NASM)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C CXX ASM_NASM)
+
+enable_language(ASM_NASM)
+set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
+
+set(IS_OS_WINDOWS FALSE)
+set(IS_OS_LINUX FALSE)
+set(IS_OS_MAC FALSE)
+
+if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+	set(IS_OS_WINDOWS TRUE)
+	message("Building on the Windows operating system.")
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+	set(IS_OS_LINUX TRUE)
+	message("Building on the Linux operating system.")
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+	set(IS_OS_MAC TRUE)
+	message("Building on the Mac operating system.")
+endif ()
 
 # Source files
 set(BOOT_SOURCE_FILES
     src/boot/boot.asm
     src/boot/linker.ld
 )
+
 set(GRUB_SOURCE_FILES
     src/boot/grub/grub.cfg
     src/boot/grub/menu.lst
 )
+
 set(DRIVERS_SOURCE_FILES
     src/drivers/audio/audio.c
     src/drivers/audio/audio.h
@@ -147,6 +195,7 @@ set(DRIVERS_SOURCE_FILES
 	src/drivers/bus/isa.h
 	src/drivers/bus/mca.c
 	src/drivers/bus/mca.h
+	#src/drivers/bus/pci.asm
 	src/drivers/bus/pci.c
 	src/drivers/bus/pci.h
 	src/drivers/bus/vesa.c
@@ -154,6 +203,7 @@ set(DRIVERS_SOURCE_FILES
     src/drivers/display/display.c
     src/drivers/display/display.h
     src/drivers/io/io.c
+	src/drivers/io/io.asm
     src/drivers/io/io.h
     src/drivers/keyboard/keyboard.c
     src/drivers/keyboard/keyboard.h
@@ -168,49 +218,59 @@ set(KERNEL_SOURCE_FILES
 	src/kernel/arch/x86/include/types.h
 	src/kernel/arch/x86/memory/memory.c
 	src/kernel/arch/x86/gdt.c
-	src/kernel/arch/x86/gdt.c
+	src/kernel/arch/x86/gdt.asm
+	src/kernel/arch/x86/gdt.h
 	src/kernel/arch/x86/idt.c
+	src/kernel/arch/x86/idt.asm
 	src/kernel/arch/x86/idt.h
-	src/kernel/arch/x86/isr.c
-	src/kernel/arch/x86/isr.h
+	src/kernel/arch/x86/isr/isr.c
+	src/kernel/arch/x86/isr/isr.h
+	src/kernel/arch/x86/isr/exceptions.c
+	src/kernel/arch/x86/isr/exceptions.h
     src/kernel/kernel.c
     src/kernel/kernel.h
     src/kernel/linker.ld
     src/kernel/print.c
+		src/kernel/stack.c
+		src/kernel/stack.h
 )
+
+set(UTIL_SOURCE_FILES
+	src/EHS.h
+	src/sys/CPU.h src/sys/CPU.cpp src/sys/CPU_GCC_AMD64.asm
+	src/Util.h src/Util.cpp
+	src/Version.h src/Version.cpp
+	src/Serializer.h
+	src/Array.h
+	src/Vector.h
+	src/SArray.h
+	src/Str.h
+	src/PRNG.h
+	src/HRNG.h src/HRNG_GCC.s
+	src/Math.h src/Math.cpp src/Math_GCC_AMD64.s
+	src/Rect.h
+	src/Range.h src/Range.cpp
+	src/Color4.h src/Color4.cpp
+	src/Color3.h src/Color3.cpp
+	src/Quat.h
+	src/Vec4.h
+	src/Vec3.h
+	src/Vec2.h
+	src/Mat4.h
+	src/Mat3.h
+	src/Mat2.h
+)
+
+set_source_files_properties(src/boot/boot.asm PROPERTIES LANGUAGE ASM_NASM)
 
 add_executable(ClassicOS
-    ${BOOT_SOURCE_FILES}
-    ${GRUB_SOURCE_FILES}
+	${KERNEL_SOURCE_FILES}
     ${DRIVERS_SOURCE_FILES}
-    ${KERNEL_SOURCE_FILES}
 )
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_executable(ClassicOSBL
+	${BOOT_SOURCE_FILES}
+	${GRUB_SOURCE_FILES}
+)
 
-# Enable testing
-enable_testing()
-
-target_link_libraries(ClassicOS PRIVATE)
-
-set(CMAKE_C_COMPILER gcc)
-set(CMAKE_LINKER ld)
-set(CMAKE_EXE_LINKER_FLAGS "-g -s")
-set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -e kernel_main")
-set(CMAKE_CXX_FLAGS "-g -Wall")
-set(CMAKE_C_FLAGS "-g -Wall -m32")
-set(CMAKE_C_FLAGS_DEBUG "-g")
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_GDB_COMMAND gdb)
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_ASM_COMPILER nasm)
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --32")
-set(CMAKE_SYSTEM_PROCESSOR i386)
-set(CMAKE_SYSTEM_NAME None)
-set(CMAKE_ASM_NASM_COMPILER nasm)
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set_target_properties(ClassicOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
+message("${CMAKE_EXE_LINKER_FLAGS}")

@@ -12,8 +12,8 @@ typedef struct {
 } heap_block_t;
 
 // Function prototypes
-void init_kernel_heap(void* start, void* end);
-void init_user_heap(void* start, void* end);
+int init_kernel_heap(void* start, void* end);
+int init_user_heap(void* start, void *end);
 void* kmalloc(size_t size);
 void kfree(void* ptr);
 

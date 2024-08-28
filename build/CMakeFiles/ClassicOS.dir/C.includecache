@@ -9,24 +9,20 @@
 /home/gbowne1/Documents/ClassicOS/src/drivers/audio/audio.c
 audio.h
 /home/gbowne1/Documents/ClassicOS/src/drivers/audio/audio.h
-stdbool.h
--
-stddef.h
--
-stdint.h
+time.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/drivers/audio/audio.h
-stdbool.h
+stdint.h
 -
 stddef.h
--
-stdint.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/drivers/bus/eisa.c
 eisa.h
 /home/gbowne1/Documents/ClassicOS/src/drivers/bus/eisa.h
+stdarg.h
+-
 stdbool.h
 -
 stddef.h
@@ -44,6 +40,8 @@ stddef.h
 stdint.h
 -
 stdio.h
+-
+stdarg.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/drivers/bus/isa.c
@@ -54,6 +52,12 @@ stdbool.h
 stddef.h
 -
 stdint.h
+-
+stdarg.h
+-
+stdio.h
+-
+string.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/drivers/bus/isa.h
@@ -222,6 +226,28 @@ stdlib.h
 ./tty.h
 /home/gbowne1/Documents/ClassicOS/src/drivers/tty/./tty.h
 
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/gdt.h
+stdint.h
+-
+stdbool.h
+-
+
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/idt.h
+include/types.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/types.h
+stdbool.h
+-
+
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/memory.h
+stddef.h
+-
+stdint.h
+-
+
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/types.h
+stdint.h
+-
+
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/gdt.c
 gdt.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/gdt.h
@@ -249,18 +275,24 @@ sys/cdefs.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/gdt.h
 stdint.h
 -
+stdbool.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/idt.c
 idt.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/idt.h
-isr/isr.h
-/home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/isr.h
 ../../../drivers/keyboard/keyboard.h
 /home/gbowne1/Documents/ClassicOS/src/drivers/keyboard/keyboard.h
+isr/isr.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/isr.h
+stdint.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/idt.h
 include/types.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/include/types.h
+stdbool.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/include/memory.h
 stddef.h
@@ -269,18 +301,36 @@ stdint.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/include/types.h
+stdint.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/exceptions.c
 exceptions.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/exceptions.h
+setjmp.h
+-
+signal.h
+-
 stdio.h
+-
+stdlib.h
+-
+stdint.h
 -
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/exceptions.h
+stddef.h
+-
+stdint.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/isr.c
 isr.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/isr.h
+stdbool.h
+-
+stdio.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/isr/isr.h
 ../include/types.h
@@ -297,8 +347,40 @@ string.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.c
 kernel.h
 /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.h
+../kernel/malloc/kmalloc.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/malloc/kmalloc.h
+../kernel/malloc/malloc.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/malloc/malloc.h
+./arch/x86/gdt.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/gdt.h
+./arch/x86/idt.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/idt.h
+./arch/x86/include/memory.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/memory.h
+stdbool.h
+-
+stddef.h
+-
+stdint.h
+-
+stdio.h
+-
+string.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.h
+kernel.h
+/home/gbowne1/Documents/ClassicOS/src/kernel/kernel.h
+
+/home/gbowne1/Documents/ClassicOS/src/kernel/malloc/kmalloc.h
+stdint.h
+-
+stddef.h
+-
+
+/home/gbowne1/Documents/ClassicOS/src/kernel/malloc/malloc.h
+stddef.h
+-
 
 /home/gbowne1/Documents/ClassicOS/src/kernel/print.c
 kernel.h

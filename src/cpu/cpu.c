@@ -1,83 +1,46 @@
 #include "cpu.h"
+#include <stdint.h>
+#include <stdio.h>
 
-// Function to read a 32-bit value from a CPU register
-uint32_t read_register(uint8_t reg) {
-    uint32_t value;
-    __asm__ volatile("mov %0, %%" : "+r"(value) : "c"(reg));
-    return value;
-}
+// Existing functions
+uint32_t read_register(uint8_t reg) { /*...*/ }
+void write_register(uint8_t reg, uint32_t value) { /*...*/ }
+void switch_to_protected_mode() { /*...*/ }
 
-// Function to write a 32-bit value to a CPU register
-void write_register(uint8_t reg, uint32_t value) {
-    __asm__ volatile("mov %0, %%" : : "c"(reg), "r"(value));
-}
-
-// Function to read the value of the CR0 register
-uint32_t read_cr0()
+// Integrated cpuid function
+/*void cpuid(uint32_t function, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
-    uint32_t value;
-    __asm__ volatile("mov %%cr0, %0" : "=r"(value));
-    return value;
+	asm volatile(
+		"cpuid"
+		: "=a"(*eax),
+		  "=b"(*ebx),
+		  "=c"(*ecx),
+		  "=d"(*edx)
+		: "a"(function));
+}
+*/
+
+// Optionally, integrate identify_cpu function
+void identify_cpu()
+{
+	uint32_t max_leaf;
+	uint32_t vendor_id[4];
+	uint32_t eax, ebx, ecx, edx;
+
+	cpuid(0, &eax, &ebx, &ecx, &edx);
+	max_leaf = eax;
+
+	cpuid(0x80000000, &eax, &ebx, &ecx, &edx);
+	vendor_id[0] = eax;
+	vendor_id[1] = ebx;
+	vendor_id[2] = ecx;
+	vendor_id[3] = edx;
+
+	printf("Vendor ID: %.4s%.4s\n", (char *)&vendor_id[0], (char *)&vendor_id[1]);
+	printf("Maximum leaf value: %u\n", max_leaf);
 }
 
-// Function to write a value to the CR0 register
-void write_cr0(uint32_t value)
-{
-    __asm__ volatile("mov %0, %%cr0" : : "r"(value));
-}
-
-// Function to switch from real mode to protected mode
-void switch_to_protected_mode()
-{
-    uint32_t cr0 = read_cr0();
-    cr0 |= 0x1; // Set the PE bit to switch to protected mode
-    write_cr0(cr0);
-}
-
-// Write a byte to a port
-void outb(uint16_t port, uint8_t value)
-{
-    __asm__ volatile ("outb %0, %1" : : "a"(value), "Nd"(port));
-}
-
-// Read a byte from a port
-uint8_t inb(uint16_t port)
-{
-    uint8_t value;
-    __asm__ volatile ("inb %1, %0" : "=a"(value) : "Nd"(port));
-    return value;
-}
-
-// Write a word to a port
-void outw(uint16_t port, uint16_t value)
-{
-    __asm__ volatile ("outw %0, %1" : : "a"(value), "Nd"(port));
-}
-
-// Read a word from a port
-uint16_t inw(uint16_t port)
-{
-    uint16_t value;
-    __asm__ volatile ("inw %1, %0" : "=a"(value) : "Nd"(port));
-    return value;
-}
-
-// Write a double word to a port
-void outl(uint16_t port, uint32_t value)
-{
-    __asm__ volatile ("outl %0, %1" : : "a"(value), "Nd"(port));
-}
-
-// Read a double word from a port
-uint32_t inl(uint16_t port)
-{
-    uint32_t value;
-    __asm__ volatile ("inl %1, %0" : "=a"(value) : "Nd"(port));
-    return value;
-}
-
-// Execute the CPUID instruction
-void cpuid(uint32_t code, uint32_t *a, uint32_t *d)
-{
-    __asm__ volatile ("cpuid" : "=a"(*a), "=d"(*d) : "a"(code) : "ecx", "ebx");
+int main() {
+    identify_cpu();
+    return 0;
 }

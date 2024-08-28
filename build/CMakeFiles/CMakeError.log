@@ -1,8 +1,4 @@
-Checking whether the ASM_NASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
-NASM version 2.14
-Checking whether the ASM_NASM compiler is Clang using "--version" did not match "(clang version)":
-NASM version 2.14
-Checking whether the ASM_NASM compiler is AppleClang using "--version" did not match "(Apple LLVM version)":
+Checking whether the ASM_NASM compiler is GNU using "--version" terminated after 10 s due to timeout.Checking whether the ASM_NASM compiler is Clang using "--version" terminated after 10 s due to timeout.Checking whether the ASM_NASM compiler is AppleClang using "--version" did not match "(Apple LLVM version)":
 NASM version 2.14
 Checking whether the ASM_NASM compiler is HP using "-V" did not match "HP C":
 nasm:error: unrecognised option `-V'

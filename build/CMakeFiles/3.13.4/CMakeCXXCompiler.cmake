@@ -72,5 +72,5 @@ endif()
 
 
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-linux-gnu/8/32;/usr/lib/i386-linux-gnu;/usr/lib32;/lib/i386-linux-gnu;/lib32;/usr/lib/gcc/x86_64-linux-gnu/8;/usr/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-linux-gnu/8/32;/usr/x86_64-linux-gnu/lib32;/usr/lib/i386-linux-gnu;/usr/lib32;/lib/i386-linux-gnu;/lib32;/usr/lib/gcc/x86_64-linux-gnu/8;/usr/x86_64-linux-gnu/lib;/usr/lib")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

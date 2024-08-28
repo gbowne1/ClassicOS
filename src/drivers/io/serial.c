@@ -1,4 +1,5 @@
 #include "serial.h"
+#include "io.h"  // Include the new I/O header
 
 #include <stddef.h>
 #include <stdint.h>

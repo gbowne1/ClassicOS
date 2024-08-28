@@ -7,6 +7,13 @@ PHDRS {
 }
 
 SECTIONS {
+
+	.kernelheap (0x100000) :  /* Assuming kernel heap starts at 1MB */
+    {
+      _kernel_heap_start = .;  /* Define symbol at the start of the section */
+      *(kernel.o)  /* Include kernel object file in this section */
+    }
+	
     . = 0xC0000000;  /* Starting virtual address */
 
     /* Text Section */

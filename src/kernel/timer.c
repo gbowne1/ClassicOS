@@ -3,7 +3,7 @@
 
 // Function to send a byte to an I/O port
 void outb(uint16_t port, uint8_t data) {
-    __asm__ volatile ("outb %b, %w" : : "a" (data), "d" (port));
+    __asm__ volatile ("outb %0, %1" : : "a" (data), "Nd" (port));
 }
 
 // Function to initialize the timer with a desired frequency

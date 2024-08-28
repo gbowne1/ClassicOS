@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "../../ata.h"
+#include "../../kernel/arch/x86/disk/ata.h"
 
 // Define constants for sector size, cluster size, etc. (replace with actual values)
 #define SECTOR_SIZE 512

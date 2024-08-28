@@ -9,7 +9,7 @@ ASM_NASM_DEFINES =
 
 ASM_NASM_INCLUDES = 
 
-C_FLAGS = -m32 -ffreestanding -nostdlib -g   -std=gnu11
+C_FLAGS = -m32 -ffreestanding -nostdlib   -std=gnu11
 
 C_DEFINES = 
 

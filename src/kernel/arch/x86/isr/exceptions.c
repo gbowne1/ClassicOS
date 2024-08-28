@@ -9,8 +9,8 @@
 #define PAGE_SIZE 4096
 typedef struct memory_region_t
 {
-	void *start_address;
-	size_t size;
+    uintptr_t start_address;  // Changed from void* to uintptr_t
+    size_t size;
 } memory_region_t;
 
 // Array of allocated memory regions (example)
@@ -18,6 +18,9 @@ memory_region_t *allocated_regions;
 size_t num_allocated_regions;
 
 jmp_buf page_fault_buffer;
+
+extern memory_region_t *allocated_regions;
+extern size_t num_allocated_regions;
 
 void DivideByZero()
 {
@@ -47,17 +50,19 @@ void DoubleFault()
 }
 
 // Function to check if address is within allocated memory (example)
-int IsAddressInRange(uint16_t address)
+int IsAddressInRange(uintptr_t address)  // Changed from uint16_t to uintptr_t
 {
-	for (size_t i = 0; i < num_allocated_regions; ++i)
-	{
-		if ((address >= allocated_regions[i].start_address) &&
-			(address < (allocated_regions[i].start_address + allocated_regions[i].size)))
-		{
-			return 1;
-		}
-	}
-	return 0;
+    for (size_t i = 0; i < num_allocated_regions; ++i)
+    {
+        uintptr_t region_start = allocated_regions[i].start_address;
+        uintptr_t region_end = region_start + allocated_regions[i].size;
+
+        if (address >= region_start && address < region_end)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 // Placeholder for loading page from disk (replace with actual implementation)

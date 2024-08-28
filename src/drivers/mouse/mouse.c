@@ -1,12 +1,14 @@
 #include "mouse.h"
 #include "ps2.h"
-#include "serial.h"
+#include "../io/serial.h"
 #include "usb.h"
+#include "../io/io.h"
 
 #include <stddef.h>
 #include <stdint.h>
 
 #define MOUSE_COM 1
+#define PORT_BASE 0x3F8  // Add this if it's not defined elsewhere
 
 void init_mouse(uint16_t com)
 {
@@ -42,7 +44,7 @@ int mouse_received(uint16_t com)
 
 mouse_data_t read_mouse(uint16_t com)
 {
-    mouse_data_t data;
+    mouse_data_t data = {0};  // Initialize to zero
 
     if (usb_mouse_detected())
     {
@@ -54,32 +56,18 @@ mouse_data_t read_mouse(uint16_t com)
     }
     else
     {
-        data.x       = 0;
-        data.y       = 0;
-        data.buttons = 0;
-
         while (mouse_received(com) == 0)
             ;
 
         uint8_t status = inb(PORT_BASE + 8 * (com - 1) + 5);
 
-        if (status & 0x01)
-        {
-            data.buttons |= 0x01;
-        }
+        data.buttons = 0;
+        if (status & 0x01) data.buttons |= 0x01;
+        if (status & 0x02) data.buttons |= 0x02;
+        if (status & 0x04) data.buttons |= 0x04;
 
-        if (status & 0x02)
-        {
-            data.buttons |= 0x02;
-        }
-
-        if (status & 0x04)
-        {
-            data.buttons |= 0x04;
-        }
-
-        data.x = inb(PORT_BASE + 8 * (com - 1));
-        data.y = inb(PORT_BASE + 8 * (com - 1) + 1);
+        data.x = (int16_t)inb(PORT_BASE + 8 * (com - 1));
+        data.y = (int16_t)inb(PORT_BASE + 8 * (com - 1) + 1);
     }
 
     return data;

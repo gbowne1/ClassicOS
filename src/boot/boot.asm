@@ -20,46 +20,48 @@ start:
 ;Enable A20 Gate
 EnableA20Gate:
 	call TestA20
-	cmp ax, 1
-	je A20Enabled
+    cmp ax, 1
+    jne A20Disabled
+
+    ; A20 is already enabled, skip further checks
+    jmp A20Enabled
 
 tryUsingBIOS:
 	mov ax, 0x2401
-	int 0x15
-	call TestA20
-	cmp ax, 1
-	je A20Enabled
+    int 0x15
+    call TestA20
+    cmp ax, 1
+    jne A20Disabled
 
 tryUsingKeyboardController:
 	cli
-	call WaitCommand
-	mov al, 0xAD	;Disable the keyboard
-	out 0x64, al
+    call WaitCommand
+    mov al, 0xAD
+    out 0x64, al
 
-	call WaitCommand
-	mov al, 0xD0	;Read from input
-	out 0x64, al
+    call WaitCommand
+    mov al, 0xD0
+    out 0x64, al
 
-	call WaitData
-	in al, 0x60		;Read input from keyboard
-	push ax			;Save it
+    call WaitData
+    in al, 0x60
+    push ax
 
-	call WaitCommand
-	mov al, 0xD1	;Write to output
-	out 0x64, al
+    call WaitCommand
+    mov al, 0xD1
+    out 0x64, al
 
-	call WaitCommand
-	pop ax			;Write to input back with bit #2 set
-	or al, 2
-	out 0x60, al
+    call WaitCommand
+    pop ax
+    or al, 2
+    out 0x60, al
 
-	call WaitCommand
-	mov al, 0xAE	;Enable Keyboard
-	out 0x64, al
+    call WaitCommand
+    mov al, 0xAE
+    out 0x64, al
 
-	call WaitCommand
-	sti
-	jmp A20KeyboardCheck
+    sti
+    jmp A20KeyboardCheck
 
 WaitCommand:
 	in al, 0x64
@@ -75,16 +77,16 @@ WaitData:
 
 A20KeyboardCheck:
 	call TestA20
-	cmp ax, 1
-	je A20Enabled
+    cmp ax, 1
+    jne A20Disabled
 
 UseFastA20Method:
 	in al, 0x92
-	or al, 2
-	out 0x92, al
-	call TestA20
-	cmp ax, 1
-	je A20Enabled
+    or al, 2
+    out 0x92, al
+    call TestA20
+    cmp ax, 1
+    jne A20Disabled
 
 ;Else bail out, A20 cannot be enabled, maybe :)
 A20Error:
@@ -96,36 +98,44 @@ A20Error:
 	int 19h
 
 jmp $
+
+A20Disabled:
+    jmp A20Error
 ;If we ever get here, A20 is enabled!
 A20Enabled:
+
 LoadSecondStage:
 	push es
-	mov ax, 0x7e0
-	mov es, ax
+    mov ax, 0x7E0
+    mov es, ax
 
-	stc
-	mov dh, 0
-	mov ah, 0x02
-	mov al, 2	;load 2 sectors
-	mov ch, 0
-	mov cl, 2
+    stc
+    mov dh, 0
+    mov ah, 0x02
+    mov al, 2
+    mov ch, 0
+    mov cl, 2
 
-	mov dl, [bootdev]
+    mov dl, [bootdev]
 
-	xor bx, bx ; [es:bx] = 0x07e0:0x0000
-	int 13h
+    xor bx, bx
+    int 13h
 
-	jnc load_success
+    jc disk_error
+
+    pop es
+    mov dl, [bootdev]
+    jmp 0x7E0:0x0000
 
 disk_error:
 	mov si, disk_read_error_msg
-	call print
-	xor ax, ax
-	int 16h
-	xor ax, ax
-	int 19h
+    call print
+    xor ax, ax
+    int 16h
+    xor ax, ax
+    int 19h
 
-jmp $
+    jmp $
 
 load_success:
 	pop es
@@ -206,8 +216,8 @@ A20Exit:
 ;;;;;;End of function;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-disk_read_error_msg db 'Error Reading disk. Press any key to reboot. Code : 0x01', 0
-A20_error_msg db 'An Internal error occured. Press any key to reboot. Code: 0x02', 0
+disk_read_error_msg db 'Disk read error. Boot failed.', 0
+A20_error_msg db 'Failed to enable A20 line. Boot aborted.', 0
 bootdev db 0
 
 times 442 - ($-$$) db 0

@@ -14,4 +14,7 @@ void set_interrupt_vector(uint8_t vector, void (*handler)());
 void enable_interrupt(uint8_t vector);
 uint8_t translate_scancode_to_keycode(uint8_t scancode);
 uint8_t translate_extended_scancode(uint8_t second_scancode);
+void process_keycode(uint8_t keycode);
+void log_keycode(uint8_t keycode);
+
 #endif

@@ -1,10 +1,3 @@
-Here's a breakdown of how to create timer.c and timer.h compatible with the 8253 for x86 32-bit protected mode on 386/486 processors:
-
-1. timer.h:
-
-This header file will contain function prototypes, constants, and any data structures you might need for interacting with the 8253 timer. Here's an example:
-C
-
 #ifndef TIMER_H
 #define TIMER_H
 

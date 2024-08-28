@@ -1,7 +1,7 @@
 #include "fat16.h"
 #include <stdint.h>
 #include "fat16_io.h"
-#include "src/kernel/arch/x86/disk/ata.h"
+#include "../../kernel/arch/x86/disk/ata.h"
 // Implementation of read_sector and write_sector functions (replace with actual disk I/O)
 int read_sector(uint32_t sector_number, void *buffer)
 {

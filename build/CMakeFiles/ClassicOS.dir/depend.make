@@ -61,8 +61,14 @@ CMakeFiles/ClassicOS.dir/src/kernel/arch/x86/isr/isr.c.o: ../src/kernel/arch/x86
 CMakeFiles/ClassicOS.dir/src/kernel/arch/x86/memory/memory.c.o: ../src/kernel/arch/x86/include/memory.h
 CMakeFiles/ClassicOS.dir/src/kernel/arch/x86/memory/memory.c.o: ../src/kernel/arch/x86/memory/memory.c
 
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/./arch/x86/gdt.h
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/./arch/x86/idt.h
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/./arch/x86/include/memory.h
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/./arch/x86/include/types.h
 CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/kernel.c
 CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/kernel.h
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/malloc/kmalloc.h
+CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o: ../src/kernel/malloc/malloc.h
 
 CMakeFiles/ClassicOS.dir/src/kernel/print.c.o: ../src/kernel/kernel.h
 CMakeFiles/ClassicOS.dir/src/kernel/print.c.o: ../src/kernel/print.c

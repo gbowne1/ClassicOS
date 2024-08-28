@@ -62,8 +62,14 @@ CMakeFiles/ClassicOS.dir/src/kernel/arch/x86/memory/memory.c.o
  /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/include/memory.h
  /home/gbowne1/Documents/ClassicOS/src/kernel/arch/x86/memory/memory.c
 CMakeFiles/ClassicOS.dir/src/kernel/kernel.c.o
+ /home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/gdt.h
+ /home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/idt.h
+ /home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/memory.h
+ /home/gbowne1/Documents/ClassicOS/src/kernel/./arch/x86/include/types.h
  /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.c
  /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.h
+ /home/gbowne1/Documents/ClassicOS/src/kernel/malloc/kmalloc.h
+ /home/gbowne1/Documents/ClassicOS/src/kernel/malloc/malloc.h
 CMakeFiles/ClassicOS.dir/src/kernel/print.c.o
  /home/gbowne1/Documents/ClassicOS/src/kernel/kernel.h
  /home/gbowne1/Documents/ClassicOS/src/kernel/print.c

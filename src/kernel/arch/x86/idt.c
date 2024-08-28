@@ -13,20 +13,35 @@ void TimerInterruptHandler()
     timer_count++;
 }
 
+union interrupt_handler_union {
+    void (*handler)();
+    struct {
+        uint16_t low;
+        uint16_t high;
+    } parts;
+};
 // Initialize the IDT
-void InitializeIDT()
+bool InitializeIDT()
 {
-	idt[KEYBOARD_INTERRUPT].base_lo = ((uint16_t *)KeyboardInterruptHandler)[0];
-	idt[KEYBOARD_INTERRUPT].sel = 0x08;
-	idt[KEYBOARD_INTERRUPT].always0 = 0x00;
-	idt[KEYBOARD_INTERRUPT].flags = 0x8E;
-	idt[KEYBOARD_INTERRUPT].base_hi = ((uint16_t *)KeyboardInterruptHandler)[1];
+    union interrupt_handler_union keyboard_handler;
+    keyboard_handler.handler = KeyboardInterruptHandler;
 
-	idt[0x33].base_lo = (uint16_t)TimerInterruptHandler;
-	idt[0x33].sel = 0x08;
-	idt[0x33].always0 = 0x00;
-	idt[0x33].flags = 0x8E;
-	idt[0x33].base_hi = (uint16_t)TimerInterruptHandler >> 16;
+    idt[KEYBOARD_INTERRUPT].base_lo = keyboard_handler.parts.low;
+    idt[KEYBOARD_INTERRUPT].sel = 0x08;
+    idt[KEYBOARD_INTERRUPT].always0 = 0x00;
+    idt[KEYBOARD_INTERRUPT].flags = 0x8E;
+    idt[KEYBOARD_INTERRUPT].base_hi = keyboard_handler.parts.high;
 
-	LoadIDT(&idt[0]);
+    union interrupt_handler_union timer_handler;
+    timer_handler.handler = TimerInterruptHandler;
+
+    idt[0x33].base_lo = timer_handler.parts.low;
+    idt[0x33].sel = 0x08;
+    idt[0x33].always0 = 0x00;
+    idt[0x33].flags = 0x8E;
+    idt[0x33].base_hi = timer_handler.parts.high;
+
+    LoadIDT(&idt[0]);
+
+    return true;  // Assuming initialization always succeeds
 }
