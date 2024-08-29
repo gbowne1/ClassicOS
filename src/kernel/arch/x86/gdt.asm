@@ -2,9 +2,7 @@ global LoadGDT
 
 section .text
     LoadGDT:
-        /* LGDT [ESP + 32]
-        RET
-		*/
+
 		mov eax, [esp+4]  ; Get the pointer to the GDT pointer structure
     	lgdt [eax]        ; Load the GDT
     	mov ax, 0x10      ; Set the kernel data segment selector

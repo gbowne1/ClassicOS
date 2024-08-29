@@ -57,6 +57,7 @@ extern bool gdt_init(void)
 	// Set up GDT pointer
 	struct gdt_ptr gp;
 	gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+	gp.base = (uintptr_t)&gdt_entries[0];
 
 	// Initialize GDT entries
 	gdt_set_gate(0, 0, 0, 0, 0, &gdt_entries[0]);				 // Null segment
@@ -64,26 +65,23 @@ extern bool gdt_init(void)
 	gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF, &gdt_entries[2]); // Data segment
 
 	// Load GDT
-	struct gdt_ptr gdtp;
-	gdtp.limit = gp.limit;
-	gdtp.base = (uint32_t)&gdt_entries[0];
-
-	LoadGDT(&gdtp);
+	LoadGDT(&gp);
 
 	// Switch to protected mode
 	__asm__ volatile(
-		"cli\n\t"					  // Disable interrupts
-		"mov %[base], %%eax\n\t"	  // Move the base address of the GDT to eax
-		"mov %[limit], %%ebx\n\t"	  // Move the limit of the GDT to ebx
-		"shl $16, %%ebx\n\t"		  // Shift left 16 bits to get the full 32-bit value
-		"or %%eax, %%ebx\n\t"		  // Combine the base and limit
-		"mov %[address], %%ecx\n\t"	  // Move the address of gdtr to ecx
-		"mov %%ebx, (%[address])\n\t" // Store the combined value at gdtr
-		"lgdt (%[address])\n\t"		  // Load the GDT
-		"sti\n\t"					  // Enable interrupts
+		"movw $0x10, %%ax\n\t"
+		"movw %%ax, %%ds\n\t"
+		"movw %%ax, %%es\n\t"
+		"movw %%ax, %%fs\n\t"
+		"movw %%ax, %%gs\n\t"
+		"movw %%ax, %%ss\n\t"
+		"ljmp $0x08, $1f\n\t"
+		"1:\n\t"
 		:
-		: [base] "a"(gdtp.base), [limit] "b"(gdtp.limit), [address] "c"(&gdtp)
-		: "%ebx", "%ecx", "%edx");
+		:
+		: "ax");
+
+	return true; // Indicate successful GDT initialization
 }
 
 // Exception handlers

@@ -1,8 +1,8 @@
 #ifndef GDT_H
 #define GDT_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 // GDT entry structure
 struct gdt_entry
@@ -16,10 +16,9 @@ struct gdt_entry
 } __attribute__((packed));
 
 // GDT pointer structure
-struct gdt_ptr
-{
-	uint16_t limit; // The upper 16 bits of all selector limits
-	uint32_t base;	// The address of the first gdt_entry_t struct
+struct gdt_ptr {
+    uint16_t limit;
+    uintptr_t base;
 } __attribute__((packed));
 
 // Function prototypes
