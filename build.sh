@@ -17,12 +17,12 @@ for cmd in nasm gcc qemu-system-i386; do
 done
 
 # Compile the assembly file
-echo "Compiling boot4.asm..."
-nasm -f elf32 boot4.asm -o boot4.o
+echo "Compiling boot.asm..."
+nasm -f elf32 boot.asm -o boot.o
 
 # Compile and link the kernel
 echo "Compiling and linking kernel..."
-gcc -m32 -ffreestanding -nostdlib kernel.c boot4.o -o kernel.bin -T linker.ld
+gcc -m32 -ffreestanding -nostdlib kernel.c boot.o -o kernel.bin -T linker.ld
 
 # Check if compilation was successful
 if [ -f kernel.bin ]; then
