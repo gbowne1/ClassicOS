@@ -22,7 +22,7 @@ nasm -f elf32 boot.asm -o boot.o
 
 # Compile and link the kernel
 echo "Compiling and linking kernel..."
-gcc -m32 -ffreestanding -nostdlib kernel.c boot.o -o kernel.bin -T linker.ld
+gcc -m32 -ffreestanding -nostdlib -fno-pic -fno-pie kernel.c boot.o -o kernel.bin -T linker.ld
 
 # Check if compilation was successful
 if [ -f kernel.bin ]; then
