@@ -31,7 +31,7 @@ Ideal situations aside, My goal has always been:
 1-2 person working on issues/bugs
 1-2 people working on applications/user-space
 1-2 people working on Networking
-1-2 people working on memmory issues, stack issues, etc.
+1-2 people working on memory issues, stack issues, etc.
 
 at least one person doing hardware and software testing and writing tests in a test framework
 
@@ -158,7 +158,37 @@ Novell NE2000
 ## Drivers
 
 -- Video card(s)
+
+    3dFx Voodoo2, Voodoo3 cards
+    NVIDIA NV1
+    NVIDIA Riva 128
+    ATI VGA Wonder
+    NVIDIA GeForce 256
+    NVIDIA GeForce 2 GTS
+    NVIDIA GeForce 3 Ti500
+    ATI Radeon DDR
+    ATI Radeon 9700 Pro
+    ATI Radeon 9800 Pro
+    Matrox Millennium and MGA Millennium
+    Matrox G400
+    Matrox Mystique
+    Matrox G200
+    Matrox G400
+    ATI Mach8
+    ATI Mach32
+    ATI Mach 64
+    ATI 3D Rage
+    ATI Rage Pro
+    ATI Rage 128 Pro
+    ATI Rage Wonder
+
 -- NIC's (3Com, Intel, etc.)
+
+    Intel EtherExpress Pro/100
+    3Com EtherLink I, II & III cards in the 3c5xx - 3c9xx series model range.
+    Linksys LNE series cards
+    Netgear FA3xx/FA4xx series and GA series cards
+
 -- Audio
 
 ## Filesystems
@@ -173,3 +203,9 @@ Novell NE2000
 - exFAT
 - ZFS
 - JFS
+
+## Build
+
+nasm -f elf32 boot.asm -o boot.o ; gcc -m32 -ffreestanding -nostdlib -fno-pic -fno-pie -std=c11 kernel.c boot.o -o kernel.bin -T linker.ld
+nasm -f elf32 boot.asm -o boot.o ; gcc -m32 -ffreestanding -nostdlib -fno-pic kernel.c boot.o -o kernel.bin -T linker.ld
+nasm -f elf32 boot.asm -o boot.o ; gcc -m32 -ffreestanding -nostdlib -fno-pie kernel.c boot.o -o kernel.bin -T linker.ld

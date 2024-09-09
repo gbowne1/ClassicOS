@@ -50,3 +50,16 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Binaries
+*.bin
+
+# Build system
+Makefile
+CMakeLists.txt
+
+# source control and editor
+.vscode
+.vscode/
+.github
+.github/
