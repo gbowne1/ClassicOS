@@ -11,7 +11,7 @@ boot:
 	mov [disk],dl
 
 	mov ah, 0x2    ;read sectors
-	mov al, 6      ;sectors to read
+	mov al, 64     ;sectors to read
 	mov ch, 0      ;cylinder idx
 	mov dh, 0      ;head idx
 	mov cl, 2      ;sector idx
@@ -30,22 +30,37 @@ boot:
 	mov gs, ax
 	mov ss, ax
 	jmp CODE_SEG:boot2
+
+; access(8)
+;    P:present(1) DPL:descriptor_privilege_level(2)
+;    S:descriptor_type(1) E:executable(1) DC:direction/conforming(1)
+;    RW:readable/writable(1) A:accessed(1)
+; flags(4)
+;    G:granularity(1) DB:size(1) L:long_mode_code(1) Reserved(1)
+
 gdt_start:
-	dq 0x0
+	dq 0x0000000000000000 ; null descriptor
+
 gdt_code:
-	dw 0xFFFF
-	dw 0x0
-	db 0x0
-	db 10011010b
-	db 11001111b
-	db 0x0
+	dw 0xFFFF    ; limit_0_15(16)
+	dw 0x0000    ; base_0_15(16)
+	db 0x00      ; base_16_23(8)
+	db 10011010b ; P(1)=1=present DPL(2)=00=ring0 S(1)=1=non_system E(1)=1=code
+	             ; DC(1)=0=same_ring RW(1)=1=readable A(1)=0=not_accessed
+	db 11001111b ; G(1)=1=page, DB(1)=1=32b, L(1)=0=non_64b Reserved(1)=0=_
+	             ; limit_16_19(4)=1111
+	db 0x00      ; base_24_31(8)
+
 gdt_data:
-	dw 0xFFFF
-	dw 0x0
-	db 0x0
-	db 10010010b
-	db 11001111b
-	db 0x0
+	dw 0xFFFF    ; limit_0_15(16)
+	dw 0x0000    ; base_0_15(16)
+	db 0x00      ; base_16_23(8)
+	db 10010010b ; P(1)=1=present DPL(2)=00=ring0 S(1)=1=non_system E(1)=0=data
+	             ; DC(1)=0=grows_up RW(1)=1=rw A(1)=0=not_accessed
+	db 11001111b ; G(1)=1=page DB(1)=1=32b_sp L(1)=0=_ Reserved(1)=0=_
+	             ; limit_16_19(4)=1111
+	db 0x00      ; base_24_31(8)
+
 gdt_end:
 gdt_pointer:
 	dw gdt_end - gdt_start
