@@ -63,3 +63,5 @@ CMakeLists.txt
 .vscode/
 .github
 .github/
+
+*.patch
