@@ -65,3 +65,9 @@ CMakeLists.txt
 .github/
 
 *.patch
+
+/build
+build
+./build
+build/
+build/**

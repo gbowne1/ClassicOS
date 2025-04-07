@@ -1,11 +1,18 @@
-cmake_minimum_required(VERSION 3.13.4)
+cmake_minimum_required(VERSION 4.0.0)
+project(ClassicOS VERSION 0.0.1 LANGUAGES C ASM SH)
 
-# Enable C, Assembly, and Shell scripting languages
-enable_language(C ASM SH)
-
-# Set up the project name and version
-set(PROJECT_NAME "ClassicOS")
-set(PROJECT_VERSION "0.0.1")
+set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_COMPILER "g++")
+set(CMAKE_ASM_COMPilER "nasm")
+set(cmake_SH_COMPILER "bash")
+set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Werror")
 
 # Define the executable name
 set(EXECUTABLE_NAME "${PROJECT_NAME}")
