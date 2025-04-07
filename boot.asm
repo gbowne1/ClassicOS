@@ -1,4 +1,4 @@
-section .boot
+section .boot align=512
 bits 16
 global boot
 boot:
@@ -70,11 +70,11 @@ disk:
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
 
+copy_target equ kernel_stack_bottom + 16384
+hello: db "Hello more than 512 bytes world!!",0
+
 times 510 - ($-$$) db 0
 dw 0xaa55
-copy_target:
-bits 32
-	hello: db "Hello more than 512 bytes world!!",0
 boot2:
 	mov esi,hello
 	mov ebx,0xb8000
@@ -97,4 +97,4 @@ section .bss
 align 4
 kernel_stack_bottom: equ $
 	resb 16384 ; 16 KB
-kernel_stack_top:
+kernel_stack_top: equ kernel_stack_bottom + 16384
