@@ -31,6 +31,17 @@ void kmain(void) {
     paging_init();
     serial_write("Paging initialized.\n");
 
+    terminal_write("Initializing memory allocator...\n");
+    kmalloc_init(0xC0100000);  // Virtual heap start address (must be mapped!)
+    serial_write("kmalloc initialized.\n");
+
+    void* ptr = kmalloc(128);  // Allocation test
+    serial_write("Allocated 128 bytes.\n");
+
+    terminal_write("Initializing timer...\n");
+    timer_init(100);  // 100 Hz (10 ms interval)
+    serial_write("Timer initialized.\n");
+
     terminal_write("Getting memory map...\n");
     memory_map_entry_t mmap[32];
     uint32_t mmap_size = get_memory_map(mmap, 32);

@@ -6,6 +6,7 @@
 #define PAGE_SIZE 4096                // Page size in bytes
 #define PAGE_DIRECTORY_SIZE 1024      // 1024 entries in page directory
 #define PAGE_TABLE_SIZE 1024          // 1024 entries in a page table
+#define KERNEL_HEAP_START 0xC0100000
 
 // Page Directory and Page Table structure
 typedef struct {
