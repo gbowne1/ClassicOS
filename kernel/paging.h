@@ -39,6 +39,7 @@ typedef struct {
 
 extern page_directory_entry_t *page_directory;
 extern page_table_entry_t *page_table;
+extern page_table_entry_t *heap_page_table;
 
 void paging_init(void);
 void set_page_directory(page_directory_entry_t *dir);

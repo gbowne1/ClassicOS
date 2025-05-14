@@ -4,6 +4,8 @@
 [GLOBAL isr20, isr21, isr22, isr23, isr24, isr25, isr26, isr27, isr28, isr29]
 [GLOBAL isr30, isr31, isr_default]
 
+[EXTERN isr_handler]
+
 %macro ISR_NOERR 1
 isr%1:
     cli

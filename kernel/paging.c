@@ -1,5 +1,7 @@
 #include "paging.h"
 #include "io.h"
+#include <stdint.h>
+#include <stddef.h>
 
 page_directory_entry_t *page_directory = (page_directory_entry_t *)0x100000;
 page_table_entry_t *page_table = (page_table_entry_t *)0x101000;

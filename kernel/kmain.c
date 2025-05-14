@@ -6,6 +6,7 @@
 #include "idt.h"
 #include "paging.h"
 #include "memmap.h"
+#include "gdt.h"
 
 #define LPT1 0x378
 
@@ -22,6 +23,10 @@ void kmain(void) {
     serial_write("Serial port initialized.\n");
 
     lpt_write('L'); // Send 'L' to LPT1 to test
+
+    terminal_write("Initializing GDT...\n");
+    gdt_init();
+    serial_write("GDT initialized.\n");
 
     terminal_write("Initializing IDT...\n");
     idt_init();
