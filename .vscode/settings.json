@@ -1,6 +1,7 @@
 {
     "files.associations": {
         ".fantomasignore": "ignore",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "io.h": "c"
     }
 }

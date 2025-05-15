@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "io.h"
 #include "terminal.h"
+#include "vga.h"
 
 #define VGA_ADDRESS 0xB8000
 #define VGA_WIDTH 80
@@ -11,10 +12,6 @@ static uint16_t* const vga_buffer = (uint16_t*) VGA_ADDRESS;
 static uint8_t cursor_x = 0;
 static uint8_t cursor_y = 0;
 static uint8_t current_color = WHITE_ON_BLACK;
-
-static uint16_t vga_entry(char c, uint8_t color) {
-    return (uint16_t) color << 8 | (uint8_t) c;
-}
 
 void terminal_initialize(void) {
     for (uint16_t y = 0; y < VGA_HEIGHT; y++) {

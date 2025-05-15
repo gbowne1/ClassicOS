@@ -1,12 +1,12 @@
 #include "terminal.h"
 #include "serial.h"
 #include "isr.h"
+#include "io.h"
 
 static isr_callback_t interrupt_handlers[MAX_INTERRUPTS] = { 0 };
 
 void isr_handler(uint32_t int_num, uint32_t err_code) {
     terminal_write("Interrupt occurred: ");
-    // Here you can add a basic itoa to print int_num
     serial_write("INT triggered\n");
 
     if (interrupt_handlers[int_num]) {
@@ -26,6 +26,16 @@ void isr_handler(uint32_t int_num, uint32_t err_code) {
         while (1) {
             asm volatile ("hlt");
         }
+    }
+
+    // === Send End Of Interrupt to PIC(s) ===
+    if (int_num >= 40) {
+        // Send reset signal to slave PIC
+        outb(0xA0, 0x20);
+    }
+    if (int_num >= 32) {
+        // Send reset signal to master PIC
+        outb(0x20, 0x20);
     }
 }
 

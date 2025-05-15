@@ -7,10 +7,13 @@ static uint32_t tick = 0;
 
 void timer_callback(void) {
     tick++;
-    // Optional: Print every 100 ticks
-    // if (tick % 100 == 0) {
-    //     terminal_write("Tick\n");
-    // }
+    
+    // Print every 100 ticks for debugging purposes
+    if (tick % 100 == 0) {
+        char tick_msg[50];
+        snprintf(tick_msg, sizeof(tick_msg), "Tick count: %u\n", tick);
+        terminal_write(tick_msg);
+    }
 }
 
 void timer_init(uint32_t frequency) {
