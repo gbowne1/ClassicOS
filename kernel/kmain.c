@@ -7,6 +7,7 @@
 #include "paging.h"
 #include "memmap.h"
 #include "gdt.h"
+#include "cpu.h"
 
 #define LPT1 0x378
 
@@ -21,6 +22,10 @@ void kmain(void) {
 
     serial_init();
     serial_write("Serial port initialized.\n");
+
+    terminal_write("Identifying CPU...\n");
+    identify_cpu();
+    serial_write("CPU identification complete.\n");
 
     lpt_write('L'); // Send 'L' to LPT1 to test
 
@@ -53,11 +58,17 @@ void kmain(void) {
     serial_write("Memory map retrieved.\n");
 
     terminal_write("Memory Regions:\n");
+
+    char buf[32];
     for (uint32_t i = 0; i < mmap_size; i++) {
-        terminal_write(" - Region: ");
-        // You would format and print base/length/type here
-        // (e.g., with a basic itoa and print_hex helper)
-        serial_write("Memory region entry\n");
+        terminal_write(" - Base: ");
+        print_hex((uint32_t)(mmap[i].base_addr & 0xFFFFFFFF));  // Lower 32 bits
+        terminal_write(", Length: ");
+        print_hex((uint32_t)(mmap[i].length & 0xFFFFFFFF));     // Lower 32 bits
+        terminal_write(", Type: ");
+        itoa(mmap[i].type, buf, 10);
+        terminal_write(buf);
+        terminal_write("\n");
     }
 
     terminal_write("System initialized. Halting.\n");
