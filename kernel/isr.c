@@ -2,12 +2,21 @@
 #include "serial.h"
 #include "isr.h"
 #include "io.h"
+#include "utils.h"
 
 static isr_callback_t interrupt_handlers[MAX_INTERRUPTS] = { 0 };
 
 void isr_handler(uint32_t int_num, uint32_t err_code) {
     terminal_write("Interrupt occurred: ");
+
+    print_hex(int_num);
+    terminal_write("\n");
+
     serial_write("INT triggered\n");
+
+    terminal_write("Error code: ");
+    print_hex(err_code);
+    terminal_write("\n");
 
     if (interrupt_handlers[int_num]) {
         interrupt_handlers[int_num]();  // Call registered handler

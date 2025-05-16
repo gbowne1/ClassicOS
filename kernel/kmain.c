@@ -8,6 +8,9 @@
 #include "memmap.h"
 #include "gdt.h"
 #include "cpu.h"
+#include "kmalloc.h"
+#include "timer.h"
+#include "utils.h"
 
 #define LPT1 0x378
 

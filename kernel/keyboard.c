@@ -28,7 +28,7 @@ void keyboard_callback() {
         return;
 
     char c = scancode_map[scancode];
-    if (c && buffer_index < sizeof(key_buffer)) {
+    if (c && buffer_index < sizeof(key_buffer) - 1) {
         key_buffer[buffer_index++] = c;
         terminal_putchar(c); // Echo to terminal (optional)
     }

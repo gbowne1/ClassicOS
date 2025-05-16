@@ -17,7 +17,7 @@ void execute(char *input) {
 void shell_loop()
 {
     char input[256];
-    int index = 0;
+    size_t index = 0;
     char c;
 
     while (1)

@@ -2,6 +2,7 @@
 #include "io.h"
 #include "isr.h"
 #include "terminal.h"
+#include "stdio.h"
 
 static uint32_t tick = 0;
 

@@ -96,7 +96,7 @@ void terminal_clear(void) {
     update_cursor();
 }
 
-static void update_cursor() {
+void update_cursor() {
     uint16_t pos = cursor_y * VGA_WIDTH + cursor_x;
 
     outb(0x3D4, 0x0F);

@@ -1,4 +1,6 @@
 #include "utils.h"
+#include "serial.h"
+#include "terminal.h"
 
 static void reverse(char* str, int len) {
     int start = 0;
