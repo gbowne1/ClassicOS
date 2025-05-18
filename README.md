@@ -49,3 +49,6 @@ git clone https://github.com/gbowne1/ClassicOS.git
 cd ClassicOS
 make
 ```
+
+build kernel
+for %f in (*.c) do gcc -m32 -O0 -Wall -Wextra -Werror -pedantic -ffreestanding -nostdlib -fno-pic -fno-stack-protector -fno-pie -march=i386 -mtune=i386 -c "%f" -o "%f.o"
