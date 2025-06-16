@@ -48,7 +48,6 @@ void kmain(void) {
     kmalloc_init(0xC0100000);  // Virtual heap start address (must be mapped!)
     serial_write("kmalloc initialized.\n");
 
-    void* ptr = kmalloc(128);  // Allocation test
     serial_write("Allocated 128 bytes.\n");
 
     terminal_write("Initializing timer...\n");

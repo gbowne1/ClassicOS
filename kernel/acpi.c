@@ -11,7 +11,7 @@ acpi_rsdp_t* acpi_find_rsdp() {
         acpi_rsdp_t* rsdp = (acpi_rsdp_t*)addr;
         if (memcmp(rsdp->signature, "RSD PTR ", 8) == 0) {
             uint8_t checksum = 0;
-            for (int i = 0; i < sizeof(acpi_rsdp_t); i++) {
+            for (size_t i = 0; i < sizeof(acpi_rsdp_t); i++) { // Change int to size_t
                 checksum += ((uint8_t*)rsdp)[i];
             }
             if (checksum == 0) {
@@ -36,18 +36,19 @@ acpi_fadt_t* acpi_find_fadt(void* rsdt_or_xsdt) {
     acpi_rsdt_t* rsdt = (acpi_rsdt_t*)rsdt_or_xsdt;
     uint32_t num_tables = (rsdt->length - sizeof(acpi_rsdt_t)) / sizeof(uint32_t);
 
-    for (uint32_t i = 0; i < num_tables; i++) {
+    for (size_t i = 0; i < num_tables; i++) {
         uint32_t table_addr = rsdt->tables[i];
         acpi_fadt_t* fadt = (acpi_fadt_t*)table_addr;
-        if (fadt->signature == 0x50434146) { // "FACP" in ASCII
+        if (fadt->signature == 0x50434146) {
             uint8_t checksum = 0;
-            for (int j = 0; j < fadt->length; j++) {
+            for (size_t j = 0; j < fadt->length; j++) {
                 checksum += ((uint8_t*)fadt)[j];
             }
             if (checksum == 0) {
-                return fadt;  // Valid FADT found
+                return fadt;
             }
         }
     }
-    return NULL;  // FADT not found
+    return NULL;
 }
+
