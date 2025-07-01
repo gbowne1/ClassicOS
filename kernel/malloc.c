@@ -55,7 +55,15 @@ void mark_as_free(void *ptr) {
         block->next = block->next->next;
     }
 
-    // TODO: Implement coalescing with previous block
+    // Coalesce with previous block if it's free
+    struct memory_block *prev = free_blocks;
+    while (prev && prev->next != block) {
+        prev = prev->next;
+    }
+    if (prev && prev->is_free) {
+        prev->size += block->size + sizeof(struct memory_block);
+        prev->next = block->next;
+    }
 }
 
 void *malloc(size_t size)

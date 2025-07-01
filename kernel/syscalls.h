@@ -1,6 +1,7 @@
 #ifndef SYSCALLS_H
 #define SYSCALLS_H
 
+#include <stdarg.h>
 // Syscall numbers
 typedef enum {
     SYSCALL_INIT = 0,
@@ -9,8 +10,7 @@ typedef enum {
 } syscall_code_t;
 
 // Syscall dispatcher
-void syscall_handler();
-
+void syscall_handler(int code, va_list args);
 // Syscall interface
 void syscall(int code, ...);
 

@@ -14,4 +14,14 @@ SECTIONS {
         *(.bss*)
         *(COMMON)
     }
+
+    .stack (NOLOAD) : {
+        . = ALIGN(4);
+        . = . + 0x1000;
+    }
+
+    .heap (NOLOAD) : {
+        . = ALIGN(4);
+        . = . + 0x10000;
+    }
 }

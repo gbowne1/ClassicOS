@@ -1,5 +1,5 @@
-#include "fs.h"
+#include "fat12.h"
 
-void fs_init() {
+void fat12_init() {
     // Filesystem initialization code
 }

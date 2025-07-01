@@ -1,16 +1,18 @@
 #include "shell.h"
 #include "keyboard.h"
 #include "terminal.h"
+#include "print.h"
 #include <stdio.h>
 #include <string.h>
+#include "string_utils.h"
 
 void execute(char *input) {
-    if (strcmp(input, "help") == 0) {
-        printf("Available commands: help, clear, exit\n");
-    } else if (strcmp(input, "clear") == 0) {
+    if (my_strcmp(input, "help") == 0) {
+        my_printf("Available commands: help, clear, exit\n");
+    } else if (my_strcmp(input, "clear") == 0) {
         terminal_clear();
     } else {
-        printf("Unknown command: %s\n", input);
+        my_printf("Unknown command: %s\n", input);
     }
 }
 
@@ -22,7 +24,7 @@ void shell_loop()
 
     while (1)
     {
-        printf("> ");
+        my_printf("> ");
         index = 0;
 
         while (1)
@@ -32,7 +34,7 @@ void shell_loop()
             if (c == '\n' || c == '\r')  // Enter key
             {
                 input[index] = '\0';
-                printf("\n");
+                my_printf("\n");
                 break;
             }
             else if (c == '\b' || c == 127) // Backspace
@@ -40,7 +42,7 @@ void shell_loop()
                 if (index > 0)
                 {
                     index--;
-                    printf("\b \b"); // Erase last char on screen
+                    my_printf("\b \b"); // Erase last char on screen
                 }
             }
             else
@@ -52,7 +54,7 @@ void shell_loop()
             }
         }
 
-        if (strcmp(input, "exit") == 0)
+        if (my_strcmp(input, "exit") == 0)
             break;
 
         execute(input);

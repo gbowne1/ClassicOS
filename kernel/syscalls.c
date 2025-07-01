@@ -21,8 +21,7 @@ void syscall_handler(int code, va_list args) {
     }
 }
 
-void syscall(int code, ...)
-{
+void syscall(int code, ...) {
     va_list args;
     va_start(args, code);
     syscall_handler(code, args);
