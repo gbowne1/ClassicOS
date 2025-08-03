@@ -21,25 +21,26 @@ start:
     mov es, ax
 
     ; Load second-stage bootloader (boot1.asm) to 0x7E00
-    mov si, 0x7E00              ; Destination offset (ES already zero, so physical 0x7E00)
-    mov al, 1                   ; Number of sectors to read (adjust if needed)
-    mov cl, 1                   ; Starting sector (CHS - sector number, 1-based)
+    mov ax, 1                   ; LBA of boot1.asm (starts at sector 1)
+    call lba_to_chs
+    mov si, 0x7E00
+    mov al, 4                   ; Number of sectors to read
     call read_chs
-    jc disk_error               ; Jump if carry set (read error)
 
     ; Load kernel to 0x100000 (1 MB)
     mov si, 0x0000              ; Destination offset
     mov ax, 0x1000              ; ES = 0x1000 (0x1000:0x0000 = 1 MB)
     mov es, ax
     xor bx, bx
-    mov al, 16                  ; Number of sectors for kernel (example)
-    mov cl, 2                   ; Starting sector (adjust as per your disk layout)
+    mov ax, 5                   ; LBA of kernel start (boot1 is 4 sectors: LBA 1–4 → kernel at LBA 5)
+    call lba_to_chs
+    mov al, 16                  ; Number of sectors for kernel
     call read_chs
     jc disk_error
 
     ; Memory Validation: Verify checksum of second stage bootloader
     mov si, 0x7E00             ; Start of second stage
-    mov cx, 512                ; Size in bytes (adjust if more sectors loaded)
+    mov cx, 512 * 4            ; Size in bytes (adjust if more sectors loaded)
     call verify_checksum
     jc disk_error              ; Jump if checksum fails
 
@@ -100,16 +101,52 @@ verify_checksum:
 ; AL = number of sectors
 ; CL = starting sector (1-based)
 ; SI = destination offset (Segment:ES already set)
+; Inputs:
+; AL = sector count
+; CH = cylinder
+; DH = head
+; CL = sector (1–63, with top 2 bits as high cylinder bits)
+; SI = destination offset (segment ES must be set)
+
+; ----------------------------------------------------------------
+; Convert LBA to CHS
+; Inputs:
+;   AX = LBA sector number (0-based)
+; Outputs:
+;   CH = cylinder
+;   DH = head
+;   CL = sector (1-63, top 2 bits are upper cylinder bits)
+
+lba_to_chs:
+    pusha
+    xor dx, dx
+    mov bx, [sectors_per_track]
+    div bx                     ; AX = LBA / sectors_per_track, DX = LBA % spt
+    mov si, ax                 ; temp quotient
+    mov cx, [heads_per_cylinder]
+    xor dx, dx
+    div cx                     ; AX = cylinder, DX = head
+    mov ch, al                 ; CH = cylinder low
+    mov dh, dl                 ; DH = head
+    mov cl, sil                ; CL = sector number (0-based)
+    inc cl                     ; Sector is 1-based
+    mov ah, al
+    and ah, 0xC0               ; upper 2 bits of cylinder
+    or cl, ah                  ; insert upper cylinder bits into CL
+    popa
+    ret
+
 read_chs:
     pusha
     push dx
+
     mov cx, 5
 .retry:
-    mov ah, 0x02             ; BIOS read sector
-    mov dl, [bootdev]        ; Drive number
+    mov ah, 0x02         ; BIOS: Read sectors
+    mov dl, [bootdev]    ; Boot device
+    ; Assume CH, DH, CL already set before this call
     int 0x13
-
-    jc .error                ; Carry flag set = error
+    jc .error
     pop dx
     popa
     ret
@@ -123,25 +160,56 @@ read_chs:
 
 ; ----------------------------------------------------------------
 enable_a20:
-    ; Fast A20 gate method
+    ; Try fast A20 gate method
     in al, 0x92
     or al, 0x02
+    and al, 0xFE              ; Clear bit 0 to avoid fast A20 bugs
     out 0x92, al
-    ; Fallback method (keyboard controller)
-    jc .fallbackenable_a20:
-    ; Fast A20 method
-    in al, 0x92
-    or al, 0x02
-    and al, 0xFE  ; Clear bit 0 to avoid fast A20 issues on some systems
-    out 0x92, al
+
     ; Verify A20
     call check_a20
-    jnc .done
-    ; Fallback method
-    mov al, 0xAD
-    out 0x64, al
-    ; ... (rest of keyboard controller code)
+    jnc .done                 ; Success
+
+    ; Fallback: use keyboard controller method
+    call .fallback
+
 .done:
+    ret
+
+.fallback:
+    mov al, 0xAD              ; Disable keyboard
+    out 0x64, al
+    call .wait_input_clear
+
+    mov al, 0xD0              ; Command: read output port
+    out 0x64, al
+    call .wait_output_full
+    in al, 0x60
+    or al, 0x02               ; Set A20 enable bit
+    mov bl, al
+
+    call .wait_input_clear
+    mov al, 0xD1              ; Command: write output port
+    out 0x64, al
+    call .wait_input_clear
+    mov al, bl
+    out 0x60, al
+
+    call .wait_input_clear
+    mov al, 0xAE              ; Enable keyboard
+    out 0x64, al
+    ret
+
+.wait_input_clear:
+    in al, 0x64
+    test al, 0x02
+    jnz .wait_input_clear
+    ret
+
+.wait_output_full:
+    in al, 0x64
+    test al, 0x01
+    jz .wait_output_full
     ret
 
 check_a20:
@@ -164,19 +232,6 @@ check_a20:
 
 .a20_enabled:
     clc                      ; Clear carry flag to indicate success
-    ret
-
-.fallback:
-    mov al, 0xAD
-    out 0x64, al
-    mov al, 0xD0
-    out 0x64, al
-    in al, 0x60
-    or al, 0x02
-    mov al, 0xD1
-    out 0x64, al
-    mov al, 0xAE
-    out 0x64, al
     ret
 
 ; ----------------------------------------------------------------
