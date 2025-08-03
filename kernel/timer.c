@@ -4,17 +4,20 @@
 #include "terminal.h"
 #include "stdio.h"
 
-static uint32_t tick = 0;
+static volatile uint32_t tick = 0;
 
 void timer_callback(void) {
     tick++;
-    
-    // Print every 100 ticks for debugging purposes
+
     if (tick % 100 == 0) {
-        char tick_msg[50];
-        snprintf(tick_msg, sizeof(tick_msg), "Tick count: %u\n", tick);
-        terminal_write(tick_msg);
+        char buf[16];
+        itoa(tick, buf, 10);
+        terminal_write("Tick count: ");
+        terminal_write(buf);
+        terminal_write("\n");
     }
+
+    outb(0x20, 0x20); // EOI to PIC
 }
 
 void timer_init(uint32_t frequency) {

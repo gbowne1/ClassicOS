@@ -20,19 +20,22 @@ static const char scancode_map[128] = {
 };
 
 // Interrupt handler for IRQ1
-void keyboard_callback() {
-    uint8_t scancode = inb(KEYBOARD_DATA_PORT);
+void keyboard_callback(void) {
+    uint8_t scancode = inb(0x60);
 
-    // Ignore key releases (scancodes with high bit set)
-    if (scancode & 0x80)
-        return;
-
-    char c = scancode_map[scancode];
-    if (c && buffer_index < sizeof(key_buffer) - 1) {
-        key_buffer[buffer_index++] = c;
-        terminal_putchar(c); // Echo to terminal (optional)
+    // Only handle key press (ignore key release)
+    if (!(scancode & 0x80)) {
+        char c = scancode_map[scancode];
+        if (c && buffer_index < sizeof(key_buffer) - 1) {
+            key_buffer[buffer_index++] = c;
+            terminal_putchar(c);
+        }
     }
+
+    // Send End of Interrupt (EOI) to the PIC
+    outb(0x20, 0x20);
 }
+
 
 void keyboard_init() {
     register_interrupt_handler(33, keyboard_callback); // IRQ1 = int 33 (0x21)
@@ -40,14 +43,17 @@ void keyboard_init() {
 
 // Blocking read (returns one char)
 char keyboard_get_char() {
-    while (buffer_index == 0);
-    char c = key_buffer[0];
+    while (buffer_index == 0); // Busy wait
 
-    // Shift buffer left
+    char c;
+    __asm__ __volatile__("cli");
+    c = key_buffer[0];
     for (uint8_t i = 1; i < buffer_index; i++) {
         key_buffer[i - 1] = key_buffer[i];
     }
     buffer_index--;
+    __asm__ __volatile__("sti");
 
     return c;
 }
+

@@ -11,6 +11,7 @@
 #include "kmalloc.h"
 #include "timer.h"
 #include "utils.h"
+#include "keyboard.h"
 
 #define LPT1 0x378
 
@@ -53,6 +54,10 @@ void kmain(void) {
     terminal_write("Initializing timer...\n");
     timer_init(100);  // 100 Hz (10 ms interval)
     serial_write("Timer initialized.\n");
+
+    terminal_write("Initializing keyboard...\n");
+    keyboard_init();
+    serial_write("Keyboard initialized.\n");
 
     terminal_write("Getting memory map...\n");
     memory_map_entry_t mmap[32];

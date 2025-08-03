@@ -1,10 +1,9 @@
-ENTRY(start)
+ENTRY(kmain)
 
 SECTIONS {
     . = 1M;
 
     .text : {
-        *(.multiboot)
         *(.text*)
     }
 
