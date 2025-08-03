@@ -180,3 +180,5 @@ page_directory times 1024 dd 0
 align 4096
 page_table times 1024 dd 0
 
+times 2047 - ($ - $$) db 0   ; Pad to the second-to-last byte of the 4th sector
+checksum_byte db 0           ; This byte will be calculated and patched later
