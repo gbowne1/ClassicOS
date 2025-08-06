@@ -88,7 +88,7 @@ real_mode_entry:
     inc dword [MemoryMapEntries]
     test ebx, ebx
     jnz .e820_loop
-    jmp .e820_done
+    jmp e820_done
 
 e820_error:
     mov si, e820_error_msg
@@ -112,9 +112,9 @@ vesa_error:
     mov dx, 0x184F         ; Lower-right corner
     int 0x10
 
-    jmp .e820_done         ; Continue booting without VESA graphics
+    jmp e820_done         ; Continue booting without VESA graphics
 
-.e820_done:
+e820_done:
     ; Back to protected mode
     cli
     mov eax, cr0
@@ -123,6 +123,7 @@ vesa_error:
     jmp 0x08:protected_entry
 
 ; ----------------------------------------------------------------
+[BITS 16]
 print_string_16:
 .loop:
     lodsb
@@ -149,8 +150,9 @@ protected_entry:
     rep stosd
     mov edi, page_table
     rep stosd
-
-    mov dword [page_directory], page_table | 0x3
+    mov eax, page_table
+    or eax, 0x3
+    mov [page_directory], eax
     mov ecx, 1024
     mov edi, page_table
     mov eax, 0x00000003
@@ -168,6 +170,13 @@ protected_entry:
 
     jmp kmain
 
+halt:
+    cli
+
+.hang:
+    hlt
+    jmp .hang
+
 ; ----------------------------------------------------------------
 ; Data buffers and variables must be appropriately defined in your data section
 MemoryMapBuffer times 128 db 0          ; 128*24 bytes reserved for E820 memory map (adjust size as needed)
@@ -180,5 +189,15 @@ page_directory times 1024 dd 0
 align 4096
 page_table times 1024 dd 0
 
-times 2047 - ($ - $$) db 0   ; Pad to the second-to-last byte of the 4th sector
-checksum_byte db 0           ; This byte will be calculated and patched later
+%assign pad_size 4096
+%ifdef __SIZE__
+  %define size_current __SIZE__
+%else
+  %define size_current ($ - $$)
+%endif
+
+%if size_current < pad_size
+  times pad_size - size_current db 0
+%endif
+
+checksum_byte db 0

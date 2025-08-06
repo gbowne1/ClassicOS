@@ -119,20 +119,27 @@ verify_checksum:
 
 lba_to_chs:
     pusha
+
     xor dx, dx
     mov bx, [sectors_per_track]
-    div bx                     ; AX = LBA / sectors_per_track, DX = LBA % spt
-    mov si, ax                 ; temp quotient
+    div bx                     ; AX = LBA / sectors_per_track, DX = remainder (sector number)
+    mov si, ax                 ; SI = temp quotient (track index)
     mov cx, [heads_per_cylinder]
     xor dx, dx
     div cx                     ; AX = cylinder, DX = head
-    mov ch, al                 ; CH = cylinder low
+    mov ch, al                 ; CH = cylinder low byte
     mov dh, dl                 ; DH = head
-    mov cl, sil                ; CL = sector number (0-based)
-    inc cl                     ; Sector is 1-based
-    mov ah, al
-    and ah, 0xC0               ; upper 2 bits of cylinder
-    or cl, ah                  ; insert upper cylinder bits into CL
+
+    ; Now take sector number from earlier remainder
+    mov cx, si                 ; Copy track index to CX to access CL
+    and cl, 0x3F               ; Mask to 6 bits (sector number)
+    inc cl                     ; Sector numbers are 1-based
+
+    ; Insert upper 2 bits of cylinder into CL
+    mov ah, al                 ; AH = cylinder again
+    and ah, 0xC0               ; Get top 2 bits of cylinder
+    or cl, ah                  ; OR them into sector byte
+
     popa
     ret
 
