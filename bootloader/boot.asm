@@ -23,18 +23,17 @@ start:
     ; Load second-stage bootloader (boot1.asm) to 0x7E00
     mov ax, 1                   ; LBA of boot1.asm (starts at sector 1)
     call lba_to_chs
-    mov si, 0x7E00
     mov al, 4                   ; Number of sectors to read
+    mov bx, 0x7E00              ; Destination address offset ES = 0 (0x0000:0x7E00)
     call read_chs
 
     ; Load kernel to 0x100000 (1 MB)
-    mov si, 0x0000              ; Destination offset
-    mov ax, 0x1000              ; ES = 0x1000 (0x1000:0x0000 = 1 MB)
-    mov es, ax
-    xor bx, bx
+    mov ax, 0xffff
+    mov es, ax                  ; Set ES for destination address (0xffff << 4 == 0xffff0)
     mov ax, 5                   ; LBA of kernel start (boot1 is 4 sectors: LBA 1–4 → kernel at LBA 5)
     call lba_to_chs
     mov al, 16                  ; Number of sectors for kernel
+    mov bx, 0x10                ; Destination address offset (0xffff:0x10 = 0xffff << 4 + 0x10 = 0x100000)
     call read_chs
     jc disk_error
 
