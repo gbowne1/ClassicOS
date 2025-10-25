@@ -7,7 +7,8 @@ IMG_SIZE = 1440k
 BUILD_DIR = build
 
 BOOT_SRC = bootloader/boot.asm
-BOOT_BIN = $(BUILD_DIR)/boot.bin
+BOOT_OBJ = $(BUILD_DIR)/boot.o
+BOOT_ELF = $(BUILD_DIR)/boot.elf
 BOOT_IMG = $(BUILD_DIR)/boot.img
 KERNEL_SRC = kernel/kmain.c
 KERNEL_BIN = $(BUILD_DIR)/kernel.bin
@@ -15,16 +16,17 @@ DISK_IMG = $(BUILD_DIR)/disk.img
 
 all: $(BOOT_IMG) $(KERNEL_BIN) $(DISK_IMG)
 
-stage1: $(BOOT_IMG)
-
 $(BUILD_DIR):
 	mkdir -p $@
 
-$(BOOT_BIN): $(BOOT_SRC) | $(BUILD_DIR)
-	$(AS) -f bin -o $@ $<
+$(BOOT_OBJ): $(BOOT_SRC) | $(BUILD_DIR)
+	$(AS) -f elf32 -g -F dwarf -o $@ $<
 
-$(BOOT_IMG): $(BOOT_BIN)
-	cp $(BOOT_BIN) $@
+$(BOOT_ELF): $(BOOT_OBJ)
+	$(LD) -Ttext=0x7c00 -melf_i386 -o $@ $<
+
+$(BOOT_IMG): $(BOOT_ELF)
+	objcopy -O binary $< $@
 	truncate -s $(IMG_SIZE) $@
 
 $(KERNEL_BIN): $(KERNEL_SRC) | $(BUILD_DIR)
@@ -37,6 +39,10 @@ $(DISK_IMG): $(BOOT_IMG) $(KERNEL_BIN)
 
 run: $(DISK_IMG)
 	$(QEMU) -drive file=$<,format=raw,if=floppy
+
+.PHONY: stage1 clean
+
+stage1: $(BOOT_IMG)
 
 clean:
 	rm -rf $(BUILD_DIR)
