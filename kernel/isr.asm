@@ -1,8 +1,8 @@
 [BITS 32]
-[GLOBAL isr0, isr1, isr2, isr3, isr4, isr5, isr6, isr7, isr8, isr9]
-[GLOBAL isr10, isr11, isr12, isr13, isr14, isr15, isr16, isr17, isr18, isr19]
-[GLOBAL isr20, isr21, isr22, isr23, isr24, isr25, isr26, isr27, isr28, isr29]
-[GLOBAL isr30, isr31, isr_default]
+GLOBAL isr0, isr1, isr2, isr3, isr4, isr5, isr6, isr7, isr8, isr9
+GLOBAL isr10, isr11, isr12, isr13, isr14, isr15, isr16, isr17, isr18, isr19
+GLOBAL isr20, isr21, isr22, isr23, isr24, isr25, isr26, isr27, isr28, isr29
+GLOBAL isr30, isr31, isr_default
 
 [EXTERN isr_handler]
 

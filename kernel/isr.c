@@ -2,20 +2,20 @@
 #include "serial.h"
 #include "isr.h"
 #include "io.h"
-#include "utils.h"
+#include "print.h"
 
 static isr_callback_t interrupt_handlers[MAX_INTERRUPTS] = { 0 };
 
 void isr_handler(uint32_t int_num, uint32_t err_code) {
     terminal_write("Interrupt occurred: ");
 
-    print_hex(int_num);
+    print_hex(int_num, true, false);
     terminal_write("\n");
 
     serial_write("INT triggered\n");
 
     terminal_write("Error code: ");
-    print_hex(err_code);
+    print_hex(err_code, true, false);
     terminal_write("\n");
 
     if (interrupt_handlers[int_num]) {
@@ -33,7 +33,7 @@ void isr_handler(uint32_t int_num, uint32_t err_code) {
 
         // Halt CPU
         while (1) {
-            asm volatile ("hlt");
+            __asm__("hlt");
         }
     }
 

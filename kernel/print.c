@@ -1,13 +1,14 @@
-#include <stdio.h>
 #include <stdarg.h>
 #include "print.h"
+#include "serial.h"
+#include "terminal.h"
 
 void my_putchar(char ch) {
     // Write a single character to standard output
     // In a freestanding environment, you might need to implement this differently
     // For now, we will use the standard putchar for demonstration
     // Replace this with your own implementation if needed
-    putchar(ch);
+    terminal_putchar(ch);
 }
 
 void print_string(const char *str) {
@@ -33,7 +34,9 @@ void my_printf(const char *format, ...) {
                 case 'd': { // Integer
                     int num = va_arg(args, int);
                     char buffer[20]; // Buffer to hold the string representation
-                    snprintf(buffer, sizeof(buffer), "%d", num);
+                    
+                    //TODO: implement `snprintf()`
+                    //snprintf(buffer, sizeof(buffer), "%d", num);
                     print_string(buffer);
                     break;
                 }
@@ -56,29 +59,44 @@ void my_printf(const char *format, ...) {
     va_end(args);
 }
 
+void print_hex(uint32_t val, int include_prefix, int suppress_leading_zeros) { 
+    char hex_chars[] = "0123456789ABCDEF";
+    char buffer[11]; // 8 hex digits + "0x" + null terminator
+    int pos = 10;    // Start from end of buffer (null terminator)
 
-void print_hex(unsigned int num) {
-    // Buffer to hold the hexadecimal representation
-    char buffer[9]; // 8 hex digits + null terminator
-    buffer[8] = '\0'; // Null-terminate the string
+    // Null-terminate the buffer
+    buffer[pos--] = '\0';
 
+    // Convert value to hex digits
     for (int i = 7; i >= 0; i--) {
-        int digit = num & 0xF; // Get the last 4 bits
-        buffer[i] = (digit < 10) ? (digit + '0') : (digit - 10 + 'A'); // Convert to hex character
-        num >>= 4; // Shift right by 4 bits
+        int digit = val & 0xF; // Get last 4 bits
+        buffer[pos--] = hex_chars[digit];
+        val >>= 4; // Shift right by 4 bits
     }
 
-    // Print the buffer, skipping leading zeros
-    int leading_zero = 1;
-    for (int i = 0; i < 8; i++) {
-        if (buffer[i] != '0') {
-            leading_zero = 0; // Found a non-zero digit
-        }
-        if (!leading_zero) {
-            my_putchar(buffer[i]);
-        }
+    // Add "0x" prefix if requested
+    if (include_prefix) {
+        buffer[pos--] = 'x';
+        buffer[pos--] = '0';
     }
-    if (leading_zero) {
-        my_putchar('0'); // If all were zeros, print a single '0'
+
+    // Determine start of output (skip leading zeros if requested)
+    int start = include_prefix ? 0 : 2; // Start after "0x" if prefix included
+    if (suppress_leading_zeros && !include_prefix) {
+        int i = start;
+        while (i < 9 && buffer[i] == '0') {
+            i++;
+        }
+        if (i == 10) {
+            // All zeros, output single '0'
+            terminal_write("0");
+            serial_write("0");
+            return;
+        }
+        start = i;
     }
+
+    // Output the result
+    terminal_write(buffer + start);
+    serial_write(buffer + start);
 }

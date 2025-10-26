@@ -3,6 +3,7 @@
 #include "isr.h"
 #include "terminal.h"
 #include "stdio.h"
+#include "utils.h"
 
 static volatile uint32_t tick = 0;
 

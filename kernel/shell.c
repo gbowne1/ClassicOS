@@ -2,8 +2,6 @@
 #include "keyboard.h"
 #include "terminal.h"
 #include "print.h"
-#include <stdio.h>
-#include <string.h>
 #include "string_utils.h"
 
 void execute(char *input) {
@@ -49,7 +47,7 @@ void shell_loop()
             {
                 if (index < sizeof(input) - 1) {
                     input[index++] = c;
-                    putchar(c);
+                    terminal_putchar(c);
                 }
             }
         }

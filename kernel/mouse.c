@@ -10,7 +10,7 @@ static mouse_data_t mouse_data;
 // Read USB mouse data
 mouse_data_t usb_read_mouse(void) {
     uint8_t buffer[3]; // USB HID Mouse reports typically use 3 bytes
-    if (usb_interrupt_transfer(buffer, sizeof(buffer))) { // Ensure buffer is filled
+    if (usb_interrupt_transfer()) { // Ensure buffer is filled
         // Process the received data
         mouse_data.x += buffer[1]; // X movement
         mouse_data.y += buffer[2]; // Y movement

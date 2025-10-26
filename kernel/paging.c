@@ -37,12 +37,12 @@ void enable_paging() {
     uint32_t cr0;
 
     // Load page directory into CR3
-    asm volatile("mov %0, %%cr3" : : "r"(page_directory));
+    __asm__("mov %0, %%cr3" : : "r"(page_directory));
 
     // Enable paging (set the PG bit in CR0)
-    asm volatile("mov %%cr0, %0" : "=r"(cr0));
+    __asm__("mov %%cr0, %0" : "=r"(cr0));
     cr0 |= 0x80000000;  // Set the PG (paging) bit
-    asm volatile("mov %0, %%cr0" : : "r"(cr0));
+    __asm__("mov %0, %%cr0" : : "r"(cr0));
 }
 
 // Initialize paging: set up the page directory and enable paging

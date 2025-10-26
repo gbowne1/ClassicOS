@@ -1,8 +1,9 @@
+#include "malloc.h"
+#include "print.h"
 #include "threading.h"
-#include <stdlib.h>
+#include "types.h"
+#include "utils.h"
 #include <stdint.h>
-#include <stdio.h>
-#include <string.h>
 
 #define MAX_THREADS 16           // Maximum number of threads
 #define THREAD_STACK_SIZE 8192   // Stack size for each thread
@@ -27,7 +28,7 @@ void thread_init(void) {
 // Create a new thread
 void thread_create(Thread *thread __attribute__((unused)), void (*start_routine)(void *), void *arg) {
     if (num_threads >= MAX_THREADS) {
-        printf("Error: Maximum thread count reached.\n");
+        my_printf("Error: Maximum thread count reached.\n");
         return;
     }
 
@@ -98,7 +99,7 @@ void scheduler(void) {
 void context_switch(Thread *next) {
     // For simplicity, context switching in this example would involve saving/restoring registers.
     // In a real system, you would need to save the CPU state (registers) and restore the next thread's state.
-    printf("Switching to thread...\n");
+    my_printf("Switching to thread...\n");
     next->start_routine(next->arg);  // Start running the next thread
 }
 
