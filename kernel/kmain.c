@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <stdbool.h>
 #include "io.h"
 #include "serial.h"
 #include "terminal.h"
@@ -9,6 +8,7 @@
 #include "gdt.h"
 #include "cpu.h"
 #include "kmalloc.h"
+#include "print.h"
 #include "timer.h"
 #include "utils.h"
 #include "keyboard.h"
@@ -69,9 +69,9 @@ void kmain(void) {
     char buf[32];
     for (uint32_t i = 0; i < mmap_size; i++) {
         terminal_write(" - Base: ");
-        print_hex((uint32_t)(mmap[i].base_addr & 0xFFFFFFFF));  // Lower 32 bits
+        print_hex((uint32_t)(mmap[i].base_addr & 0xFFFFFFFF), true, false);  // Lower 32 bits
         terminal_write(", Length: ");
-        print_hex((uint32_t)(mmap[i].length & 0xFFFFFFFF));     // Lower 32 bits
+        print_hex((uint32_t)(mmap[i].length & 0xFFFFFFFF), true, false);     // Lower 32 bits
         terminal_write(", Type: ");
         itoa(mmap[i].type, buf, 10);
         terminal_write(buf);
@@ -82,6 +82,6 @@ void kmain(void) {
 
     // Halt CPU in loop
     while (1) {
-        asm volatile("hlt");
+        __asm__("hlt");
     }
 }

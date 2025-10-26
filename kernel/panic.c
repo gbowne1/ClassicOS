@@ -14,6 +14,6 @@ void panic(const char *message) {
 
     // Halt the system
     while (true) {
-        asm volatile ("cli; hlt");
+        __asm__("cli; hlt");
     }
 }

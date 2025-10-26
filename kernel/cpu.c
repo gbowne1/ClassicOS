@@ -5,7 +5,7 @@
 #include "print.h"
 
 void cpuid(uint32_t function, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
-    asm volatile (
+    __asm__(
         "cpuid"
         : "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
         : "a"(function)
@@ -32,6 +32,6 @@ void identify_cpu() {
     serial_write("\n");
 
     terminal_write("CPUID max leaf: ");
-    print_hex(eax);  // You must implement this (see below)
+    print_hex(eax, false, false);  // You must implement this (see below)
     terminal_write("\n");
 }

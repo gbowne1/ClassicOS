@@ -1,6 +1,4 @@
 #include "utils.h"
-#include "serial.h"
-#include "terminal.h"
 
 static void reverse(char* str, int len) {
     int start = 0;
@@ -79,13 +77,19 @@ char* utoa(unsigned int value, char* str, int base) {
     return str;
 }
 
-void print_hex(uint32_t val) {
-    char hex_chars[] = "0123456789ABCDEF";
-    char buf[11] = "0x00000000";
-    for (int i = 9; i >= 2; i--) {
-        buf[i] = hex_chars[val & 0xF];
-        val >>= 4;
+int memcmp(const void *ptr1, const void *ptr2, size_t num) {
+    const uint8_t *p1 = ptr1, *p2 = ptr2;
+    for (size_t i = 0; i < num; i++) {
+        if (p1[i] != p2[i]) {
+            return p1[i] < p2[i] ? -1 : 1;
+        }
     }
-    terminal_write(buf);
-    serial_write(buf);
+    return 0;
+}
+
+void *memset(void *dest, int value, size_t len) {
+    unsigned char *ptr = (unsigned char *)dest;
+    while (len-- > 0)
+        *ptr++ = (unsigned char)value;
+    return dest;
 }

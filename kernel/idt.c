@@ -52,7 +52,7 @@ void idt_set_gate(int n, uint32_t handler) {
 
 // Load IDT via lidt
 static void idt_load() {
-    asm volatile("lidt (%0)" : : "r" (&idt_ptr));
+    __asm__("lidt (%0)" : : "r" (&idt_ptr));
 }
 
 // IDT initialization
