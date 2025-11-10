@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-page_directory_entry_t *page_directory = (page_directory_entry_t *)0x100000;
-page_table_entry_t *page_table = (page_table_entry_t *)0x101000;
-page_table_entry_t *heap_page_table = (page_table_entry_t *)0x102000; // Located right after the page directory
+page_directory_entry_t *page_directory = (page_directory_entry_t *)0x200000;
+page_table_entry_t     *page_table     = (page_table_entry_t *)0x201000;
+page_table_entry_t     *heap_page_table = (page_table_entry_t *)0x202000;
 
 // Helper function to set up the page directory entry
 void set_page_directory(page_directory_entry_t *dir) {
