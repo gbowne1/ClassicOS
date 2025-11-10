@@ -4,8 +4,12 @@
 #include "terminal.h"
 
 #define KEYBOARD_DATA_PORT 0x60
+#define KEY_BUFFER_SIZE 256
 
-static char key_buffer[256];
+static char key_buffer[KEY_BUFFER_SIZE];
+static uint8_t buffer_head = 0;  // Write position (interrupt)
+static uint8_t buffer_tail = 0;  // Read position (get_char)
+static uint8_t buffer_count = 0;
 static uint8_t buffer_index = 0;
 
 // Basic US QWERTY keymap (scancode to ASCII)
@@ -21,39 +25,41 @@ static const char scancode_map[128] = {
 
 // Interrupt handler for IRQ1
 void keyboard_callback(void) {
-    uint8_t scancode = inb(0x60);
+    uint8_t scancode = inb(KEYBOARD_DATA_PORT);
 
-    // Only handle key press (ignore key release)
-    if (!(scancode & 0x80)) {
-        char c = scancode_map[scancode];
-        if (c && buffer_index < sizeof(key_buffer) - 1) {
-            key_buffer[buffer_index++] = c;
-            terminal_putchar(c);
-        }
-    }
+    if (scancode & 0x80) return;  // Ignore key release
 
-    // Send End of Interrupt (EOI) to the PIC
-    outb(0x20, 0x20);
+    char c = scancode_map[scancode];
+    if (!c) return;
+
+    uint8_t next_head = (buffer_head + 1) % KEY_BUFFER_SIZE;
+
+    // Drop key if buffer full
+    if (next_head == buffer_tail) return;
+
+    key_buffer[buffer_head] = c;
+    buffer_head = next_head;
+    buffer_count++;
+
+    terminal_putchar(c);
 }
-
 
 void keyboard_init() {
     register_interrupt_handler(33, keyboard_callback); // IRQ1 = int 33 (0x21)
 }
 
 // Blocking read (returns one char)
-char keyboard_get_char() {
-    while (buffer_index == 0); // Busy wait
+char keyboard_get_char(void) {
+    while (buffer_count == 0) {
+        __asm__ __volatile__("hlt");  // Better than busy loop
+    }
 
     char c;
     __asm__ __volatile__("cli");
-    c = key_buffer[0];
-    for (uint8_t i = 1; i < buffer_index; i++) {
-        key_buffer[i - 1] = key_buffer[i];
-    }
-    buffer_index--;
+    c = key_buffer[buffer_tail];
+    buffer_tail = (buffer_tail + 1) % KEY_BUFFER_SIZE;
+    buffer_count--;
     __asm__ __volatile__("sti");
 
     return c;
 }
-
