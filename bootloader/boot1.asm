@@ -123,17 +123,8 @@ e820_done:
     jmp 0x08:protected_entry
 
 ; ----------------------------------------------------------------
-[BITS 16]
-print_string_16:
-.loop:
-    lodsb
-    or al, al
-    jz .done
-    mov ah, 0x0E
-    int 0x10
-    jmp .loop
-.done:
-    ret
+; removed duplicate print from here
+; suggested calling it from boot.asm
 
 e820_error_msg db "E820 Failed!", 0
 vesa_error_msg db "VESA Failed!", 0
