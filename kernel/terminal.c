@@ -12,6 +12,7 @@ static uint16_t* const vga_buffer = (uint16_t*) VGA_ADDRESS;
 static uint8_t cursor_x = 0;
 static uint8_t cursor_y = 0;
 static uint8_t current_color = WHITE_ON_BLACK;
+static uint16_t last_cursor_pos = 0xFFFF;
 
 void terminal_initialize(void) {
     for (uint16_t y = 0; y < VGA_HEIGHT; y++) {
@@ -96,8 +97,10 @@ void terminal_clear(void) {
     update_cursor();
 }
 
-void update_cursor() {
+void update_cursor(void) {
     uint16_t pos = cursor_y * VGA_WIDTH + cursor_x;
+    if (pos == last_cursor_pos) return;
+    last_cursor_pos = pos;
 
     outb(0x3D4, 0x0F);
     outb(0x3D5, (uint8_t)(pos & 0xFF));
