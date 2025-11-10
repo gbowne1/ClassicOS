@@ -1,7 +1,7 @@
 #include "kmalloc.h"
 #include "terminal.h"  // Optional: for debug output
 
-#define HEAP_END 0xC0100000
+#define HEAP_END 0xC0500000
 
 static uint32_t current_heap = 0;
 
