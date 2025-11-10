@@ -12,6 +12,7 @@
 #include "timer.h"
 #include "utils.h"
 #include "keyboard.h"
+#include "irq.h"
 
 #define LPT1 0x378
 
@@ -40,6 +41,9 @@ void kmain(void) {
     terminal_write("Initializing IDT...\n");
     idt_init();
     serial_write("IDT initialized.\n");
+
+    irq_install();
+    __asm__ __volatile__ ("sti");
 
     terminal_write("Enabling paging...\n");
     paging_init();
