@@ -1,0 +1,6 @@
+target remote :1234
+add-symbol-file build/stage1.elf
+add-symbol-file build/stage2.elf
+add-symbol-file build/kernel.elf
+hbreak *0x7c00
+c

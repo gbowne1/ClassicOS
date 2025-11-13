@@ -2,10 +2,16 @@
 ; boot.asm - First Stage Bootloader (CHS Based)
 ; ==============================================================================
 
-[BITS 16]
-; [ORG 0x7C00]
+; Params for stage2
+%define s2_addr 1               ; stage2 disk offset, in sectors
+%define s2_laddr 0x7e00         ; stage2 load address
+%define s2_size 2048            ; stage2 size
+%define s2_nsect s2_size / 512  ; stage2 size in sectors
 
-start:
+[BITS 16]
+global _start
+
+_start:
     cli                         ; Disable interrupts
 
     mov [bootdev], dl           ; Save boot device number (from BIOS in DL)
@@ -20,28 +26,15 @@ start:
     mov ds, ax
     mov es, ax
 
+    ; Query bios for disk parameters
+    call get_disk_params
+
     ; Load second-stage bootloader (boot1.asm) to 0x7E00
     mov ax, 1                   ; LBA of boot1.asm (starts at sector 1)
     call lba_to_chs
-    mov al, 4                   ; Number of sectors to read
+    mov al, s2_nsect            ; Number of sectors to read
     mov bx, 0x7E00              ; Destination address offset ES = 0 (0x0000:0x7E00)
     call read_chs
-
-    ; Load kernel to 0x100000 (1 MB)
-    mov ax, 0xffff
-    mov es, ax                  ; Set ES for destination address (0xffff << 4 == 0xffff0)
-    mov ax, 5                   ; LBA of kernel start (boot1 is 4 sectors: LBA 1–4 → kernel at LBA 5)
-    call lba_to_chs
-    mov al, 16                  ; Number of sectors for kernel
-    mov bx, 0x10                ; Destination address offset (0xffff:0x10 = 0xffff << 4 + 0x10 = 0x100000)
-    call read_chs
-    jc disk_error
-
-    ; Memory Validation: Verify checksum of second stage bootloader
-    mov si, 0x7E00             ; Start of second stage
-    mov cx, 512 * 4            ; Size in bytes (adjust if more sectors loaded)
-    call verify_checksum
-    jc disk_error              ; Jump if checksum fails
 
     ; Enable A20 line
     call enable_a20
@@ -95,17 +88,32 @@ verify_checksum:
     pop ax
     ret
 
+get_disk_params:
+    mov  ah, 08h          ; BIOS: Get Drive Parameters
+    int  13h
+    ; TODO: error checking
+
+    ; CL bits 0–5 contain sectors per track
+    mov  al, cl
+    and  al, 3Fh           ; mask bits 0–5
+    mov  ah, 0
+    mov  [sectors_per_track], ax
+
+    ; DH = maximum head number (0-based)
+    mov  al, dh
+    inc  ax                ; convert to count (heads = maxhead + 1)
+    mov  [heads_per_cylinder], ax
+    ret
+
 ; ----------------------------------------------------------------
 ; CHS Disk Read Routine
 ; AL = number of sectors
 ; CL = starting sector (1-based)
-; SI = destination offset (Segment:ES already set)
 ; Inputs:
 ; AL = sector count
 ; CH = cylinder
 ; DH = head
 ; CL = sector (1–63, with top 2 bits as high cylinder bits)
-; SI = destination offset (segment ES must be set)
 
 ; ----------------------------------------------------------------
 ; Convert LBA to CHS
@@ -117,36 +125,29 @@ verify_checksum:
 ;   CL = sector (1-63, top 2 bits are upper cylinder bits)
 
 lba_to_chs:
-    pusha
-
+    ; Sector
     xor dx, dx
-    mov bx, [sectors_per_track]
-    div bx                     ; AX = LBA / sectors_per_track, DX = remainder (sector number)
-    mov si, ax                 ; SI = temp quotient (track index)
-    mov cx, [heads_per_cylinder]
-    xor dx, dx
-    div cx                     ; AX = cylinder, DX = head
-    mov ch, al                 ; CH = cylinder low byte
-    mov dh, dl                 ; DH = head
+    mov bx, ax
+    div word [sectors_per_track] ; divide lba with max sectors
+    add dl, 1 ; take the remainder, sectors start at 1
+    mov cl, dl ; sector is in cl
 
-    ; Now take sector number from earlier remainder
-    mov cx, si                 ; Copy track index to CX to access CL
-    and cl, 0x3F               ; Mask to 6 bits (sector number)
-    inc cl                     ; Sector numbers are 1-based
+    ; Head
+    mov ax, bx
+    mov dx, 0
+    div word [sectors_per_track] ; divide lba with max sectors
+    mov dx, 0
+    div word [heads_per_cylinder] ; divide quotient with heads
+    mov dh, dl ; take the remainder, head is in dh
 
-    ; Insert upper 2 bits of cylinder into CL
-    mov ah, al                 ; AH = cylinder again
-    and ah, 0xC0               ; Get top 2 bits of cylinder
-    or cl, ah                  ; OR them into sector byte
-
-    popa
+    ; Cylinder
+    mov ch, al ; take the quotient, cylinder is in ch
     ret
 
 read_chs:
     pusha
     push dx
 
-    mov cx, 5
 .retry:
     mov ah, 0x02         ; BIOS: Read sectors
     mov dl, [bootdev]    ; Boot device
@@ -262,7 +263,7 @@ switch_to_pm:
     mov eax, cr0
     or eax, 1
     mov cr0, eax
-    jmp 0x08:0x7E00
+    jmp 0x08:0x7E00             ; jump to S2
 
 ; ----------------------------------------------------------------
 print_string_16:
@@ -284,8 +285,8 @@ halt:
     hlt
 
 bootdev db 0
-sectors_per_track dw 63
-heads_per_cylinder dw 255
+sectors_per_track dw 0
+heads_per_cylinder dw 0
 
 times 510 - ($ - $$) db 0
 dw 0xAA55
