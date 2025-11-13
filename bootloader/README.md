@@ -14,7 +14,7 @@ Bootloader documentation for ClassicOS
 Responsible for loading the second stage using BIOS routines, and switching to protected mode.
 
 - Queries CHS parameters from BIOS
-- Loads the second stage bootloader (2048 B) to `07c00h`
+- Loads the second stage bootloader (2048 B) to `0x7c00`
 - Sets up a GDT with descriptor entries for code and data both covering the whole 32-bit address space
 - Enables A20
 - Set CR0.PE (enable protected mode) and jump to stage 2
