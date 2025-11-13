@@ -1,64 +1,58 @@
 AS = nasm
+ASFLAGS = -f elf32 -g -F dwarf
 CC = gcc
-CFLAGS = -std=c11 -m32 -ffreestanding -c -fno-stack-protector -fno-pie
 LD = ld
-QEMU = qemu-system-i386
-IMG_SIZE = 1440k
+QEMU= qemu-system-i386
 
 BUILD_DIR = build
-
-BOOT_SRC = bootloader/boot.asm
-BOOT_OBJ = $(BUILD_DIR)/boot.o
-BOOT_ELF = $(BUILD_DIR)/boot.elf
-BOOT_IMG = $(BUILD_DIR)/boot.img
+DISK_IMG = $(BUILD_DIR)/disk.img
+STAGE2_SIZE = 2048
 
 KERNEL_C_SRC = $(wildcard kernel/*.c)
 KERNEL_ASM_SRC = $(wildcard kernel/*.asm)
 KERNEL_OBJ = $(patsubst kernel/%.c, $(BUILD_DIR)/%.o, $(KERNEL_C_SRC))
 KERNEL_OBJ += $(patsubst kernel/%.asm, $(BUILD_DIR)/asm_%.o, $(KERNEL_ASM_SRC))
-KERNEL_OBJ += $(BUILD_DIR)/boot1.o
-KERNEL_ELF = $(BUILD_DIR)/kernel.elf
-KERNEL_BIN = $(BUILD_DIR)/kernel.bin
 
-DISK_IMG = $(BUILD_DIR)/disk.img
+all: $(DISK_IMG)
 
-all: $(BOOT_IMG) $(KERNEL_BIN) $(DISK_IMG)
+.PHONY: stage1 stage2 kernel run gdb clean
+stage1: $(BUILD_DIR)
+	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/$@.o bootloader/$@.asm
+	$(LD) -Ttext=0x7c00 -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.o
+	objcopy -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
+
+# NOTE: Stage2 final size should be checked against `$(STAGE2_SIZE)` by the build system to avoid an overflow.
+# Alternatively, convey the final stage2 size through other means to stage1.
+stage2: $(BUILD_DIR)
+	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/stage2.o bootloader/stage2.asm
+	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $(BUILD_DIR)/stage2_load.o bootloader/stage2_load.c
+	$(LD) -Tbootloader/stage2.ld -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/stage2.o $(BUILD_DIR)/stage2_load.o
+	objcopy -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
+	truncate -s $(STAGE2_SIZE) $(BUILD_DIR)/$@.bin
+
+$(BUILD_DIR)/asm_%.o: kernel/%.asm
+	$(AS) $(ASFLAGS) -o $@ $<
+
+$(BUILD_DIR)/%.o: kernel/%.c
+	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $@ $<
+
+kernel: $(KERNEL_OBJ) | $(BUILD_DIR)
+	$(LD) -melf_i386 -Tbootloader/linker.ld -o $(BUILD_DIR)/kernel.elf $(KERNEL_OBJ)
+
+$(DISK_IMG): stage1 stage2 kernel
+	dd if=$(BUILD_DIR)/stage1.bin of=$@
+	dd if=$(BUILD_DIR)/stage2.bin of=$@ oflag=append conv=notrunc
+	dd if=$(BUILD_DIR)/kernel.elf of=$@ oflag=append conv=notrunc
+	truncate -s 1M $@
 
 $(BUILD_DIR):
 	mkdir -p $@
 
-$(BOOT_OBJ): $(BOOT_SRC) | $(BUILD_DIR)
-	$(AS) -f elf32 -g -F dwarf -o $@ $<
+run:
+	qemu-system-i386 -s -S $(DISK_IMG)
 
-$(BOOT_ELF): $(BOOT_OBJ)
-	$(LD) -Ttext=0x7c00 -melf_i386 -o $@ $<
-
-$(BOOT_IMG): $(BOOT_ELF)
-	objcopy -O binary $< $@
-	truncate -s $(IMG_SIZE) $@
-
-$(BUILD_DIR)/boot1.o: bootloader/boot1.asm
-	$(AS) -f elf32 -o $@ $<
-
-$(BUILD_DIR)/asm_%.o: kernel/%.asm
-	$(AS) -f elf32 -o $@ $<
-
-$(BUILD_DIR)/%.o: kernel/%.c
-	$(CC) $(CFLAGS) $< -o $@
-
-$(KERNEL_BIN): $(KERNEL_OBJ) | $(BUILD_DIR)
-	$(LD) -melf_i386 --oformat binary -T bootloader/linker.ld -o $@ $(KERNEL_OBJ)
-
-$(DISK_IMG): $(BOOT_IMG) $(KERNEL_BIN)
-	dd if=$(BOOT_IMG) of=$@ bs=512 seek=4
-	dd if=$(KERNEL_BIN) of=$@ bs=512 seek=200
-
-run: $(DISK_IMG)
-	$(QEMU) -drive file=$<,format=raw,if=floppy
-
-.PHONY: stage1 clean
-
-stage1: $(BOOT_IMG)
+gdb:
+	gdb -x gdb.txt
 
 clean:
 	rm -rf $(BUILD_DIR)
