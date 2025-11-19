@@ -4,7 +4,7 @@
 #include "io.h"
 #include "print.h"
 
-static isr_callback_t interrupt_handlers[MAX_INTERRUPTS] = { 0 };
+isr_callback_t interrupt_handlers[MAX_INTERRUPTS] = { 0 };
 
 void isr_handler(uint32_t int_num, uint32_t err_code) {
     terminal_write("Interrupt occurred: ");

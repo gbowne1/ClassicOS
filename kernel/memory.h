@@ -11,7 +11,7 @@ extern "C" {
 /* C11 / POSIX-2004 signatures */
 void *memcpy(void *restrict dst, const void *restrict src, size_t n);
 void *memmove(void *dst, const void *src, size_t n);
-/*int   memcmp(const void *s1, const void *s2, size_t n); */
+int   memcmp(const void *s1, const void *s2, size_t n);
 
 /* Optional fast-path using 32-bit loads (x86 only) */
 #if defined(__i386__) && !defined(MEMORY_NO_OPT)

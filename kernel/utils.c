@@ -77,16 +77,6 @@ char* utoa(unsigned int value, char* str, int base) {
     return str;
 }
 
-int memcmp(const void *ptr1, const void *ptr2, size_t num) {
-    const uint8_t *p1 = ptr1, *p2 = ptr2;
-    for (size_t i = 0; i < num; i++) {
-        if (p1[i] != p2[i]) {
-            return p1[i] < p2[i] ? -1 : 1;
-        }
-    }
-    return 0;
-}
-
 void *memset(void *dest, int value, size_t len) {
     unsigned char *ptr = (unsigned char *)dest;
     while (len-- > 0)
