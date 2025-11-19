@@ -1,3 +1,4 @@
+#include "idt.h"
 #include "irq.h"
 #include "io.h"
 #include "isr.h"
@@ -6,6 +7,25 @@
 #define PIC1_DATA  0x21
 #define PIC2_CMD   0xA0
 #define PIC2_DATA  0xA1
+
+// FIXME: stubs
+void irq0() {}
+void irq1() {}
+void irq2() {}
+void irq3() {}
+void irq4() {}
+void irq5() {}
+void irq6() {}
+void irq7() {}
+void irq8() {}
+void irq9() {}
+void irq10() {}
+void irq11() {}
+void irq12() {}
+void irq13() {}
+void irq14() {}
+void irq15() {}
+// --- stubs end
 
 void irq_remap(void)
 {
@@ -31,8 +51,8 @@ void irq_install(void)
     irq_remap();
 
     /* Fill IRQ entries in the IDT (0x20 … 0x2F) */
-    extern void irq0(), irq1(), irq2(), irq3(), irq4(), irq5(), irq6(), irq7();
-    extern void irq8(), irq9(), irq10(), irq11(), irq12(), irq13(), irq14(), irq15();
+    //extern void irq0(), irq1(), irq2(), irq3(), irq4(), irq5(), irq6(), irq7();
+    //extern void irq8(), irq9(), irq10(), irq11(), irq12(), irq13(), irq14(), irq15();
 
     idt_set_gate(0x20, (uint32_t)irq0);
     idt_set_gate(0x21, (uint32_t)irq1);

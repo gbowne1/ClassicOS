@@ -37,7 +37,7 @@ $(BUILD_DIR)/%.o: kernel/%.c
 	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $@ $<
 
 kernel: $(KERNEL_OBJ) | $(BUILD_DIR)
-	$(LD) -melf_i386 -Tbootloader/linker.ld -o $(BUILD_DIR)/kernel.elf $(KERNEL_OBJ)
+	$(LD) -melf_i386 -Tkernel/linker.ld -o $(BUILD_DIR)/kernel.elf $(KERNEL_OBJ)
 
 $(DISK_IMG): stage1 stage2 kernel
 	dd if=$(BUILD_DIR)/stage1.bin of=$@
