@@ -1,47 +1,67 @@
 #ifndef FAT12_H
 #define FAT12_H
 
-#include <stdint.h> /* Include standard integer types */
-#include <stdio.h>  /* Include standard I/O library */
-#include <stdlib.h> /* Include standard library */
+#include <stdint.h>
 
-#define FAT12_SECTOR_SIZE 512 /* Sector size for FAT12 */
-#define FAT12_MAX_FILES 128 /* Maximum number of files in root directory */
-#define FAT12_ROOT_DIR_SECTORS 1 /* Number of sectors for root directory */
+// --- Configuration ---
+#define FAT12_SECTOR_SIZE 512
 
+// --- On-Disk Structures (Must be Packed) ---
+
+// BIOS Parameter Block (Start of Boot Sector)
 typedef struct {
-    uint8_t jump[3]; /* Jump instruction for boot */
-    char oem[8]; /* OEM name */
-    uint16_t bytes_per_sector; /* Bytes per sector */
-    uint8_t sectors_per_cluster; /* Sectors per cluster */
-    uint16_t reserved_sectors; /* Reserved sectors count */
-    uint8_t num_fats; /* Number of FATs */
-    uint16_t max_root_dir_entries; /* Max entries in root directory */
-    uint16_t total_sectors; /* Total sectors */
-    uint8_t media_descriptor; /* Media descriptor */
-    uint16_t fat_size; /* Size of each FAT */
-    uint16_t sectors_per_track; /* Sectors per track */
-    uint16_t num_heads; /* Number of heads */
-    uint32_t hidden_sectors; /* Hidden sectors count */
-    uint32_t total_sectors_large; /* Total sectors for large disks */
-} __attribute__((packed)) FAT12_BootSector; /* Packed structure for boot sector */
+    uint8_t  jump[3];
+    char     oem[8];
+    uint16_t bytes_per_sector;    // 512
+    uint8_t  sectors_per_cluster; // 1
+    uint16_t reserved_sectors;    // 1 (Boot sector)
+    uint8_t  fat_count;           // 2
+    uint16_t dir_entries_count;   // 224
+    uint16_t total_sectors;       // 2880
+    uint8_t  media_descriptor;    // 0xF0
+    uint16_t sectors_per_fat;     // 9
+    uint16_t sectors_per_track;   // 18
+    uint16_t heads;               // 2
+    uint32_t hidden_sectors;
+    uint32_t total_sectors_large;
+} __attribute__((packed)) fat12_bpb_t;
 
+// Directory Entry (32 bytes)
 typedef struct {
-    char name[11]; /* File name (8.3 format) */
-    uint8_t attr; /* File attributes */
-    uint16_t reserved; /* Reserved */
-    uint16_t time; /* Time of last write */
-    uint16_t date; /* Date of last write */
-    uint16_t start_cluster; /* Starting cluster number */
-    uint32_t file_size; /* File size in bytes */
-} __attribute__((packed)) FAT12_DirEntry; /* Directory entry structure */
+    char     filename[8];
+    char     ext[3];
+    uint8_t  attributes;
+    uint8_t  reserved;
+    uint8_t  creation_ms;
+    uint16_t creation_time;
+    uint16_t creation_date;
+    uint16_t last_access_date;
+    uint16_t high_cluster_num; // Always 0 in FAT12
+    uint16_t last_mod_time;
+    uint16_t last_mod_date;
+    uint16_t low_cluster_num;  // The starting cluster
+    uint32_t file_size;        // Size in bytes
+} __attribute__((packed)) fat12_entry_t;
 
-void initialize_fat12(const char *disk_image); /* Function to initialize FAT12 */
-void read_fat12(const char *disk_image); /* Function to read FAT12 */
-void write_fat12(const char *disk_image); /* Function to write FAT12 */
-void list_files(const char *disk_image); /* Function to list files in root directory */
-void read_file(const char *disk_image, const char *filename); /* Function to read a file */
-void write_file(const char *disk_image, const char *filename, const uint8_t *data, size_t size); /* Function to write a file */
+// --- Kernel File Handle ---
+// This is what your kernel uses to track an open file
+typedef struct {
+    char     name[11];
+    uint32_t size;
+    uint16_t start_cluster;
+    uint16_t current_cluster;
+    uint32_t current_sector_in_cluster;
+    uint32_t bytes_read;
+} file_t;
 
-#endif 
-/* FAT12_H */
+// --- Public API ---
+
+// You must implement this in your disk driver (e.g., floppy.c)
+// Returns 0 on success, non-zero on error.
+extern int disk_read_sector(uint32_t lba, uint8_t *buffer);
+
+void fat12_init();
+file_t fat12_open(const char *filename);
+uint32_t fat12_read(file_t *file, uint8_t *buffer, uint32_t bytes_to_read);
+
+#endif // FAT12_H
