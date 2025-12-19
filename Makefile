@@ -1,12 +1,9 @@
-MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-MAKEFILE_DIR  := $(dir $(MAKEFILE_PATH))
-
 AS = nasm
 ASFLAGS = -f elf32 -g -F dwarf
-CC = $(MAKEFILE_DIR)cross/bin/i386-elf-gcc
-LD = $(MAKEFILE_DIR)cross/bin/i386-elf-ld
+CC = i386-elf-gcc
+LD = i386-elf-ld
 QEMU= qemu-system-i386
-OBJCOPY = $(MAKEFILE_DIR)cross/bin/i386-elf-objcopy
+OBJCOPY = i386-elf-objcopy
 
 BUILD_DIR = build
 DISK_IMG = $(BUILD_DIR)/disk.img
