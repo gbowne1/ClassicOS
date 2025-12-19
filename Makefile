@@ -1,8 +1,9 @@
 AS = nasm
 ASFLAGS = -f elf32 -g -F dwarf
-CC = gcc
-LD = ld
+CC = i386-elf-gcc
+LD = i386-elf-ld
 QEMU= qemu-system-i386
+OBJCOPY = i386-elf-objcopy
 
 BUILD_DIR = build
 DISK_IMG = $(BUILD_DIR)/disk.img
@@ -19,7 +20,7 @@ all: $(DISK_IMG)
 stage1: $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/$@.o bootloader/$@.asm
 	$(LD) -Ttext=0x7c00 -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.o
-	objcopy -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
+	$(OBJCOPY) -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
 
 # NOTE: Stage2 final size should be checked against `$(STAGE2_SIZE)` by the build system to avoid an overflow.
 # Alternatively, convey the final stage2 size through other means to stage1.
@@ -27,7 +28,7 @@ stage2: $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/stage2.o bootloader/stage2.asm
 	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $(BUILD_DIR)/stage2_load.o bootloader/stage2_load.c
 	$(LD) -Tbootloader/stage2.ld -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/stage2.o $(BUILD_DIR)/stage2_load.o
-	objcopy -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
+	$(OBJCOPY) -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
 	truncate -s $(STAGE2_SIZE) $(BUILD_DIR)/$@.bin
 
 $(BUILD_DIR)/asm_%.o: kernel/%.asm
@@ -56,3 +57,4 @@ gdb:
 
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf $(CROSS_DIR)
