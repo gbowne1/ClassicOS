@@ -5,7 +5,7 @@
 [![Platform](https://img.shields.io/badge/platform-x86_IA32-lightgrey?style=flat-square)](https://en.wikipedia.org/wiki/IA-32)
 [![Made with](https://img.shields.io/badge/made%20with-C%20%26%20NASM-9cf?style=flat-square)](#)
 
-> **ClassicOS** is a 32-bit Intel x86 operating system built from scratch using C, NASM, and GCC.  
+> **ClassicOS** is a 32-bit Intel x86 operating system built from scratch using C, NASM, and GCC.
 > Designed for 386, 486, and Pentium-class CPUs, it runs in protected mode, outputs to VGA text mode and serial ports, and supports floppy/HDD boot with basic FAT support.
 
 ---
@@ -35,6 +35,7 @@ You’ll need the following tools installed:
 - `qemu-system-i386`
 
 Optional:
+
 - `gdb`
 - `vncviewer` (TigerVNC or similar)
 
@@ -42,13 +43,27 @@ Optional:
 
 ## 🛠️ Building ClassicOS
 
-Clone and build:
+Clone repository:
 
-```bash
+```sh
 git clone https://github.com/gbowne1/ClassicOS.git
 cd ClassicOS
-make
 ```
 
-build kernel
-for %f in (*.c) do gcc -m32 -O0 -Wall -Wextra -Werror -pedantic -ffreestanding -nostdlib -fno-pic -fno-stack-protector -fno-pie -march=i386 -mtune=i386 -c "%f" -o "%f.o"
+Run `configure` script to build a cross-compiler toolchain for `i386-elf`:
+
+```sh
+./configure
+```
+
+Source the `.build.env` file to add the cross-compiler toolchain to your PATH:
+
+```sh
+source .build.env
+```
+
+Build the kernel:
+
+```sh
+make
+```
