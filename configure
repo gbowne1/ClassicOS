@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Configuration
+TARGET="i386-elf"
+BINUTILS_VERSION="2.45"
+GCC_VERSION="15.2.0"
+
+# Paths
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+PREFIX="$SCRIPT_DIR/cross"
+SRC_DIR="$PREFIX/src"
+
+BINUTILS_SRC="$SRC_DIR/binutils-$BINUTILS_VERSION"
+BINUTILS_BUILD="$PREFIX/build-binutils"
+GCC_SRC="$SRC_DIR/gcc-$GCC_VERSION"
+GCC_BUILD="$PREFIX/build-gcc"
+
+# Flags
+DEBUG=0
+HELP=0
+
+# Parse arguments
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help)
+      HELP=1
+      ;;
+    -d|--debug)
+      DEBUG=1
+      ;;
+    *)
+      echo "Unknown option: $arg"
+      echo "Use -h or --help for usage information"
+      exit 1
+      ;;
+  esac
+done
+
+# Show help
+if [[ "$HELP" -eq 1 ]]; then
+  cat << EOF
+Usage: $0 [OPTIONS]
+
+Build a cross-compiler toolchain for $TARGET.
+
+OPTIONS:
+  -h, --help     Show this help message
+  -d, --debug    Enable debug mode (set -x)
+
+This script will:
+  1. Download binutils $BINUTILS_VERSION and GCC $GCC_VERSION
+  2. Build and install them to: $PREFIX
+
+EOF
+  exit 0
+fi
+
+# Enable debug mode
+if [[ "$DEBUG" -eq 1 ]]; then
+  set -x
+fi
+
+# Print configuration
+cat << EOF
+
+=== Build Configuration ===
+Target       : $TARGET
+Prefix       : $PREFIX
+Binutils     : $BINUTILS_VERSION
+GCC          : $GCC_VERSION
+===========================
+
+EOF
+
+# Create directory structure
+echo "Setting up directories..."
+mkdir -p "$SRC_DIR"
+
+# Download sources
+cd "$SRC_DIR"
+
+if [[ ! -d "$BINUTILS_SRC" ]]; then
+  echo "Downloading binutils $BINUTILS_VERSION..."
+  wget "https://ftp.gnu.org/gnu/binutils/binutils-$BINUTILS_VERSION.tar.gz"
+  echo "Extracting binutils..."
+  tar xf "binutils-$BINUTILS_VERSION.tar.gz"
+  rm "binutils-$BINUTILS_VERSION.tar.gz"
+else
+  echo "Binutils source already exists, skipping download"
+fi
+
+if [[ ! -d "$GCC_SRC" ]]; then
+  echo "Downloading GCC $GCC_VERSION..."
+  wget "https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.gz"
+  echo "Extracting GCC..."
+  tar xf "gcc-$GCC_VERSION.tar.gz"
+  rm "gcc-$GCC_VERSION.tar.gz"
+else
+  echo "GCC source already exists, skipping download"
+fi
+
+# Download GCC prerequisites
+if [[ ! -d "$GCC_SRC/gmp" ]]; then
+  echo "Downloading GCC prerequisites..."
+  cd "$GCC_SRC"
+  ./contrib/download_prerequisites
+  cd "$SRC_DIR"
+else
+  echo "GCC prerequisites already downloaded, skipping"
+fi
+
+# Build binutils
+if [[ ! -f "$PREFIX/bin/$TARGET-ld" ]]; then
+  echo "Building binutils..."
+  mkdir -p "$BINUTILS_BUILD"
+  cd "$BINUTILS_BUILD"
+
+  "$BINUTILS_SRC/configure" \
+    --target="$TARGET" \
+    --prefix="$PREFIX" \
+    --with-sysroot \
+    --disable-nls \
+    --disable-werror
+
+  make -j"$(nproc)"
+  make install
+else
+  echo "Binutils already installed, skipping build"
+fi
+
+# Build GCC
+if [[ ! -f "$PREFIX/bin/$TARGET-gcc" ]]; then
+  echo "Building GCC..."
+  mkdir -p "$GCC_BUILD"
+  cd "$GCC_BUILD"
+
+  "$GCC_SRC/configure" \
+    --target="$TARGET" \
+    --prefix="$PREFIX" \
+    --disable-nls \
+    --enable-languages=c \
+    --without-headers
+
+  make all-gcc -j"$(nproc)"
+  make all-target-libgcc -j"$(nproc)"
+  make install-gcc
+  make install-target-libgcc
+else
+  echo "GCC already installed, skipping build"
+fi
+
+cd "$SCRIPT_DIR"
+
+echo ""
+echo "=== Build Complete ==="
+echo "Toolchain installed to: $PREFIX"
+echo "Add to PATH: export PATH=\"$PREFIX/bin:\$PATH\""
+echo "======================"
