@@ -27,7 +27,6 @@ typedef enum { false = 0, true = 1 } bool;
 // ----------------------------
 // OS subsystem types
 // ----------------------------
-typedef uint32_t size_t;
 typedef int32_t  ssize_t;
 
 typedef uint32_t phys_addr_t; // Physical address

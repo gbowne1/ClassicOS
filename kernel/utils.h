@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stddef.h>
+
 #include "types.h"
 
 // Convert integer to string (base is typically 10, 16, etc.)
