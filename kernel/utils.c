@@ -76,10 +76,3 @@ char* utoa(unsigned int value, char* str, int base) {
     reverse(str, i);
     return str;
 }
-
-void *memset(void *dest, int value, size_t len) {
-    unsigned char *ptr = (unsigned char *)dest;
-    while (len-- > 0)
-        *ptr++ = (unsigned char)value;
-    return dest;
-}
