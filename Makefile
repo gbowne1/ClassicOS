@@ -6,6 +6,7 @@ QEMU= qemu-system-i386
 OBJCOPY = i386-elf-objcopy
 
 BUILD_DIR = build
+CROSS_DIR = cross
 DISK_IMG = $(BUILD_DIR)/disk.img
 STAGE2_SIZE = 2048
 
@@ -13,6 +14,9 @@ KERNEL_C_SRC = $(wildcard kernel/*.c)
 KERNEL_ASM_SRC = $(wildcard kernel/*.asm)
 KERNEL_OBJ = $(patsubst kernel/%.c, $(BUILD_DIR)/%.o, $(KERNEL_C_SRC))
 KERNEL_OBJ += $(patsubst kernel/%.asm, $(BUILD_DIR)/asm_%.o, $(KERNEL_ASM_SRC))
+
+KLIBC_SRC = $(wildcard klibc/src/*.c)
+KLIBC_OBJ = $(patsubst klibc/src/%.c, $(BUILD_DIR)/klibc/%.o, $(KLIBC_SRC))
 
 all: $(DISK_IMG)
 
@@ -26,7 +30,7 @@ stage1: $(BUILD_DIR)
 # Alternatively, convey the final stage2 size through other means to stage1.
 stage2: $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/stage2.o bootloader/stage2.asm
-	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $(BUILD_DIR)/stage2_load.o bootloader/stage2_load.c
+	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $(BUILD_DIR)/stage2_load.o bootloader/stage2_load.c
 	$(LD) -Tbootloader/stage2.ld -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/stage2.o $(BUILD_DIR)/stage2_load.o
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
 	truncate -s $(STAGE2_SIZE) $(BUILD_DIR)/$@.bin
@@ -35,10 +39,13 @@ $(BUILD_DIR)/asm_%.o: kernel/%.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%.o: kernel/%.c
-	$(CC) -std=c11 -ffreestanding -nostdlib -fno-stack-protector -m32 -g -c -o $@ $<
+	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $@ $<
 
-kernel: $(KERNEL_OBJ) | $(BUILD_DIR)
-	$(LD) -melf_i386 -Tkernel/linker.ld -o $(BUILD_DIR)/kernel.elf $(KERNEL_OBJ)
+$(BUILD_DIR)/klibc/%.o: klibc/src/%.c
+	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $@ $<
+
+kernel: $(KERNEL_OBJ) | $(BUILD_DIR) $(KLIBC_OBJ)
+	$(LD) -melf_i386 -Tkernel/linker.ld -o $(BUILD_DIR)/kernel.elf $(KERNEL_OBJ) $(KLIBC_OBJ)
 
 $(DISK_IMG): stage1 stage2 kernel
 	dd if=$(BUILD_DIR)/stage1.bin of=$@
@@ -48,6 +55,7 @@ $(DISK_IMG): stage1 stage2 kernel
 
 $(BUILD_DIR):
 	mkdir -p $@
+	mkdir -p $(BUILD_DIR)/klibc
 
 run:
 	qemu-system-i386 -s -S $(DISK_IMG)
@@ -57,4 +65,9 @@ gdb:
 
 clean:
 	rm -rf $(BUILD_DIR)
+
+clean-cross:
 	rm -rf $(CROSS_DIR)
+	rm -rf .build.env
+
+clean-all: clean clean-cross
