@@ -1,4 +1,4 @@
-.global ctx_switch
+global ctx_switch
 
 ; void ctx_switch(uint32_t **old_sp_ptr, uint32_t *new_sp);
 ; Arguments on stack (cdecl convention):
