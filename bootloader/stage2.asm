@@ -40,6 +40,13 @@ ata_lba_read:
     push edx
     push edi
 
+    ; Wait BSY=0 before proceeding to write the regs
+.wait_rdy:
+    mov edx, 0x1F7
+    in al, dx
+    test al, 0x80
+    jnz .wait_rdy
+
     mov eax, [ebp+8]     ; arg #1 = LBA
     mov cl, [ebp+12]     ; arg #2 = # of sectors
     mov edi, [ebp+16]    ; arg #3 = buffer address
@@ -74,21 +81,23 @@ ata_lba_read:
     mov al, 0x20         ; Read with retry.
     out dx, al
 
-    mov bl, cl          ; Save # of sectors in BL
+    mov bl, cl           ; Save # of sectors in BL
 
-.wait_drq:
+.wait_rdy2:
     mov edx, 0x1F7
-.do_wait_drq:
+.do_wait_rdy2:
     in al, dx
-    test al, 8           ; the sector buffer requires servicing.
-    jz .do_wait_drq      ; keep polling until the sector buffer is ready.
+    test al, 0x80        ; BSY?
+    jnz .do_wait_rdy2
+    test al, 0x8         ; DRQ?
+    jz .do_wait_rdy2
 
     mov edx, 0x1F0       ; Data port, in and out
     mov ecx, 256
     rep insw             ; in to [RDI]
 
     dec bl               ; are we...
-    jnz .wait_drq        ; ...done?
+    jnz .wait_rdy2       ; ...done?
 
     pop edi
     pop edx
