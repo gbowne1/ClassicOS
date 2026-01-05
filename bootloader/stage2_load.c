@@ -1,11 +1,33 @@
 #include <stdint.h>
 
+// ATA IO Ports
+#define ATA_PRIMARY_DATA            0x1F0
+#define ATA_PRIMARY_ERR_FEATURES    0x1F1
+#define ATA_PRIMARY_SEC_COUNT       0x1F2
+#define ATA_PRIMARY_LBA_LOW         0x1F3
+#define ATA_PRIMARY_LBA_MID         0x1F4
+#define ATA_PRIMARY_LBA_HIGH        0x1F5
+#define ATA_PRIMARY_DRIVE_SEL       0x1F6
+#define ATA_PRIMARY_COMM_STAT       0x1F7
+
+// ATA Commands
+#define ATA_CMD_READ_PIO            0x20
+#define ATA_CMD_WRITE_PIO           0x30
+
 // ELF Ident indexes
-#define EI_NIDENT 16
+#define EI_NIDENT                   16
 
 // Program header types
-#define PT_NULL    0
-#define PT_LOAD    1
+#define PT_NULL                     0
+#define PT_LOAD                     1
+
+// Disk sector size
+#define SECTOR_SIZE                 512
+
+// Kernel start LBA
+#define KERN_START_SECT             5
+
+extern uint8_t read_buf[];
 
 // ELF Header (32-bit)
 typedef struct {
@@ -37,8 +59,84 @@ typedef struct {
     uint32_t p_align;
 } __attribute__((packed)) Elf32_Phdr;
 
+static inline uint8_t inb(uint16_t port)
+{
+    uint8_t ret;
+    __asm__ volatile ("inb %1, %0"
+                      : "=a"(ret)
+                      : "Nd"(port));
+    return ret;
+}
+
+static inline void outb(uint16_t port, uint8_t val)
+{
+    __asm__ volatile ("outb %0, %1"
+                      :
+                      : "a"(val), "Nd"(port));
+}
+
+static inline uint16_t inw(uint16_t port)
+{
+    uint16_t ret;
+    __asm__ volatile ("inw %1, %0"
+                      : "=a"(ret)
+                      : "Nd"(port));
+    return ret;
+}
+
+static inline void ata_wait_bsy() {
+    while (inb(ATA_PRIMARY_COMM_STAT) & 0x80);
+}
+
+static inline void ata_wait_drq() {
+    while (!(inb(ATA_PRIMARY_COMM_STAT) & 0x08));
+}
+
+static void ata_read_sector(void *addr, uint32_t lba) {
+    ata_wait_bsy();
+
+    outb(ATA_PRIMARY_DRIVE_SEL, 0xE0 | ((lba >> 24) & 0x0F));
+    outb(ATA_PRIMARY_SEC_COUNT, 1);
+    outb(ATA_PRIMARY_LBA_LOW, (uint8_t)lba);
+    outb(ATA_PRIMARY_LBA_MID, (uint8_t)(lba >> 8));
+    outb(ATA_PRIMARY_LBA_HIGH, (uint8_t)(lba >> 16));
+    outb(ATA_PRIMARY_COMM_STAT, ATA_CMD_READ_PIO);
+
+    uint16_t* ptr = (uint16_t*)addr;
+    ata_wait_bsy();
+    ata_wait_drq();
+    for (int i = 0; i < 256; i++) {
+        *ptr++ = inw(ATA_PRIMARY_DATA);
+    }
+}
+
+static void load_segment(uint8_t *addr, uint32_t offset, uint32_t size)
+{
+    uint32_t lba = KERN_START_SECT + offset / SECTOR_SIZE;
+    uint32_t off = offset % 512;
+    uint8_t data[512];
+
+    while (size > 0) {
+        ata_read_sector(data, lba);
+
+        uint32_t copy = 512 - off;
+        if (copy > size) {
+            copy = size;
+        }
+
+        for (uint32_t i = 0; i < copy; i++) {
+            addr[i] = data[off + i];
+        }
+
+        addr += copy;
+        size -= copy;
+        lba++;
+        off = 0;
+    }
+}
+
 // Load an ELF executable into memory.
-static int elf_load(const void* data, void (*load_segment)(uint8_t *vaddr, uint32_t src, uint32_t size)) {
+static int elf_load(const void *data) {
     const Elf32_Ehdr* header = (const Elf32_Ehdr*)data;
     const Elf32_Phdr* ph = (const Elf32_Phdr*)((uint8_t*)data + header->e_phoff);
 
@@ -51,8 +149,6 @@ static int elf_load(const void* data, void (*load_segment)(uint8_t *vaddr, uint3
         uint32_t filesz = ph[i].p_filesz;
         uint32_t memsz = ph[i].p_memsz;
 
-        // Copy data segment
-        //load_segment((uint8_t *)vaddr, offset, filesz);
         load_segment((uint8_t *)vaddr, offset, filesz);
 
         // Zero remaining BSS (if any)
@@ -67,52 +163,33 @@ static int elf_load(const void* data, void (*load_segment)(uint8_t *vaddr, uint3
     return header->e_entry;
 }
 
-#define KERN_START_SECT 5
-#define MAX(a, b) ((a)>(b) ? (a) : (b))
-
-extern void ata_lba_read(uint32_t lba, uint8_t nsect, void *addr);
-extern uint8_t read_buf[];
-
 static uint32_t
-total_header_size(const Elf32_Ehdr *header) {
+total_headers_size(const Elf32_Ehdr *header) {
     uint32_t phend = header->e_phoff + header->e_phentsize*header->e_phnum;
 
-    // Align to 512
-    return (phend + 511) & ~511;
-}
-
-static void read_sectors(uint8_t *vaddr, uint32_t offset, uint32_t size) {
-    // # of sectors to read
-    uint32_t rem_nsect = ((size + 511) & ~511) / 512;
-
-    // Current lba address, offset by the first sector already read
-    uint32_t lba = KERN_START_SECT + offset / 512;
-
-    // Max 255 sectors at a time
-    while (rem_nsect) {
-        uint8_t nsect = rem_nsect > 255 ? 255 : rem_nsect;
-        ata_lba_read(lba, nsect, vaddr);
-
-        vaddr += nsect * 512;
-        rem_nsect -= nsect;
-        lba += nsect;
-    }
+    // Align to sector size
+    uint32_t a = SECTOR_SIZE-1;
+    return (phend + a) & ~a;
 }
 
 void *load_kernel(void) {
     // Read the first sector
-    ata_lba_read(KERN_START_SECT, 1, read_buf);
+    ata_read_sector(read_buf, KERN_START_SECT);
 
     const Elf32_Ehdr* header = (const Elf32_Ehdr*)read_buf;
 
     // Remaining data size, subtract the first 512B already read
-    uint32_t rem = total_header_size(header) - 512;
+    uint32_t rem = total_headers_size(header) - SECTOR_SIZE;
 
     // Read the rest if necessary
-    if (rem)
-        read_sectors(read_buf+512, 512, rem);
+    if (rem) {
+        uint8_t *dst = read_buf + SECTOR_SIZE;
+        for (uint32_t i = 0; i < rem / SECTOR_SIZE; i++, dst += 512) {
+            ata_read_sector(dst, KERN_START_SECT + i + 1);
+        }
+    }
 
-    elf_load(read_buf, read_sectors);
+    elf_load(read_buf);
 
     return (void *)header->e_entry;
 }
