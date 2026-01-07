@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdint.h>
 
 // ATA IO Ports
@@ -23,11 +24,16 @@
 
 // Disk sector size
 #define SECTOR_SIZE                 512
+#define PH_PER_SECTOR               (SECTOR_SIZE / sizeof(Elf32_Phdr))
 
 // Kernel start LBA
 #define KERN_START_SECT             5
 
-extern uint8_t read_buf[];
+// VGA
+// Expects bios initialization for text mode (3), buffer at 0xb8000
+#define VGA_ADDRESS                 0xB8000
+#define VGA_COLS                    80
+#define VGA_ROWS                    25
 
 // ELF Header (32-bit)
 typedef struct {
@@ -110,8 +116,9 @@ static void ata_read_sector(void *addr, uint32_t lba) {
     }
 }
 
-static void load_segment(uint8_t *addr, uint32_t offset, uint32_t size)
+static void ata_read_sectors(uint8_t *addr, uint32_t offset, uint32_t size)
 {
+    // Reads are offset from the starting sector of the kernel
     uint32_t lba = KERN_START_SECT + offset / SECTOR_SIZE;
     uint32_t off = offset % 512;
     uint8_t data[512];
@@ -135,61 +142,94 @@ static void load_segment(uint8_t *addr, uint32_t offset, uint32_t size)
     }
 }
 
+static void on_error(const char *msg)
+{
+    uint16_t *ptr = (uint16_t *)VGA_ADDRESS;
+
+    // Clear
+    uint16_t val = 0x0f | (uint8_t)' ';
+    for (size_t i = 0; i < VGA_COLS * VGA_ROWS; i++) {
+        ptr[i] = val;
+    }
+
+    // Print error
+    for (size_t i = 0; msg[i]; i++) {
+        ptr[i] = 0xf00 | (uint8_t)msg[i];
+    }
+
+    // Halt
+    while (1) {
+        __asm__("hlt");
+    }
+}
+
 // Load an ELF executable into memory.
-static int elf_load(const void *data) {
-    const Elf32_Ehdr* header = (const Elf32_Ehdr*)data;
-    const Elf32_Phdr* ph = (const Elf32_Phdr*)((uint8_t*)data + header->e_phoff);
+// NOTE: Only 32-byte program headers are supported.
+// Returns the entry point to the program.
+static void *elf_load(const void *data) {
+    const Elf32_Ehdr *header = (const Elf32_Ehdr*)data;
+
+    if (header->e_phentsize != sizeof(Elf32_Phdr)) {
+        // The bootloader only handles 32-byte program header entries
+        on_error("ERROR: Unsupported program header entry size, halting...");
+    }
+
+    // Buffer for the program headers
+    uint8_t file_buf[SECTOR_SIZE];
+
+    // Current file offset to the next program header
+    uint32_t file_offset = header->e_phoff;
 
     for (int i = 0; i < header->e_phnum; i++) {
-        if (ph[i].p_type != PT_LOAD)
+        // Check for sector boundary.
+        // Program headers are read in a sector at a time
+        // 512 / 32 = 16 PH per sector
+        if (i % PH_PER_SECTOR == 0) {
+            uint32_t count = (header->e_phnum - i) * sizeof(Elf32_Phdr);
+            if (count > SECTOR_SIZE) {
+                count = SECTOR_SIZE;
+            }
+
+            // Reads
+            ata_read_sectors(file_buf, file_offset, count);
+            file_offset += count;
+        }
+
+        // PH being processed currently, index mod 16 as headers
+        // are being loaded in sector by sector.
+        const Elf32_Phdr *ph = (const Elf32_Phdr *)file_buf + (i % PH_PER_SECTOR);
+
+        // Discard non-load segments
+        if (ph->p_type != PT_LOAD)
             continue;
 
-        uint32_t offset = ph[i].p_offset;
-        uint32_t vaddr = ph[i].p_vaddr;
-        uint32_t filesz = ph[i].p_filesz;
-        uint32_t memsz = ph[i].p_memsz;
-
-        load_segment((uint8_t *)vaddr, offset, filesz);
+        // Load in the segment
+        uint32_t offset = ph->p_offset;
+        uint32_t filesz = ph->p_filesz;
+        uint32_t memsz = ph->p_memsz;
+        uint8_t *vaddr = (uint8_t *)ph->p_vaddr;
+        ata_read_sectors(vaddr, offset, filesz);
 
         // Zero remaining BSS (if any)
         if (memsz > filesz) {
-            uint8_t* bss_start = (uint8_t*)(vaddr + filesz);
+            uint8_t* bss_start = vaddr + filesz;
             for (uint32_t j = 0; j < memsz - filesz; j++) {
                 bss_start[j] = 0;
             }
         }
     }
 
-    return header->e_entry;
-}
-
-static uint32_t
-total_headers_size(const Elf32_Ehdr *header) {
-    uint32_t phend = header->e_phoff + header->e_phentsize*header->e_phnum;
-
-    // Align to sector size
-    uint32_t a = SECTOR_SIZE-1;
-    return (phend + a) & ~a;
+    // Return the entry point
+    return (void *)header->e_entry;
 }
 
 void *load_kernel(void) {
-    // Read the first sector
-    ata_read_sector(read_buf, KERN_START_SECT);
+    // ELF header buffer
+    uint8_t header_buf[SECTOR_SIZE];
 
-    const Elf32_Ehdr* header = (const Elf32_Ehdr*)read_buf;
+    // Read the first sector (contains the ELF header)
+    ata_read_sector(header_buf, KERN_START_SECT);
 
-    // Remaining data size, subtract the first 512B already read
-    uint32_t rem = total_headers_size(header) - SECTOR_SIZE;
-
-    // Read the rest if necessary
-    if (rem) {
-        uint8_t *dst = read_buf + SECTOR_SIZE;
-        for (uint32_t i = 0; i < rem / SECTOR_SIZE; i++, dst += 512) {
-            ata_read_sector(dst, KERN_START_SECT + i + 1);
-        }
-    }
-
-    elf_load(read_buf);
-
-    return (void *)header->e_entry;
+    // `elf_load()` returns the entry point
+    return elf_load(header_buf);
 }
