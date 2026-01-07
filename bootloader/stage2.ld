@@ -9,6 +9,4 @@ SECTIONS {
         *(.bss*)
         *(COMMON)
     }
-
-    read_buf = .;
 }
