@@ -147,7 +147,7 @@ static void on_error(const char *msg)
     uint16_t *ptr = (uint16_t *)VGA_ADDRESS;
 
     // Clear
-    uint16_t val = 0x0f | (uint8_t)' ';
+    uint16_t val = 0x0f00 | (uint8_t)' ';
     for (size_t i = 0; i < VGA_COLS * VGA_ROWS; i++) {
         ptr[i] = val;
     }
