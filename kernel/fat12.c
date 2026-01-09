@@ -15,9 +15,16 @@ static uint8_t g_sector_buffer[FAT12_SECTOR_SIZE];
 static int k_memcmp(const void *s1, const void *s2, uint32_t n) {
     const uint8_t *p1 = (const uint8_t *)s1;
     const uint8_t *p2 = (const uint8_t *)s2;
+
     for (uint32_t i = 0; i < n; i++) {
-        if (p1[i] != p2[i]) return p1[i] - p2[i];
+        if (p1[i] != p2[i]) {
+            // Correct way to return the difference:
+            // If p1[i] > p2[i], returns positive.
+            // If p1[i] < p2[i], returns negative.
+            return (int)p1[i] - (int)p2[i];
+        }
     }
+
     return 0;
 }
 
@@ -181,4 +188,9 @@ uint32_t fat12_read(file_t *file, uint8_t *buffer, uint32_t bytes_to_read) {
     }
 
     return total_read;
+}
+
+int disk_read_sector(uint32_t lba, uint8_t *buffer) {
+    // For now, do nothing and return success
+    return 0; 
 }
