@@ -14,10 +14,18 @@ static uint8_t sector_buffer[FAT12_SECTOR_SIZE];
 /* --- Internal Helpers --- */
 
 static int k_memcmp(const void *s1, const void *s2, uint32_t n) {
-    const uint8_t *p1 = s1, *p2 = s2;
+    const uint8_t *p1 = (const uint8_t *)s1;
+    const uint8_t *p2 = (const uint8_t *)s2;
+
     for (uint32_t i = 0; i < n; i++) {
-        if (p1[i] != p2[i]) return p1[i] - p2[i];
+        if (p1[i] != p2[i]) {
+            // Correct way to return the difference:
+            // If p1[i] > p2[i], returns positive.
+            // If p1[i] < p2[i], returns negative.
+            return (int)p1[i] - (int)p2[i];
+        }
     }
+
     return 0;
 }
 
@@ -144,4 +152,27 @@ uint32_t fat12_read(file_t *file, uint8_t *buffer, uint32_t count) {
     }
 
     return total_read;
+}
+
+int disk_read_sector(uint32_t lba, uint8_t *buffer) {
+    // Convert LBA to CHS (Cylinder-Head-Sector) for older BIOS calls
+    // Note: Standard 1.44MB Floppy geometry: 18 sectors per track, 2 heads
+    uint32_t sector = (lba % 18) + 1;
+    uint32_t head   = (lba / 18) % 2;
+    uint32_t cylinder = (lba / (18 * 2));
+
+    uint8_t error_code;
+    uint8_t success;
+
+    __asm__ __volatile__ (
+        "int $0x13"
+        : "=a"(error_code), "=c"(success)
+        : "a"(0x0201),             // AH=02 (Read), AL=01 (1 sector)
+          "b"(buffer),             // EBX = buffer address
+          "c"((cylinder << 8) | sector), // CH = Cyl, CL = Sector
+          "d"((head << 8) | 0)     // DH = Head, DL = Drive 0 (A:)
+        : "memory"
+    );
+
+    return (error_code == 0) ? 0 : -1;
 }
