@@ -58,7 +58,7 @@ typedef struct {
 
 // You must implement this in your disk driver (e.g., floppy.c)
 // Returns 0 on success, non-zero on error.
-extern int disk_read_sector(uint32_t lba, uint8_t *buffer);
+int disk_read_sector(uint32_t lba, uint8_t *buffer);
 
 void fat12_init();
 file_t fat12_open(const char *filename);
