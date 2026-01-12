@@ -1,9 +1,9 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "malloc.h"
 #include "print.h"
 #include "threading.h"
-#include "types.h"
 #include "utils.h"
-#include <stdint.h>
 
 #define MAX_THREADS 16           // Maximum number of threads
 #define THREAD_STACK_SIZE 8192   // Stack size for each thread
