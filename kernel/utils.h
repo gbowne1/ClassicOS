@@ -3,8 +3,6 @@
 
 #include <stddef.h>
 
-#include "types.h"
-
 // Convert integer to string (base is typically 10, 16, etc.)
 char* itoa(int value, char* str, int base);
 

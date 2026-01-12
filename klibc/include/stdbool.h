@@ -1,6 +1,12 @@
 #ifndef CLASSICOS_KLIBC_STDBOOL_H
 #define CLASSICOS_KLIBC_STDBOOL_H
 
-typedef enum { false = 0, true = 1 } bool;
+#ifndef __cplusplus
+#define bool _Bool
+#define true 1
+#define false 0
+#endif
+
+#define __bool_true_false_are_defined 1
 
 #endif  // CLASSICOS_KLIBC_STDBOOL_H
