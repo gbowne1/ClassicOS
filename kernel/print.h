@@ -1,7 +1,7 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include "types.h"
+#include <stdint.h>
 
 void print_string(const char *str);
 void my_printf(const char *format, ...);

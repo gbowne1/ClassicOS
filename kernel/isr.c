@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "terminal.h"
 #include "serial.h"
 #include "isr.h"
