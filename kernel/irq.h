@@ -1,7 +1,7 @@
 #ifndef IRQ_H
 #define IRQ_H
 
-#include "types.h"
+#include <stdint.h>
 
 void irq_remap(void);
 void irq_install(void);
