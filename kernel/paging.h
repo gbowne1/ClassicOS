@@ -10,31 +10,31 @@
 
 // Page Directory and Page Table structure
 typedef struct {
-    uint32_t present : 1;  // Present bit (1: page is present in memory)
-    uint32_t rw : 1;       // Read-Write bit (1: page is read-write)
-    uint32_t user : 1;     // User-supervisor bit (1: user mode access)
-    uint32_t write_through : 1;  // Write-through cache
-    uint32_t cache_disabled : 1; // Cache disabled
-    uint32_t accessed : 1;        // Accessed bit
-    uint32_t reserved : 1;        // Reserved bit
-    uint32_t page_size : 1;       // Page size (0: 4KB, 1: 4MB)
-    uint32_t global : 1;           // Global page (can be used across different processes)
-    uint32_t available : 3;        // Available bits for the system
-    uint32_t frame : 20;           // Frame address (physical address)
+    uint32_t present : 1;           // Present bit (1: page is present in memory)
+    uint32_t rw : 1;                // Read-Write bit (1: page is read-write)
+    uint32_t user : 1;              // User-supervisor bit (1: user mode access)
+    uint32_t write_through : 1;     // Write-through cache
+    uint32_t cache_disabled : 1;    // Cache disabled
+    uint32_t accessed : 1;          // Accessed bit
+    uint32_t dirty : 1;             // Dirty bit
+    uint32_t attribute : 1;         // Page size (0: 4KB, 1: 4MB)
+    uint32_t global : 1;            // Global page (can be used across different processes)
+    uint32_t reserved : 3;          // Unused
+    uint32_t addr : 20;             // Page frame address (physical address)
 } __attribute__((packed)) page_table_entry_t;
 
 // Define page directory entry
 typedef struct {
-    uint32_t present : 1;
-    uint32_t rw : 1;
-    uint32_t user : 1;
-    uint32_t write_through : 1;
-    uint32_t cache_disabled : 1;
-    uint32_t accessed : 1;
-    uint32_t reserved : 1;
-    uint32_t zero : 5;           // Must be zero for page directory
-    uint32_t reserved_2 : 7;     // Reserved bits
-    uint32_t frame : 20;         // Frame address of the page table
+    uint32_t present : 1;           // Present bit (1: PTE is present in memory)
+    uint32_t rw : 1;                // Read-Write bit (1: pages are read-write)
+    uint32_t user : 1;              // User-supervisor bit (1: user mode access)
+    uint32_t write_through : 1;     // Write-through cache
+    uint32_t cache_disabled : 1;    // Cache disabled
+    uint32_t accessed : 1;          // Accessed bit
+    uint32_t available : 1;         // Unused
+    uint32_t page_size : 1;         // Page size (0: 4KB, 1: 4MB)
+    uint32_t available_2 : 4;       // Unused
+    uint32_t addr : 20;             // Page table address
 } __attribute__((packed)) page_directory_entry_t;
 
 extern page_directory_entry_t *page_directory;
