@@ -40,11 +40,8 @@ _start:
     call enable_a20
     jc a20_error                ; Jump if A20 enable fails
 
-    ; Setup Global Descriptor Table
-    call setup_gdt
-
-    ; Switch to protected mode and jump to second stage at 0x08:0x7E00
-    call switch_to_pm
+    ; Jump to s2
+    jmp 0x7e00
 
 disk_error:
     mov si, disk_error_msg
@@ -240,30 +237,6 @@ check_a20:
 .a20_enabled:
     clc                      ; Clear carry flag to indicate success
     ret
-
-; ----------------------------------------------------------------
-gdt_start:
-    dq 0x0000000000000000         ; Null descriptor
-    dq 0x00CF9A000000FFFF         ; 32-bit code segment (selector 0x08)
-    dq 0x00CF92000000FFFF         ; 32-bit data segment (selector 0x10)
-    dq 0x00009A000000FFFF         ; 16-bit code segment for real mode (selector 0x18)
-
-gdt_descriptor:
-    dw gdt_end - gdt_start - 1
-    dd gdt_start
-gdt_end:
-
-setup_gdt:
-    lgdt [gdt_descriptor]
-    ret
-
-; ----------------------------------------------------------------
-switch_to_pm:
-    cli
-    mov eax, cr0
-    or eax, 1
-    mov cr0, eax
-    jmp 0x08:0x7E00             ; jump to S2
 
 ; ----------------------------------------------------------------
 print_string_16:
