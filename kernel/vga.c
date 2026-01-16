@@ -1,9 +1,9 @@
-#include "vga.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdarg.h>
-#include "klibc/include/string.h"
+#include "string_utils.h"
+#include "vga.h"
 
 void outb(uint16_t port, uint8_t value) {
     __asm__ volatile("outb %0, %1" : : "a"(value), "Nd"(port));
