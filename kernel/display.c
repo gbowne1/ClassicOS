@@ -1,3 +1,4 @@
+#include <string.h>
 #include "display.h"
 #include "io.h"
 #include "vga.h"
@@ -62,7 +63,7 @@ void clear_display(void) {
 // Helper function to write a string
 void display_write_string(const char* str) {
     // Use the VGA driver's string writing function
-    vga_write_string(str, my_strlen(str));
+    vga_write_string(str, strlen(str));
 }
 
 // Helper function to print a formatted string
