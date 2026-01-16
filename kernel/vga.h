@@ -35,6 +35,7 @@ typedef enum {
 // Function prototypes
 uint8_t vga_entry_color(vga_color fg, vga_color bg);
 uint16_t vga_entry(unsigned char uc, uint8_t color);
+void vga_init(void);
 
 void vga_put_entry_at(char c, uint8_t color, size_t x, size_t y);
 void vga_clear(uint8_t color);

@@ -1,9 +1,9 @@
-#include "vga.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdarg.h>
 #include "string_utils.h"
+#include "vga.h"
 
 void outb(uint16_t port, uint8_t value) {
     __asm__ volatile("outb %0, %1" : : "a"(value), "Nd"(port));
@@ -134,7 +134,7 @@ void vga_printf(const char* format, ...) {
     va_end(args);
     
     // Now you can use the buffer with vga_write_string
-    vga_write_string(buffer, my_strlen(buffer)); // Use my_strlen instead of strlen
+    vga_write_string(buffer, strlen(buffer)); // Use my_strlen instead of strlen
 }
 
 void vga_init(void) {
