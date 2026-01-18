@@ -18,9 +18,9 @@ KERNEL_OBJ += $(patsubst kernel/%.asm, $(BUILD_DIR)/asm_%.o, $(KERNEL_ASM_SRC))
 KLIBC_SRC = $(wildcard klibc/src/*.c)
 KLIBC_OBJ = $(patsubst klibc/src/%.c, $(BUILD_DIR)/klibc/%.o, $(KLIBC_SRC))
 
+.PHONY: all stage1 stage2 kernel compile-commands $(BUILD_DIR)/compile_commands.json run gdb clean clean-cross clean-all
 all: $(DISK_IMG)
 
-.PHONY: stage1 stage2 kernel run gdb clean
 stage1: $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/$@.o bootloader/$@.asm
 	$(LD) -Ttext=0x7c00 -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.o
@@ -56,6 +56,10 @@ $(DISK_IMG): stage1 stage2 kernel
 $(BUILD_DIR):
 	mkdir -p $@
 	mkdir -p $(BUILD_DIR)/klibc
+
+compile-commands: $(BUILD_DIR)/compile_commands.json
+$(BUILD_DIR)/compile_commands.json: $(BUILD_DIR)
+	bear --output $@ -- make -B
 
 run:
 	qemu-system-i386 -s -S $(DISK_IMG)
