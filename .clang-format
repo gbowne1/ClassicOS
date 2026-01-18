@@ -8,6 +8,11 @@ DerivePointerAlignment: false
 PointerAlignment: Right
 ReferenceAlignment: Right
 
+AlignConsecutiveMacros: Consecutive
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+
 IncludeBlocks: Regroup
 IncludeCategories:
   # Std headers
