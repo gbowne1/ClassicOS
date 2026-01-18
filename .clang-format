@@ -1,0 +1,19 @@
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 80
+
+DerivePointerAlignment: false
+PointerAlignment: Right
+ReferenceAlignment: Right
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Std headers
+  - Regex: '<[[:alnum:]_.]+>'
+    Priority: 2
+
+  # Other headers
+  - Regex: '.*'
+    Priority: 1
