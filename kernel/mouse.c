@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 // Mouse buffer
-static mouse_data_t mouse_data;
+mouse_data_t mouse_data;
 
 // Read USB mouse data
 mouse_data_t usb_read_mouse(void) {
