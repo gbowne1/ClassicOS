@@ -13,7 +13,7 @@ static uint8_t buffer_count = 0;
 static uint8_t buffer_index = 0;
 
 // Basic US QWERTY keymap (scancode to ASCII)
-static const char scancode_map[128] = {
+const char scancode_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', // 0x00 - 0x09
    '9', '0', '-', '=', '\b', '\t', 'q', 'w', 'e', 'r', // 0x0A - 0x13
    't', 'y', 'z', 'u', 'i', 'o', 'p', '[', ']', '\n', // 0x14 - 0x1D
