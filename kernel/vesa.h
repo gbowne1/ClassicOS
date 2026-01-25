@@ -49,13 +49,20 @@ typedef struct {
 } __attribute__((packed)) vbe_mode_info_t;
 
 // VESA Controller Information
+
 typedef struct {
-    uint8_t VESAVersion[2];       // VESA version
-    uint32_t OEMStringPtr;        // Pointer to OEM string
-    uint8_t Capabilities[4];      // Capabilities of the controller
-    uint32_t VideoModePtr;        // Pointer to supported video modes
-    uint16_t TotalMemory;         // Total video memory (in 64KB)
-    uint8_t Reserved[4];          // Reserved
+    char Signature[4];             // Should be "VESA" (or "VBE2" for request)
+    uint16_t Version;              // VBE version; high byte is major, low is minor
+    uint32_t OEMStringPtr;         // Segment:Offset pointer to OEM string
+    uint32_t Capabilities;         // Capabilities of graphics controller
+    uint32_t VideoModePtr;         // Segment:Offset pointer to supported modes list
+    uint16_t TotalMemory;          // Number of 64KB memory blocks
+    uint16_t OEMSoftwareRev;       // VBE implementation Software revision
+    uint32_t OEMVendorNamePtr;     // Segment:Offset pointer to Vendor Name string
+    uint32_t OEMProductNamePtr;    // Segment:Offset pointer to Product Name string
+    uint32_t OEMProductRevPtr;     // Segment:Offset pointer to Product Revision string
+    uint8_t Reserved[222];         // Reserved for VBE implementation scratch area
+    uint8_t OEMData[256];          // Data area for OEM strings
 } __attribute__((packed)) vbe_controller_info_t;
 
 // Function Prototypes
