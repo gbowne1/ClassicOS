@@ -37,23 +37,28 @@ bool vesa_set_mode(uint16_t mode) {
 
 // Get the VESA mode information
 bool vesa_get_mode_info(uint16_t mode, vbe_mode_info_t* info) {
-    uint16_t eax = VBE_FUNCTION_GET_MODE_INFO;
-    uint32_t ebx = mode;
-    uint32_t ecx = 0;
-    uint32_t edx = 0;
+    uint16_t ax_ret;
+    
+    // Convert the 32-bit pointer to a Segment:Offset pair
+    // IMPORTANT: 'info' MUST be located in the first 1MB of RAM
+    uint32_t ptr = (uint32_t)info;
+    uint16_t segment = (uint16_t)((ptr >> 4) & 0xFFFF);
+    uint16_t offset  = (uint16_t)(ptr & 0x000F);
 
-    if (vesa_bios_call(VBE_FUNCTION_GET_MODE_INFO, &eax, &ebx, &ecx, &edx)) {
-        // Copy the information into the provided struct
-        uint32_t base = (uint32_t)info;
-        __asm__ __volatile__(
-            "movw %%bx, %%es:%%di\n"
-            : 
-            : "b" (base)
-            : "%es", "%di", "memory"
-        );
-        return true;
-    }
-    return false;
+    __asm__ __volatile__(
+        "push %%es\n\t"         // Save Protected Mode ES
+        "movw %1, %%es\n\t"     // Load the segment into ES
+        "int $0x10\n\t"         // BIOS Interrupt
+        "pop %%es\n\t"          // Restore Protected Mode ES
+        : "=a"(ax_ret)          // Result in AX
+        : "r"(segment),         // %1
+          "D"(offset),          // %2 (DI)
+          "a"((uint16_t)VBE_FUNCTION_GET_MODE_INFO), // AX (0x4F01)
+          "c"(mode)             // CX (The Mode Number)
+        : "memory", "cc"        // Removed %es from clobbers
+    );
+
+    return ax_ret == 0x004F;
 }
 
 // Get the VESA controller information
