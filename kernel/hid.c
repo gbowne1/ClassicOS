@@ -51,11 +51,10 @@ void hid_process_mouse_report(const mouse_hid_report_t* report) {
     mouse_data.y += report->y;
     mouse_data.left_button = (report->buttons & 0x01) != 0;
     mouse_data.right_button = (report->buttons & 0x02) != 0;
-    
-    // Print mouse movement for debugging
-    print_hex(mouse_data.x, 1, 1);
-    print_hex(mouse_data.y, 1, 1);
-    print_hex(report->buttons, 1, 1);
+
+    print_hex((uint32_t)mouse_data.x, 1, 1);
+    print_hex((uint32_t)mouse_data.y, 1, 1);
+    print_hex((uint32_t)report->buttons, 1, 1);
 }
 
 // Parse the HID descriptor (for parsing USB HID device descriptors)
