@@ -12,6 +12,8 @@ typedef struct {
     bool right_button;
 } mouse_data_t;
 
+extern mouse_data_t mouse_data;
+
 // Function declarations for USB 1.x HID mouse support
 bool usb_mouse_init(void);
 bool usb_mouse_detected(void);
