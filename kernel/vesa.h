@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 // VESA BIOS Extension 2.0 Function Calls
 #define VBE_FUNCTION_SET_MODE        0x4F02
