@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "vesa.h"
 #include "io.h"
 #include "print.h"
