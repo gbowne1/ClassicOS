@@ -32,12 +32,13 @@
 #define ATA_SR_ERR         0x01
 
 /* Drive select */
-#define ATA_MASTER         0x00
-#define ATA_SLAVE          0x10
+#define ATA_MASTER         0xA0
+#define ATA_SLAVE          0xB0
 
 /* Public API */
 bool ata_init(void);
 bool ata_read_sector(uint32_t lba, uint8_t* buffer);
 bool ata_write_sector(uint32_t lba, const uint8_t* buffer);
+bool ata_wait_ready(void);
 
 #endif
