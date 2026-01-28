@@ -8,7 +8,12 @@ OBJCOPY = i386-elf-objcopy
 BUILD_DIR = build
 CROSS_DIR = cross
 DISK_IMG = $(BUILD_DIR)/disk.img
+
+STAGE2_ADDR = 0x7e00
 STAGE2_SIZE = 2048
+
+# Place the memory map (e820) past stage2 bl in memory
+MEMMAP_BASE = $(shell echo $$(($(STAGE2_ADDR) + $(STAGE2_SIZE))))
 
 KERNEL_C_SRC = $(wildcard kernel/*.c)
 KERNEL_ASM_SRC = $(wildcard kernel/*.asm)
@@ -29,7 +34,7 @@ stage1: $(BUILD_DIR)
 # NOTE: Stage2 final size should be checked against `$(STAGE2_SIZE)` by the build system to avoid an overflow.
 # Alternatively, convey the final stage2 size through other means to stage1.
 stage2: $(BUILD_DIR)
-	$(AS) $(ASFLAGS) -o $(BUILD_DIR)/stage2.o bootloader/stage2.asm
+	$(AS) $(ASFLAGS) -DMEMMAP_BASE=$(MEMMAP_BASE) -o $(BUILD_DIR)/stage2.o bootloader/stage2.asm
 	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $(BUILD_DIR)/stage2_load.o bootloader/stage2_load.c
 	$(LD) -Tbootloader/stage2.ld -melf_i386 -o $(BUILD_DIR)/$@.elf $(BUILD_DIR)/stage2.o $(BUILD_DIR)/stage2_load.o
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$@.elf $(BUILD_DIR)/$@.bin
@@ -39,7 +44,7 @@ $(BUILD_DIR)/asm_%.o: kernel/%.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%.o: kernel/%.c
-	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $@ $<
+	$(CC) -DMEMMAP_BASE=$(MEMMAP_BASE) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $@ $<
 
 $(BUILD_DIR)/klibc/%.o: klibc/src/%.c
 	$(CC) -std=c11 -ffreestanding -nostdlib -nostdinc -fno-stack-protector -m32 -Iklibc/include -g -c -o $@ $<
