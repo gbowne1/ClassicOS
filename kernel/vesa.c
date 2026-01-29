@@ -61,25 +61,33 @@ bool vesa_get_mode_info(uint16_t mode, vbe_mode_info_t* info) {
     return ax_ret == 0x004F;
 }
 
-// Get the VESA controller information
 bool vesa_get_controller_info(vbe_controller_info_t* info) {
-    uint16_t eax = VBE_FUNCTION_GET_CONTROLLER_INFO;
-    uint32_t ebx = 0;
-    uint32_t ecx = 0;
-    uint32_t edx = 0;
+    uint16_t ax_ret;
+    
+    // We must use Segment:Offset for BIOS
+    uint32_t ptr = (uint32_t)info;
+    uint16_t segment = (uint16_t)((ptr >> 4) & 0xF000); // Base segment
+    uint16_t offset  = (uint16_t)(ptr & 0xFFFF);        // Offset
 
-    if (vesa_bios_call(VBE_FUNCTION_GET_CONTROLLER_INFO, &eax, &ebx, &ecx, &edx)) {
-        // Copy controller information into the provided struct
-        uint32_t base = (uint32_t)info;
-        __asm__ __volatile__(
-            "movw %%bx, %%es:%%di\n"
-            : 
-            : "b" (base)
-            : "%es", "%di", "memory"
-        );
-        return true;
-    }
-    return false;
+    // Copy "VBE2" into signature to tell BIOS we want VBE 2.0+ info
+    info->Signature[0] = 'V';
+    info->Signature[1] = 'B';
+    info->Signature[2] = 'E';
+    info->Signature[3] = '2';
+
+    // To fix the error: Do not use %es in clobber. 
+    // Use a temporary register or a push/pop sequence if we MUST touch ES.
+    __asm__ __volatile__(
+        "push %%es\n\t"
+        "movw %1, %%es\n\t"
+        "int $0x10\n\t"
+        "pop %%es\n\t"
+        : "=a"(ax_ret)
+        : "r"(segment), "D"(offset), "a"(0x4F00)
+        : "memory", "cc" 
+    );
+
+    return ax_ret == 0x004F;
 }
 
 // Return pointer to the VESA framebuffer
