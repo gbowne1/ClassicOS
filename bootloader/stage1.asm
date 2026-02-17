@@ -103,6 +103,34 @@ get_disk_params:
     ret
 
 ; ----------------------------------------------------------------
+; Convert LBA to CHS
+; Inputs:
+; AX = LBA sector number (0-based)
+; Outputs:
+; CH = cylinder
+; DH = head
+; CL = sector (1-63, top 2 bits are upper cylinder bits)
+
+lba_to_chs:
+    xor dx, dx
+    div word [sectors_per_track]     ; AX = LBA / SPT, DX = LBA % SPT
+
+    inc dl                           ; Sector is 1-based
+    mov cl, dl                       ; CL bits 0-5 = sector
+
+    xor dx, dx
+    div word [heads_per_cylinder]    ; AX = cylinder, DX = head
+
+    mov dh, dl                       ; DH = head
+    mov ch, al                       ; CH = cylinder low 8 bits
+
+    and ah, 0x03                     ; Keep cylinder bits 8-9
+    shl ah, 0x06                     ; Shift to position
+    or cl, ah                        ; Insert top two cylinder bits
+
+    ret
+
+; ----------------------------------------------------------------
 ; CHS Disk Read Routine
 ; AL = number of sectors
 ; CL = starting sector (1-based)
@@ -111,35 +139,6 @@ get_disk_params:
 ; CH = cylinder
 ; DH = head
 ; CL = sector (1–63, with top 2 bits as high cylinder bits)
-
-; ----------------------------------------------------------------
-; Convert LBA to CHS
-; Inputs:
-;   AX = LBA sector number (0-based)
-; Outputs:
-;   CH = cylinder
-;   DH = head
-;   CL = sector (1-63, top 2 bits are upper cylinder bits)
-
-lba_to_chs:
-    ; Sector
-    xor dx, dx
-    mov bx, ax
-    div word [sectors_per_track] ; divide lba with max sectors
-    add dl, 1 ; take the remainder, sectors start at 1
-    mov cl, dl ; sector is in cl
-
-    ; Head
-    mov ax, bx
-    mov dx, 0
-    div word [sectors_per_track] ; divide lba with max sectors
-    mov dx, 0
-    div word [heads_per_cylinder] ; divide quotient with heads
-    mov dh, dl ; take the remainder, head is in dh
-
-    ; Cylinder
-    mov ch, al ; take the quotient, cylinder is in ch
-    ret
 
 read_chs:
     pusha
