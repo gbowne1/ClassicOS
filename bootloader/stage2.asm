@@ -84,10 +84,6 @@ pm_entry:
     mov gs, ax
     mov ss, ax
 
-    ; Code segment
-    mov ax, 0x08
-    mov cs, ax
-
     ; Stack
     mov esp, 0x90000
 
